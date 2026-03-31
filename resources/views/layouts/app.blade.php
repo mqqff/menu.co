@@ -10,7 +10,7 @@
 <body class="min-h-screen font-sans flex flex-col">
     @include('partials.navbar')
 
-    <div class="container flex-1">
+    <div class="flex-1">
         @yield('content')
     </div>
 
