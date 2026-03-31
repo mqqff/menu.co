@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'reate Recipe')
+@section('title', 'Create Recipe')
 
 @section('content')
     <div class="toast fixed bottom-8 left-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-3xl text-sm font-semibold pointer-events-none z-999 whitespace-nowrap" id="toast"></div>
@@ -96,13 +96,6 @@
                 </div>
 
                 <div class="flex flex-wrap justify-center gap-3 pt-5 pb-2">
-                    <button onclick="saveRecipe('draft')"
-                            class="inline-flex items-center gap-1.75 px-3 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-gray-300 text-gray-500 bg-white hover:border-gray-400 hover:text-gray-600">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
-                        </svg>
-                        Save and Close
-                    </button>
                     <button onclick="saveRecipe('published')"
                             class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-600 bg-orange-600 text-white shadow-pub hover:bg-[#d6541e] hover:border-orange-hover hover:shadow-pub-hover">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -120,12 +113,10 @@
         let idCounter = 10;
         let ingredients = [
             { id: 1, value: '', isSection: true },
-            { id: 2, value: '250g flour', isSection: false },
-            { id: 3, value: '100ml water', isSection: false },
+            { id: 2, value: '', isSection: false }
         ];
         let steps = [
             { id: 1, title: '', previewUrl: null },
-            { id: 2, title: '', previewUrl: null },
         ];
 
         function renderIngredients() {
@@ -286,26 +277,6 @@
             if (!e.target.closest('.relative')) closeAllDropdowns();
         });
 
-        function openModal() { document.getElementById('deleteModal').classList.add('open'); }
-        function closeModal() { document.getElementById('deleteModal').classList.remove('open'); }
-        function confirmDelete() {
-            closeModal();
-            document.getElementById('recipeTitle').value = '';
-            document.getElementById('cookTime').value = '';
-            document.getElementById('servings').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('tips').value = '';
-            ingredients = [{ id: idCounter++, value: '', isSection: true }];
-            steps = [{ id: idCounter++, title: '', previewUrl: null }];
-            renderIngredients();
-            renderSteps();
-            const wrap = document.getElementById('photoUpload');
-            document.getElementById('mainPreview').style.display = 'none';
-            wrap.classList.remove('has-image');
-            wrap.querySelector('.photo-placeholder').style.display = '';
-            showToast('Recipe deleted');
-        }
-
         function saveRecipe(status) {
             const title = document.getElementById('recipeTitle').value.trim();
             if (!title) {
@@ -313,7 +284,7 @@
                 document.getElementById('recipeTitle').focus();
                 return;
             }
-            const msg = status === 'published' ? `"${title}" published! 🎉` : `"${title}" saved as draft`;
+            const msg = `"${title}" published!`;
             showToast(msg);
         }
 
