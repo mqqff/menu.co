@@ -11,3 +11,27 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
     --color-primary: #DB6F40;
 }
+
+@utility container {
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding-inline: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding-inline: 2rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .container {
+        padding-inline: 3rem;
+        max-width: 1366px;
+    }
+}
