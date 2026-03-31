@@ -20,7 +20,7 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        //
+        return view('recipes.create');
     }
 
     /**
@@ -34,7 +34,7 @@ class RecipeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(): View
     {
         $recipe = (object) [
             'title' => 'Chewy Pumpkin Oatmeal Chocolate Chip Cookies',
@@ -160,9 +160,9 @@ class RecipeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(): View
     {
-        //
+        return view('recipes.edit');
     }
 
     /**
