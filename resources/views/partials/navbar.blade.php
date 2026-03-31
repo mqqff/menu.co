@@ -3,8 +3,8 @@
 
         <a href="/" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
 
-        <a href="#" class="text-white font-semibold hover:text-white/70 transition">Trending</a>
-        <a href="#" class="text-white font-semibold hover:text-white/70 transition">Your Recipe</a>
+        <a href="#" class="text-white/80 font-semibold hover:text-white transition">Trending</a>
+        <a href="#" class="text-white/80 font-semibold hover:text-white transition">Your Recipe</a>
 
         <div class="flex-1 mx-6">
             <form action="" method="GET">
