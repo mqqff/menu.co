@@ -16,6 +16,7 @@
 
     @include('partials.footer')
 
+    <script src="https://cdn.tailwindcss.com"></script>
     @stack('scripts')
 </body>
 </html>

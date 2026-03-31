@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', $recipe->title)
+
 @section('content')
     <style>
         .rating {
