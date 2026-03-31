@@ -1,4 +1,4 @@
-<nav style="background-color: #D2714A;" class="w-full px-10 py-4">
+<nav class="w-full px-10 py-4 bg-primary">
     <div class="max-w-7xl mx-auto flex items-center gap-8">
 
         <a href="/" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
