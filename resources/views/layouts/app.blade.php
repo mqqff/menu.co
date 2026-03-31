@@ -7,8 +7,10 @@
 
     @vite('resources/css/app.css', 'resources/js/app.js')
 </head>
-<body class="min-h-screen font-sans">
-    <div class="container">
+<body class="min-h-screen font-sans flex flex-col">
+    @include('partials.navbar')
+
+    <div class="container flex-1">
         @yield('content')
     </div>
 
