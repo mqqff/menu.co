@@ -1,9 +1,9 @@
 <nav class="w-full px-10 py-4 bg-primary">
-    <div class="max-w-7xl mx-auto flex items-center gap-8">
+    <div class="max-w-8xl mx-auto flex items-center gap-8">
 
         <a href="/" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
 
-        <a href="{{ route('recipes.trending.category') }}" class="font-semibold hover:text-white transition {{ request()->routeIs('recipes.trending.category') ? 'text-white' : 'text-white/80' }}">Trending</a>
+        <a href="{{ route('recipes.index') }}" class="font-semibold hover:text-white transition {{ request()->routeIs('recipes.index') ? 'text-white' : 'text-white/80' }}">Trending</a>
         <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>
 
         <div class="flex-1 mx-6">
@@ -25,7 +25,7 @@
         <div class="ml-auto">
             @auth
                 <div class="flex items-center gap-3">
-                    <a href="" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-5 py-2">
+                    <a href="{{ route('recipes.create') }}" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-5 py-2">
                         <x-icons.plus class="w-5 h-5 text-primary" />
                         <span class="text-primary font-semibold text-sm">Create a Recipe</span>
                     </a>

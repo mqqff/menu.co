@@ -12,7 +12,86 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        //
+        $trending_recipes = collect([
+            (object)[
+                'id' => 1,
+                'status' => 'draft',
+                'title' => 'Chocolate Crinkles',
+                'image_url' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c',
+                'cook_time' => "21 min",
+                'servings' => "16 servings",
+            ],
+            (object)[
+                'id' => 2,
+                'status' => 'published',
+                'title' => 'Oatmeal Peanut Butter',
+                'image_url' => 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e',
+                'cook_time' => "15 min",
+                'servings' => "4 servings",
+            ],
+            (object)[
+                'id' => 3,
+                'status' => 'published',
+                'title' => 'Peanut Butter Cup Cookies',
+                'image_url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
+                'cook_time' => "10 min",
+                'servings' => "40 servings",
+            ],
+            (object)[
+                'id' => 4,
+                'status' => 'published',
+                'title' => 'Peanut Butter Cup Cookies',
+                'image_url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
+                'cook_time' => "10 min",
+                'servings' => "40 servings",
+            ],
+        ]);
+
+        $trending_categories = collect([
+            (object)['name' => 'Cookies',    'image_url' => 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80'],
+            (object)['name' => 'Seafood',    'image_url' => 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&q=80'],
+            (object)['name' => 'Soup',       'image_url' => 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80'],
+            (object)['name' => 'Toast',      'image_url' => 'https://images.unsplash.com/photo-1619095762086-66b82f914dcf?q=80&w=1025'],
+            (object)['name' => 'Asian Food', 'image_url' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&q=80'],
+            (object)['name' => 'Noodles',    'image_url' => 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80'],
+        ]);
+
+        $recently_added = collect([
+            (object)[
+                'id' => 1,
+                'status' => 'draft',
+                'title' => 'Chocolate Crinkles',
+                'image_url' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c',
+                'cook_time' => "21 min",
+                'servings' => "16 servings",
+            ],
+            (object)[
+                'id' => 2,
+                'status' => 'published',
+                'title' => 'Oatmeal Peanut Butter',
+                'image_url' => 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e',
+                'cook_time' => "15 min",
+                'servings' => "4 servings",
+            ],
+            (object)[
+                'id' => 3,
+                'status' => 'published',
+                'title' => 'Peanut Butter Cup Cookies',
+                'image_url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
+                'cook_time' => "10 min",
+                'servings' => "40 servings",
+            ],
+            (object)[
+                'id' => 4,
+                'status' => 'published',
+                'title' => 'Peanut Butter Cup Cookies',
+                'image_url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
+                'cook_time' => "10 min",
+                'servings' => "40 servings",
+            ],
+        ]);
+
+        return view('recipes.index', compact('trending_recipes', 'trending_categories', 'recently_added'));
     }
 
     public function my(): View
