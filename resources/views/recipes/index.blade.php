@@ -60,7 +60,7 @@
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide scroll-smooth" x-ref="track">
                 @foreach ($trending_categories as $category)
                     <a href="#"
-                       class="relative shrink-0 w-96 h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
+                       class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ $category->image_url }}"
                              alt="{{ $category->name }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -82,7 +82,7 @@
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 @foreach ($trending_recipes as $recipe)
                     <a href="#"
-                       class="relative shrink-0 w-96 h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
+                       class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ $recipe->image_url }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -114,7 +114,7 @@
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 @foreach ($recently_added as $recipe)
                     <a href="#"
-                       class="relative shrink-0 w-96 h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
+                       class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ $recipe->image_url }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
