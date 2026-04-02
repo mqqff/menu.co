@@ -29,10 +29,7 @@
                 <input type="file" id="mainPhotoInput" accept="image/*" style="display:none" onchange="handleMainPhoto(this)">
                 <div class="photo-placeholder flex flex-col items-center">
                     <div class="w-15 h-15 rounded-full bg-gray-100 flex items-center justify-center mb-3.5 transition-colors photo-icon">
-                        <svg class="text-gray-400 transition-colors" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
-                        </svg>
+                        <x-icons.camera class="w-8 h-8 text-gray-300"/>
                     </div>
                     <p class="text-md font-bold text-orange">Upload Recipe Photo</p>
                     <p class="text-xs text-gray-400 mt-1">Show others your finished dish</p>
@@ -49,12 +46,12 @@
                 <div class="flex flex-col gap-2 mt-3.5">
                     <button onclick="addSection()"
                             class="flex items-center gap-1.5 bg-transparent border-[1.5px] border-gray-200 rounded-[20px] px-4 py-1.5 text-sm font-semibold text-gray-500 cursor-pointer transition-all hover:border-gray-400 hover:text-orange w-fit">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 4v16m8-8H4"/></svg>
+                        <x-icons.plus class="w-3.5 h-3.5"/>
                         Add Section
                     </button>
                     <button onclick="addIngredient()"
                             class="flex items-center gap-1.5 bg-transparent border-[1.5px] border-gray-200 rounded-[20px] px-4 py-1.5 text-sm font-semibold text-gray-500 cursor-pointer transition-all hover:border-gray-400 hover:text-orange w-fit">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 4v16m8-8H4"/></svg>
+                        <x-icons.plus class="w-3.5 h-3.5"/>
                         Add Ingredients
                     </button>
                 </div>
@@ -96,7 +93,7 @@
                 <div class="flex justify-end mt-4">
                     <button onclick="addStep()"
                             class="flex items-center gap-1.5 bg-transparent border-[1.5px] border-gray-200 rounded-[20px] px-4 py-1.5 text-sm font-semibold text-gray-500 cursor-pointer transition-all hover:border-gray-400 hover:text-orange w-fit">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 4v16m8-8H4"/></svg>
+                        <x-icons.plus class="w-3.5 h-3.5"/>
                         Add step
                     </button>
                 </div>
@@ -111,25 +108,27 @@
             <div class="flex flex-wrap justify-center gap-3 pt-5 pb-2">
                 <button onclick="openModal()"
                         class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-600 text-orange-600 bg-white hover:bg-orange-600 hover:text-white">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
-                    </svg>
+                    <x-icons.trash class="w-4 h-4"/>
                     Delete
                 </button>
                 <button onclick="saveRecipe('draft')"
                         class="inline-flex items-center gap-1.75 px-3 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-gray-300 text-gray-500 bg-white hover:border-gray-400 hover:text-gray-600">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
-                    </svg>
+                    <x-icons.save class="w-4 h-4"/>
                     Save and Close
                 </button>
-                <button onclick="saveRecipe('published')"
-                        class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-600 bg-orange-600 text-white shadow-pub hover:bg-[#d6541e] hover:border-orange-hover hover:shadow-pub-hover">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/>
-                    </svg>
-                    Publish
-                </button>
+                @if(!$isDraft)
+                    <button onclick="saveRecipe('published')"
+                            class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-600 bg-orange-600 text-white shadow-pub hover:bg-[#d6541e] hover:border-orange-hover hover:shadow-pub-hover">
+                        <x-icons.arrow-up-right class="w-4 h-4"/>
+                        Publish
+                    </button>
+                @else
+                    <a href="#"
+                            class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-600 bg-orange-600 text-white shadow-pub hover:bg-[#d6541e] hover:border-orange-hover hover:shadow-pub-hover">
+                        <x-icons.eye class="w-4 h-4"/>
+                        Publish
+                    </a>
+                @endif
             </div>
 
         </div>
@@ -159,11 +158,7 @@
 
             row.innerHTML = `
       <button class="cursor-grab text-gray-300 shrink-0 p-1 border-none bg-transparent rounded flex items-center hover:text-gray-400 active:cursor-grabbing transition-colors" type="button" title="Drag">
-        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-          <circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/>
-          <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
-          <circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/>
-        </svg>
+        <x-icons.drag class="w-4 h-4"/>
       </button>
       <input
         class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400${ing.isSection ? ' font-bold text-gray-700' : ''}"
@@ -175,9 +170,7 @@
       >
       <div class="relative">
         <button class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn" onclick="toggleDropdown(this)" type="button">
-          <svg width="15" height="15" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
-          </svg>
+          <x-icons.three-dot class="w-3.5 h-3.5"/>
         </button>
         <div class="more-dropdown absolute right-0 top-[calc(100%+4px)] bg-white border border-gray-100 rounded-xl shadow-md py-1 min-w-[120px] z-50">
           <button class="w-full text-left bg-transparent border-none px-3.5 py-2 text-sm cursor-pointer text-red-500 hover:bg-red-50 transition-colors del-btn" onclick="removeIngredient(${i}); closeAllDropdowns()">Delete</button>
@@ -218,11 +211,7 @@
       <div class="flex flex-col items-center gap-1.5 shrink-0 pt-2">
         <div class="w-8 h-8 rounded-full bg-orange flex items-center justify-center text-white text-sm font-extrabold">${i + 1}</div>
         <button type="button" class="cursor-grab text-gray-300 p-1 border-none bg-transparent rounded flex items-center hover:text-gray-400 transition-colors">
-          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-            <circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/>
-            <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
-            <circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/>
-          </svg>
+            <x-icons.drag class="w-4 h-4"/>
         </button>
       </div>
       <div class="flex-1">
@@ -236,9 +225,7 @@
           >
           <div class="relative">
             <button class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn" onclick="toggleDropdown(this)" type="button">
-              <svg width="15" height="15" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
-              </svg>
+              <x-icons.three-dot class="w-3.5 h-3.5"/>
             </button>
             <div class="more-dropdown absolute right-0 top-[calc(100%+4px)] bg-white border border-gray-100 rounded-xl shadow-md py-1 min-w-[120px] z-50">
               <button class="w-full text-left bg-transparent border-none px-3.5 py-2 text-sm cursor-pointer text-red-500 hover:bg-red-50 transition-colors del-btn" onclick="removeStep(${i}); closeAllDropdowns()">Delete</button>
@@ -252,10 +239,7 @@
                <div class="step-overlay absolute inset-0 bg-black/30 flex items-center justify-center rounded-xl">
                  <span class="text-white text-[12px] font-bold">Change Photo</span>
                </div>`
-                : `<svg class="text-gray-300 hover:text-orange transition-colors" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
-              </svg>`
+                : `<x-icons.camera class="w-8 h-8 text-gray-300"/>`
             }
         </div>
       </div>
