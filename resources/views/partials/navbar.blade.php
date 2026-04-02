@@ -4,7 +4,7 @@
         <a href="/" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
 
         <a href="#" class="text-white/80 font-semibold hover:text-white transition">Trending</a>
-        <a href="#" class="text-white/80 font-semibold hover:text-white transition">Your Recipe</a>
+        <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white {{ request()->path() == 'my-recipes' ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>
 
         <div class="flex-1 mx-6">
             <form action="" method="GET">

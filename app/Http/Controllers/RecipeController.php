@@ -15,6 +15,44 @@ class RecipeController extends Controller
         //
     }
 
+    public function my(): View
+    {
+        $recipes = collect([
+            (object)[
+                'id' => 1,
+                'status' => 'draft',
+                'rating' => "4.5",
+                'saves_count' => "12 users",
+                'title' => 'Chocolate Crinkles',
+                'image_url' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c',
+                'cook_time' => "21 min",
+                'servings' => "16 servings",
+            ],
+            (object)[
+                'id' => 2,
+                'status' => 'published',
+                'rating' => "4.5",
+                'saves_count' => "8 users",
+                'title' => 'Oatmeal Peanut Butter',
+                'image_url' => 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e',
+                'cook_time' => "15 min",
+                'servings' => "4 servings",
+            ],
+            (object)[
+                'id' => 3,
+                'status' => 'published',
+                'rating' => "4.5",
+                'saves_count' => "20 users",
+                'title' => 'Peanut Butter Cup Cookies',
+                'image_url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
+                'cook_time' => "10 min",
+                'servings' => "40 servings",
+            ],
+        ]);
+
+        return view('recipes.my', compact('recipes'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -133,6 +171,7 @@ class RecipeController extends Controller
         $similar_recipes = collect([
             (object)[
                 'id' => 1,
+                'status' => 'draft',
                 'title' => 'Chocolate Crinkles',
                 'image_url' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c',
                 'cook_time' => "21 min",
@@ -140,6 +179,7 @@ class RecipeController extends Controller
             ],
             (object)[
                 'id' => 2,
+                'status' => 'published',
                 'title' => 'Oatmeal Peanut Butter',
                 'image_url' => 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e',
                 'cook_time' => "15 min",
@@ -147,6 +187,7 @@ class RecipeController extends Controller
             ],
             (object)[
                 'id' => 3,
+                'status' => 'published',
                 'title' => 'Peanut Butter Cup Cookies',
                 'image_url' => 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
                 'cook_time' => "10 min",
@@ -162,7 +203,9 @@ class RecipeController extends Controller
      */
     public function edit(): View
     {
-        return view('recipes.edit');
+        return view('recipes.edit', [
+            'isDraft' => false
+        ]);
     }
 
     /**
