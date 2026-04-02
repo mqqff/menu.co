@@ -3,8 +3,8 @@
 
         <a href="/" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
 
-        <a href="#" class="text-white/80 font-semibold hover:text-white transition">Trending</a>
-        <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white {{ request()->path() == 'my-recipes' ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>
+        <a href="{{ route('recipes.trending.category') }}" class="font-semibold hover:text-white transition {{ request()->routeIs('recipes.trending.category') ? 'text-white' : 'text-white/80' }}">Trending</a>
+        <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>
 
         <div class="flex-1 mx-6">
             <form action="" method="GET">

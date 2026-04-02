@@ -10,5 +10,9 @@ Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.show-login');
 });
 
+Route::prefix('recipes')->group(function () {
+    Route::get('/my', [RecipeController::class, 'my'])->name('recipes.my');
+   Route:: get('/trending/category', [RecipeController::class, 'trendingByCategory'])->name('recipes.trending.category');
+});
+
 Route::resource('recipes', RecipeController::class);
-Route::get('/my-recipes', [RecipeController::class, 'my'])->name('recipes.my');

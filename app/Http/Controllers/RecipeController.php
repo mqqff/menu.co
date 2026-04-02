@@ -198,6 +198,20 @@ class RecipeController extends Controller
         return view('recipes.show', compact('recipe', 'similar_recipes'));
     }
 
+    public function trendingByCategory(): View
+    {
+        $categories = collect([
+            (object)['name' => 'Cookies',    'image_url' => 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&q=80'],
+            (object)['name' => 'Seafood',    'image_url' => 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&q=80'],
+            (object)['name' => 'Soup',       'image_url' => 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80'],
+            (object)['name' => 'Toast',      'image_url' => 'https://images.unsplash.com/photo-1619095762086-66b82f914dcf?q=80&w=1025'],
+            (object)['name' => 'Asian Food', 'image_url' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&q=80'],
+            (object)['name' => 'Noodles',    'image_url' => 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80'],
+        ]);
+
+        return view('recipes.trending-category', compact('categories'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
