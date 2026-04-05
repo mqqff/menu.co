@@ -23,7 +23,7 @@
         </div>
 
         <div class="ml-auto">
-            @auth
+{{--            @auth--}}
                 <div class="flex items-center gap-3">
                     <a href="{{ route('recipes.create') }}" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-5 py-2">
                         <x-icons.plus class="w-5 h-5 text-primary" />
@@ -42,7 +42,7 @@
                             id="dropdownMenu"
                             class="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl py-2 z-50 transition-all duration-200 ease-out opacity-0 -translate-y-2 pointer-events-none"
                         >
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                            <a href="{{ route('auth.profile') }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
                                 <x-icons.user class="w-5 h-5 text-gray-500" />
                                 <span class="font-medium text-sm">Your Profile</span>
                             </a>
@@ -65,12 +65,12 @@
                     </div>
 
                 </div>
-            @else
-                <a href="{{ route('auth.show-login') }}" class="flex items-center gap-2 bg-white rounded-full px-5 py-2 hover:bg-gray-100 transition">
-                    <x-icons.sign-in class="w-5 h-5 text-primary" />
-                    <span class="text-primary font-semibold text-sm">Log In</span>
-                </a>
-            @endauth
+{{--            @else--}}
+{{--                <a href="{{ route('auth.show-login') }}" class="flex items-center gap-2 bg-white rounded-full px-5 py-2 hover:bg-gray-100 transition">--}}
+{{--                    <x-icons.sign-in class="w-5 h-5 text-primary" />--}}
+{{--                    <span class="text-primary font-semibold text-sm">Log In</span>--}}
+{{--                </a>--}}
+{{--            @endauth--}}
         </div>
     </div>
 </nav>
