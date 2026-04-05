@@ -23,7 +23,7 @@
         </div>
 
         <div class="ml-auto">
-            @auth
+{{--            @auth--}}
                 <div class="flex items-center gap-3">
                     <a href="{{ route('recipes.create') }}" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-5 py-2">
                         <x-icons.plus class="w-5 h-5 text-primary" />
@@ -65,12 +65,12 @@
                     </div>
 
                 </div>
-            @else
-                <a href="{{ route('auth.show-login') }}" class="flex items-center gap-2 bg-white rounded-full px-5 py-2 hover:bg-gray-100 transition">
-                    <x-icons.sign-in class="w-5 h-5 text-primary" />
-                    <span class="text-primary font-semibold text-sm">Log In</span>
-                </a>
-            @endauth
+{{--            @else--}}
+{{--                <a href="{{ route('auth.show-login') }}" class="flex items-center gap-2 bg-white rounded-full px-5 py-2 hover:bg-gray-100 transition">--}}
+{{--                    <x-icons.sign-in class="w-5 h-5 text-primary" />--}}
+{{--                    <span class="text-primary font-semibold text-sm">Log In</span>--}}
+{{--                </a>--}}
+{{--            @endauth--}}
         </div>
     </div>
 </nav>
