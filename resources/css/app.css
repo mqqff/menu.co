@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -6,6 +7,73 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Poppins', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-primary: #DB6F40;
+}
+
+@theme {
+    --color-orange: #e06c3a;
+
+    --color-orange-50: #fff4ef;
+    --color-orange-200: #f4b89a;
+    --color-orange-600: #c95a28;
+
+    --shadow-nav: 0 2px 8px rgba(224,108,58,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-pub: 0 3px 10px rgba(224,108,58,0.35);
+    --shadow-pub-hover: 0 4px 14px rgba(224,108,58,0.45);
+}
+
+@utility container {
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding-inline: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding-inline: 2rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .container {
+        padding-inline: 3rem;
+        max-width: 1366px;
+    }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+.ingredient-row.dragging { opacity: 0.4; }
+.ingredient-row.drag-over { border-top: 2px solid #e06c3a; }
+
+.more-dropdown { display: none; }
+.more-dropdown.open { display: block; }
+
+.photo-upload .overlay { opacity: 0; transition: opacity 0.2s; }
+.photo-upload.has-image:hover .overlay { opacity: 1; }
+
+.step-photo .step-overlay { opacity: 0; transition: opacity 0.2s; }
+.step-photo:hover .step-overlay { opacity: 1; }
+
+.modal-overlay { display: none; }
+.modal-overlay.open { display: flex; }
+
+.toast {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    transition: opacity 0.25s, transform 0.25s;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
