@@ -42,7 +42,7 @@
                             id="dropdownMenu"
                             class="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl py-2 z-50 transition-all duration-200 ease-out opacity-0 -translate-y-2 pointer-events-none"
                         >
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                            <a href="{{ route('auth.profile') }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
                                 <x-icons.user class="w-5 h-5 text-gray-500" />
                                 <span class="font-medium text-sm">Your Profile</span>
                             </a>
