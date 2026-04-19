@@ -14,7 +14,8 @@
                     Register
                 </h1>
 
-                <form method="POST" action="" class="space-y-5">
+                <form method="POST" action="{{ route('auth.register') }}" class="space-y-5">
+                    @csrf
                     <x-auth.input-field
                         name="email"
                         label="Email"

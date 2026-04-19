@@ -75,7 +75,7 @@
 
         <section>
             <div class="flex items-center justify-between mb-5">
-                <h2 class="text-xl font-bold text-primary">Trending Recipe</h2>
+                <h2 class="text-xl font-bold text-primary">Trending Recipes</h2>
                 <a href="#" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
             </div>
 
@@ -83,7 +83,7 @@
                 @foreach ($trending_recipes as $recipe)
                     <a href="#"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
-                        <img src="{{ $recipe->image_url }}"
+                        <img src="{{ Storage::url($recipe->image_url) }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/15 to-transparent"></div>
@@ -115,7 +115,7 @@
                 @foreach ($recently_added as $recipe)
                     <a href="#"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
-                        <img src="{{ $recipe->image_url }}"
+                        <img src="{{ Storage::url($recipe->image_url) }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/15 to-transparent"></div>
