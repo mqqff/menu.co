@@ -17,32 +17,28 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function register(Request $request)
+    {
+        return redirect()->route('auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        return redirect()->route('auth.profile');
+    }
+
     public function profile(): View
     {
         $prefs = ['Seafood', 'Asian Food', 'Noodles'];
 
-        $my_recipes = collect([
-            (object)[
-                'id' => 1,
-                'status' => 'draft',
-                'rating' => "4.5",
-                'saves_count' => "12 users",
-                'title' => 'Chocolate Crinkles',
-                'image_url' => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c',
-                'cook_time' => "21 min",
-                'servings' => "16 servings",
-            ],
-            (object)[
-                'id' => 2,
-                'status' => 'published',
-                'rating' => "4.5",
-                'saves_count' => "8 users",
-                'title' => 'Oatmeal Peanut Butter',
-                'image_url' => 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e',
-                'cook_time' => "15 min",
-                'servings' => "4 servings",
-            ],
-        ]);
+        $recipes = $this->getJson('recipes.json')->recipes ?? [];
+        $my_recipes = [];
+
+        foreach ($recipes as $recipe) {
+            if ($recipe->author->id == $this->userId) {
+                $my_recipes[] = $recipe;
+            }
+        }
 
         $saved_recipes = collect([
             (object)[

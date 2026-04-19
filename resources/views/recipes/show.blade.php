@@ -40,7 +40,7 @@
             <div class="flex flex-col md:flex-row gap-8 mb-8">
                 <div class="shrink-0 w-full md:w-72">
                     <img
-                        src="{{ $recipe->image_url }}"
+                        src="{{ Storage::url($recipe->image_url) }}"
                         alt="{{ $recipe->title }}"
                         class="w-full h-64 md:h-72 object-cover rounded-2xl shadow-md"
                     />
@@ -74,7 +74,7 @@
                             {{ $recipe->servings }}
                         </span>
 
-                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium">
+                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium cursor-pointer">
                             <x-icons.bookmark class="w-4 h-4 text-primary" />
                             {{ $recipe->saves_count }}
                         </span>
@@ -110,6 +110,13 @@
                                     <span class="font-medium">Share Recipe</span>
                                 </button>
 
+                                <a href="{{ route('recipes.edit', ['recipe' => $recipe->id]) }}"
+                                    class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition-colors cursor-pointer"
+                                >
+                                    <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
+                                    <span class="font-medium">Edit Recipe</span>
+                                </a>
+
                                 <div class="h-px bg-gray-100 mx-3"></div>
 
                                 <button
@@ -135,17 +142,17 @@
                     <h2 class="text-2xl font-semibold text-primary mb-4">Ingredients</h2>
 
                     @foreach ($recipe->ingredient_groups as $group)
-                        @if ($group['label'])
+                        @if ($group->label)
                             <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mt-4 mb-2">
-                                {{ $group['label'] }}
+                                {{ $group->label }}
                             </p>
                         @endif
 
                         <ul class="space-y-2">
-                            @foreach ($group['items'] as $item)
+                            @foreach ($group->items as $item)
                                 <li class="border-b border-[#EAE0D8] pb-1.5 text-sm text-gray-700">
-                                    <span class="font-semibold whitespace-nowrap">{{ $item['amount'] }}</span>
-                                    <span>{{ $item['name'] }}</span>
+                                    <span class="font-semibold whitespace-nowrap">{{ $item->amount }}</span>
+                                    <span>{{ $item->name }}</span>
                                 </li>
                             @endforeach
                         </ul>
@@ -162,13 +169,13 @@
                                     <div class="shrink-0 w-8 h-8 mt-1 rounded-full bg-primary text-white text-sm font-bold flex items-center justify-center">
                                         {{ $index + 1 }}
                                     </div>
-                                    <p class="text-sm text-gray-700 leading-relaxed flex-1">{{ $step['text'] }}</p>
+                                    <p class="text-sm text-gray-700 leading-relaxed flex-1">{{ $step->text }}</p>
                                 </div>
 
-                                @if (!empty($step['image']))
+                                @if (!empty($step->image))
                                     <div class="ml-11 mt-3">
                                         <img
-                                            src="{{ $step['image'] }}"
+                                            src="{{ Storage::url($step->image) }}"
                                             alt="Step {{ $index + 1 }}"
                                             class="rounded-xl w-full max-w-xs object-cover shadow-sm"
                                         />
@@ -235,7 +242,7 @@
                                                 <button
                                                     type="button"
                                                     onclick="handleReportComment({{ $comment->id }})"
-                                                    class="w-full flex items-centfer gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
+                                                    class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
                                                 >
                                                     <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
                                                     <span class="font-semibold text-red-600">Report Comment</span>
@@ -311,7 +318,7 @@
                             class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow aspect-square block"
                         >
                             <img
-                                src="{{ $similar->image_url }}"
+                                src="{{ Storage::url($similar->image_url) }}"
                                 alt="{{ $similar->title }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />

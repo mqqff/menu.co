@@ -40,7 +40,8 @@
                     Log In
                 </h1>
 
-                <form method="POST" action="" class="space-y-5">
+                <form method="POST" action="{{ route('auth.login') }}" class="space-y-5">
+                    @csrf
                     <x-auth.input-field
                         name="email"
                         label="Email"
