@@ -11,20 +11,20 @@ class RecipeController extends Controller
 {
     public function index(): View
     {
-        $trending_recipes = $this->getJson('recipes.json')->recipes ?? [];
+        $recipes = $this->getJson('recipes.json')->recipes ?? [];
         $trending_categories = $this->getJson('trending_categories.json');
-        $recently_added = $this->getJson('recently_added.json');
 
-        foreach ($trending_recipes as $recipe) {
+        foreach ($recipes as $recipe) {
             $recipe->popularity_score = ($recipe->rating * 2) + (intval($recipe->saves_count) * 0.5);
         }
 
-        $trending_recipes = collect($trending_recipes)->sortByDesc('popularity_score');
+        $trending_recipes = collect($recipes)->sortByDesc('popularity_score');
+        $recently_added = collect($recipes)->sortByDesc('created_at')->take(10);
 
         return view('recipes.index', [
             'trending_recipes' => collect($trending_recipes ?? []),
             'trending_categories' => collect($trending_categories->categories ?? []),
-            'recently_added' => collect($recently_added->recipes ?? [])
+            'recently_added' => collect($recently_added ?? [])
         ]);
     }
 
@@ -144,14 +144,11 @@ class RecipeController extends Controller
             'ingredient_groups' => $ingredient_groups,
             'steps' => $steps,
             'tips' => $validated['tips'],
+            'created_at' => now()->toDateTimeString(),
+            'updated_at' => now()->toDateTimeString(),
         ];
 
         $recipePath = 'recipes.json';
-
-        $recently_added = $this->getJson('recently_added.json')->recipes ?? [];
-
-        array_unshift($recently_added, $fullRecipe);
-        $recently_added = array_slice($recently_added, 0, 10);
 
         $recipeData = [
             'recipes' => array_merge(
@@ -161,7 +158,6 @@ class RecipeController extends Controller
         ];
 
         Storage::put($recipePath, json_encode($recipeData, JSON_PRETTY_PRINT));
-        Storage::put('recently_added.json', json_encode(['recipes' => $recently_added], JSON_PRETTY_PRINT));
 
         return redirect()->route('recipes.my');
     }
@@ -275,6 +271,7 @@ class RecipeController extends Controller
                 $recipe->status = $validated['status'];
                 $recipe->description = $validated['description'];
                 $recipe->tips = $validated['tips'];
+                $recipe->update_at = now()->toDateTimeString();
 
                 if ($imagePath) {
                     $recipe->image_url = $imagePath;
