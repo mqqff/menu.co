@@ -81,7 +81,7 @@
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 @foreach ($trending_recipes as $recipe)
-                    <a href="#"
+                    <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ Storage::url($recipe->image_url) }}"
                              alt="{{ $recipe->title }}"
@@ -113,7 +113,7 @@
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 @foreach ($recently_added as $recipe)
-                    <a href="#"
+                    <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ Storage::url($recipe->image_url) }}"
                              alt="{{ $recipe->title }}"

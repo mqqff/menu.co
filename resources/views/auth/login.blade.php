@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="flex min-h-screen">
+
         <div class="hidden lg:flex lg:w-1/2 bg-[#F7B555] items-center justify-center relative overflow-hidden">
             <div class="w-full h-full relative select-none pointer-events-none overflow-hidden">
                 <div class="absolute -left-10 top-6 w-64 h-36">
@@ -40,8 +41,21 @@
                     Log In
                 </h1>
 
-                <form method="POST" action="{{ route('auth.login') }}" class="space-y-5">
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
                     @csrf
+
+                    @if (session('success'))
+                        <div class="bg-white border border-green-300 text-green-600 font-medium text-center text-sm rounded-md px-4 py-2">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="bg-white border border-red-300 text-red-600 font-medium text-center text-sm rounded-md px-4 py-2">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <x-auth.input-field
                         name="email"
                         label="Email"
@@ -75,7 +89,7 @@
 
                     <p class="text-center text-sm text-white pt-1">
                         Didn't have an account?
-                        <a href="{{ route('auth.show-register') }}"
+                        <a href="{{ route('show-register') }}"
                            class="font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity ml-1">
                             Register
                         </a>

@@ -14,14 +14,33 @@
                     Register
                 </h1>
 
-                <form method="POST" action="{{ route('auth.register') }}" class="space-y-5">
+                <form method="POST" action="{{ route('register') }}" class="space-y-5">
                     @csrf
                     <x-auth.input-field
                         name="email"
                         label="Email"
                         type="email"
+                        value="{{ old('email') }}"
                         placeholder="Email"
                         autofocus="true"
+                        required
+                    />
+
+                    <x-auth.input-field
+                        name="name"
+                        label="Name"
+                        type="text"
+                        value="{{ old('name') }}"
+                        placeholder="Name"
+                        required
+                    />
+
+                    <x-auth.input-field
+                        name="username"
+                        label="Username"
+                        type="text"
+                        value="{{ old('username') }}"
+                        placeholder="Username"
                         required
                     />
 
@@ -51,7 +70,7 @@
 
                     <p class="text-center text-sm text-white pt-1">
                         Already have an account?
-                        <a href="{{ route('auth.show-login') }}"
+                        <a href="{{ route('show-login') }}"
                            class="font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity ml-1">
                             Login
                         </a>

@@ -28,9 +28,13 @@
             class="w-full rounded-full bg-white/95 text-gray-500 placeholder-gray-400
                    text-sm px-5 py-3 outline-none focus:ring-2 focus:ring-white/60
                    transition-all duration-200
+                   {{ $errors->has($name) ? 'border-red-400' : 'border-transparent' }}
                    {{ $showToggle ? 'pr-12' : '' }}"
             {{ $showToggle ? 'x-ref="input_' . $name . '"' : '' }}
         />
+        @error($name)
+            <p class="text-red-700 font-semibold text-xs mt-2">{{ $message }}</p>
+        @enderror
 
         @if ($showToggle)
             <button

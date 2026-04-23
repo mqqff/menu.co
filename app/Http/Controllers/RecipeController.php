@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
@@ -34,7 +35,7 @@ class RecipeController extends Controller
         $my_recipes = [];
 
         foreach ($recipes as $recipe) {
-            if ($recipe->author->id == $this->userId) {
+            if ($recipe->author->id == Auth::id()) {
                 $my_recipes[] = $recipe;
             }
         }
@@ -124,10 +125,10 @@ class RecipeController extends Controller
         }
 
         $author = [
-            'id' => $this->userId,
-            'name' => $this->userName,
-            'username' => $this->username,
-            'avatar_url' => $this->userAvatar,
+            'id' => Auth::user()->id,
+            'name' => Auth::user()->name,
+            'username' => Auth::user()->username,
+            'avatar' => Auth::user()->avatar,
         ];
 
         $fullRecipe = [
@@ -174,7 +175,7 @@ class RecipeController extends Controller
             abort(404);
         }
 
-        if ($recipe['author']['id'] != $this->userId) {
+        if ($recipe['author']['id'] != Auth::id()) {
             abort(403);
         }
 
@@ -332,7 +333,7 @@ class RecipeController extends Controller
             abort(404);
         }
 
-        if ($recipes[$recipeIndex]['author']['id'] != $this->userId) {
+        if ($recipes[$recipeIndex]['author']['id'] != Auth::id()) {
             abort(403);
         }
 
