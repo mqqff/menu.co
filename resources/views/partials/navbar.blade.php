@@ -42,19 +42,19 @@
                             id="dropdownMenu"
                             class="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl py-2 z-50 transition-all duration-200 ease-out opacity-0 -translate-y-2 pointer-events-none"
                         >
-                            <a href="{{ route('profile', ['user' => Auth::user()->username]) }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                            <a href="{{ route('profile.show', ['user' => Auth::user()->username]) }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
                                 <x-icons.user class="w-5 h-5 text-gray-500" />
                                 <span class="font-medium text-sm">Your Profile</span>
                             </a>
 
-                            <a href="{{ route('settings') }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                            <a href="{{ route('profile.settings') }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
                                 <x-icons.gear class="w-5 h-5 text-gray-500" />
                                 <span class="font-medium text-sm">Settings</span>
                             </a>
 
                             <hr class="my-1 border-gray-200 mx-4" style="border-color: #D2714A; opacity: 0.4;" />
 
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('auth.logout') }}">
                                 @csrf
                                 <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
                                     <x-icons.sign-out class="w-5 h-5 text-gray-500" />
