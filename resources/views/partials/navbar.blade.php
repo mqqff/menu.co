@@ -66,7 +66,7 @@
 
                 </div>
             @else
-                <a href="{{ route('show-login') }}" class="flex items-center gap-2 bg-white rounded-full px-5 py-2 hover:bg-gray-100 transition">
+                <a href="{{ route('auth.login.form') }}" class="flex items-center gap-2 bg-white rounded-full px-5 py-2 hover:bg-gray-100 transition">
                     <x-icons.sign-in class="w-5 h-5 text-primary" />
                     <span class="text-primary font-semibold text-sm">Log In</span>
                 </a>
