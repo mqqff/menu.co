@@ -4,10 +4,16 @@ use Illuminate\Support\Facades\Route;
 
 use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\RecipeController;
+use \App\Http\Controllers\ProfileController;
 
 Route::redirect('/', '/recipes')->name('home');
 
-Route::get('/profile/{user:username}', [AuthController::class, 'profile'])->middleware('auth')->name('profile');
+Route::prefix('profile')->group(function () {
+    Route::get('/settings', [ProfileController::class, 'edit'])->middleware('auth')->name('settings');
+    Route::get('/{user:username}', [ProfileController::class, 'show'])->middleware('auth')->name('profile');
+    Route::put('/{user}', [ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
+    Route::delete('/{user}', [ProfileController::class, 'destroy'])->middleware('auth')->name('profile.destroy');
+});
 
 Route::prefix('auth')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->middleware('guest')->name('show-register');
