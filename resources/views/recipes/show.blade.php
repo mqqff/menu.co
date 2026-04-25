@@ -122,23 +122,27 @@
                                     <span class="font-medium">Share Recipe</span>
                                 </button>
 
-                                <a href="{{ route('recipes.edit', ['recipe' => $recipe->id]) }}"
-                                    class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition-colors cursor-pointer"
-                                >
-                                    <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
-                                    <span class="font-medium">Edit Recipe</span>
-                                </a>
+                                @if(auth()->id() === $recipe->user_id)
+                                    <a href="{{ route('recipes.edit', ['recipe' => $recipe->id]) }}"
+                                       class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition-colors cursor-pointer"
+                                    >
+                                        <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
+                                        <span class="font-medium">Edit Recipe</span>
+                                    </a>
+                                @endif
 
                                 <div class="h-px bg-gray-100 mx-3"></div>
 
-                                <button
-                                    type="button"
-                                    onclick="handleReport()"
-                                    class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
-                                >
-                                    <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
-                                    <span class="font-semibold text-red-600">Report Recipe</span>
-                                </button>
+                                @if(auth()->id() != $recipe->user_id)
+                                    <button
+                                        type="button"
+                                        onclick="handleReport()"
+                                        class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
+                                    >
+                                        <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                                        <span class="font-semibold text-red-600">Report Recipe</span>
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -225,56 +229,59 @@
                                     </div>
                                 </div>
 
-                                <div class="relative" id="comment-wrapper-{{ $comment->id }}">
+                                <div class="relative comment-wrapper">
                                     <button
                                         type="button"
-                                        onclick="toggleCommentDropdown({{ $comment->id }})"
-                                        class="text-gray-400 hover:text-gray-600 transition cursor-pointer"
+                                        class="comment-toggle-btn text-gray-400 hover:text-gray-600 transition cursor-pointer"
                                     >
                                         <x-icons.three-dot class="w-4 h-4" />
                                     </button>
 
                                     <div
-                                        id="comment-dropdown-{{ $comment->id }}"
-                                        class="hidden absolute right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1"
+                                        class="comment-dropdown hidden absolute right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1"
                                         style="min-width: 220px;"
                                     >
-                                        @auth
-                                            @if (auth()->id() === $comment->user->id)
-                                                <form method="POST" action="">
-                                                    <button
-                                                        type="submit"
-                                                        class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
-                                                    >
-                                                        <x-icons.trash class="w-5 h-5 text-red-600 shrink-0" />
-                                                        <span class="font-semibold text-red-600">Delete</span>
-                                                    </button>
-                                                </form>
-                                            @else
+                                        <button
+                                            type="button"
+                                            class="edit-btn w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 transition-colors cursor-pointer"
+                                            data-id="{{ $comment->id }}"
+                                            data-content="{{ $comment->content }}"
+                                            data-rating="{{ $comment->rating->value ?? 0 }}"
+                                        >
+                                            <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
+                                            <span class="font-medium">Edit</span>
+                                        </button>
+                                        @if (auth()->check() && auth()->id() == $comment->user_id)
+                                            <form method="POST" action="{{ route('comments.destroy', $comment->id) }}">
+                                                @csrf
+                                                @method('DELETE')
                                                 <button
                                                     type="button"
-                                                    onclick="handleReportComment({{ $comment->id }})"
-                                                    class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
+                                                    class="delete-btn w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
                                                 >
-                                                    <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
-                                                    <span class="font-semibold text-red-600">Report Comment</span>
+                                                    <x-icons.trash class="w-5 h-5 text-red-600 shrink-0" />
+                                                    <span class="font-semibold text-red-600">Delete</span>
                                                 </button>
-                                            @endif
-                                        @endauth
+                                            </form>
+                                        @else
+                                            <button
+                                                type="button"
+                                                class="report-btn w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
+                                            >
+                                                <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                                                <span class="font-semibold text-red-600">Report Comment</span>
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
 
                             @php $commentRating = $comment->rating->value ?? 0; @endphp
 
-                            <div class="flex items-center mt-2">
+                            <div class="flex items-center mt-3">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <x-icons.star class="w-4 h-4 {{ $i <= $commentRating ? 'text-primary' : 'text-gray-300' }}" />
                                 @endfor
-
-                                <span class="text-xs text-gray-400 ml-1">
-                                    {{ number_format($commentRating, 1) }} stars
-                                </span>
                             </div>
 
                             <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $comment->content }}</p>
@@ -284,44 +291,49 @@
                     @endforelse
                 </div>
 
-                <div class="mt-5 flex items-center gap-3">
-                    <img
-                        src="{{ Storage::url($recipe->user->avatar) }}"
-                        alt="{{ $recipe->user->name }}"
-                        class="w-9 h-9 rounded-full object-cover shrink-0"
-                    />
-                    <form action="#" method="POST" class="flex-1 flex items-center gap-2">
-                        @csrf
-
-                        <div class="rating flex justify-end gap-1 mr-2">
-                            @for ($i = 5; $i >= 1; $i--)
-                                <input
-                                    type="radio"
-                                    id="star{{ $i }}"
-                                    name="rating"
-                                    value="{{ $i }}"
-                                    class="hidden peer"
-                                />
-                                <label
-                                    for="star{{ $i }}"
-                                    class="cursor-pointer text-gray-300 peer-checked:text-primary hover:text-primary transition"
-                                >
-                                    <x-icons.star class="w-5 h-5" />
-                                </label>
-                            @endfor
-                        </div>
-
-                        <input
-                            type="text"
-                            name="content"
-                            placeholder="Add comment"
-                            class="flex-1 bg-white border border-[#EAE0D8] rounded-lg px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder-gray-400"
+                @auth
+                    <div class="mt-5 flex items-center gap-3">
+                        <img
+                            src="{{ Storage::url($recipe->user->avatar) }}"
+                            alt="{{ $recipe->user->name }}"
+                            class="w-9 h-9 rounded-full object-cover shrink-0"
                         />
-                        <button type="submit" class="shrink-0 text-primary hover:text-[#b84e22] transition cursor-pointer">
-                            <x-icons.plane class="w-6 h-6" />
-                        </button>
-                    </form>
-                </div>
+                        <form action="{{ route('comments.store', $recipe->id) }}" method="POST" id="comment-form"
+                              class="flex-1 flex items-center gap-2 {{ $hasReviewed ? 'opacity-50 pointer-events-none' : '' }}">
+                            @csrf
+
+                            <div class="rating flex justify-end gap-1 mr-2">
+                                @for ($i = 5; $i >= 1; $i--)
+                                    <input
+                                        type="radio"
+                                        id="star{{ $i }}"
+                                        name="rating"
+                                        value="{{ $i }}"
+                                        class="hidden peer rating-input"
+                                    />
+                                    <label
+                                        for="star{{ $i }}"
+                                        class="cursor-pointer text-gray-300 peer-checked:text-primary hover:text-primary transition"
+                                    >
+                                        <x-icons.star class="w-5 h-5" />
+                                    </label>
+                                @endfor
+                            </div>
+
+                            <input
+                                type="text"
+                                id="comment-content"
+                                name="content"
+                                placeholder="Add Review"
+                                autocomplete="off"
+                                class="flex-1 bg-white border border-[#EAE0D8] rounded-lg px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder-gray-400"
+                            />
+                            <button type="submit" class="shrink-0 text-primary hover:text-[#b84e22] transition cursor-pointer">
+                                <x-icons.plane class="w-6 h-6" />
+                            </button>
+                        </form>
+                    </div>
+                @endauth
             </section>
 
             <section class="mt-14">
@@ -415,30 +427,117 @@
             btn.setAttribute('aria-expanded', 'false');
         }
 
-        function toggleCommentDropdown(id) {
-            document.querySelectorAll('[id^="comment-dropdown-"]').forEach(el => {
-                if (el.id !== `comment-dropdown-${id}`) {
-                    el.classList.add('hidden');
-                }
-            });
+        document.querySelectorAll('.comment-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
 
-            const dropdown = document.getElementById(`comment-dropdown-${id}`);
-            dropdown.classList.toggle('hidden');
-        }
+                const wrapper = this.closest('.comment-wrapper');
+                const dropdown = wrapper.querySelector('.comment-dropdown');
 
-        document.addEventListener('click', function(e) {
-            document.querySelectorAll('[id^="comment-wrapper-"]').forEach(wrapper => {
-                if (!wrapper.contains(e.target)) {
-                    const id = wrapper.id.replace('comment-wrapper-', '');
-                    const dropdown = document.getElementById(`comment-dropdown-${id}`);
-                    if (dropdown) dropdown.classList.add('hidden');
-                }
+                document.querySelectorAll('.comment-dropdown').forEach(el => {
+                    if (el !== dropdown) el.classList.add('hidden');
+                });
+
+                dropdown.classList.toggle('hidden');
             });
         });
 
-        function handleReportComment(id) {
-            document.getElementById(`comment-dropdown-${id}`).classList.add('hidden');
-            window.location.href = "";
-        }
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.comment-dropdown').forEach(el => {
+                el.classList.add('hidden');
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                const form = this.closest('form');
+
+                this.closest('.comment-wrapper')
+                    .querySelector('.comment-dropdown')
+                    .classList.add('hidden');
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This comment will be permanently deleted.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc2626",
+                    cancelButtonColor: "#6b7280",
+                    confirmButtonText: "Yes, delete it"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.report-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                this.closest('.comment-wrapper')
+                    .querySelector('.comment-dropdown')
+                    .classList.add('hidden');
+                Swal.fire({
+                    title: "Report this comment?",
+                    text: "We will review this content.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc2626",
+                    cancelButtonColor: "#6b7280",
+                    confirmButtonText: "Yes, report"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // TODO: route report
+                        console.log('Reported');
+                    }
+                });
+            });
+        });
+
+        const commentForm = document.getElementById('comment-form');
+        commentForm.addEventListener('submit', function(e) {
+            const content = this.querySelector('input[name="content"]').value.trim();
+            const rating = this.querySelector('input[name="rating"]:checked');
+
+            if (!content || !rating) {
+                e.preventDefault();
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Incomplete Form',
+                    text: 'Please fill in both content and rating.'
+                });
+            }
+        });
+
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                const content = this.dataset.content;
+                const rating  = this.dataset.rating;
+
+                commentForm.classList.remove('pointer-events-none', 'opacity-50');
+
+                document.getElementById('comment-content').value = content;
+
+                document.querySelectorAll('.rating-input').forEach(input => {
+                    input.checked = false;
+                });
+
+                const selected = document.querySelector(`.rating-input[value="${rating}"]`);
+                if (selected) selected.checked = true;
+
+                this.closest('.comment-dropdown').classList.add('hidden');
+
+                document.getElementById('comment-form').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            });
+        });
     </script>
 @endsection

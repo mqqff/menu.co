@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CommentController;
 
 Route::redirect('/', '/recipes')->name('home');
 
@@ -31,12 +32,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/my', [RecipeController::class, 'my'])->name('recipes.my');
         Route::get('/create', [RecipeController::class, 'create'])->name('recipes.create');
         Route::post('/', [RecipeController::class, 'store'])->name('recipes.store');
+    });
 
-        Route::get('/{recipe}/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
-        Route::put('/{recipe}', [RecipeController::class, 'update'])->name('recipes.update');
-        Route::delete('/{recipe}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
+    Route::prefix('recipe/{recipe}')->group(function () {
+        Route::put('/', [RecipeController::class, 'update'])->name('recipes.update');
+        Route::get('/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
+        Route::delete('/', [RecipeController::class, 'destroy'])->name('recipes.destroy');
 
-        Route::post('/{recipe}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
+        Route::post('/bookmark', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
+        Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    });
+
+    Route::prefix('comments')->group(function () {
+        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     });
 });
 

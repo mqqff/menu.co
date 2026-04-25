@@ -21,6 +21,8 @@ return new class extends Migration
 
             $table->index('user_id');
             $table->index('recipe_id');
+
+            $table->unique(['user_id', 'recipe_id']);
         });
     }
 

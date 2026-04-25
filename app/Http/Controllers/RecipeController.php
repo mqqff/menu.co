@@ -343,10 +343,15 @@ class RecipeController extends Controller
             ->take(4)
             ->get();
 
+        $hasReviewed = $recipe->comments()
+            ->where('user_id', auth()->id())
+            ->exists();
+
         return view('recipes.show', [
             'recipe' => $recipe,
             'similar_recipes' => $similar_recipes,
             'isBookmarked' => $isBookmarked,
+            'hasReviewed' => $hasReviewed
         ]);
     }
 
