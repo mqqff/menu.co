@@ -23,4 +23,9 @@ class Category extends Model
     {
         return $this->hasMany(Recipe::class);
     }
+
+    public function publishedRecipes()
+    {
+        return $this->hasMany(Recipe::class)->published();
+    }
 }

@@ -328,7 +328,7 @@
                                 autocomplete="off"
                                 class="flex-1 bg-white border border-[#EAE0D8] rounded-lg px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder-gray-400"
                             />
-                            <button type="submit" class="shrink-0 text-primary hover:text-[#b84e22] transition cursor-pointer">
+                            <button type="submit" class="shrink-0 text-primary! hover:text-[#b84e22] transition cursor-pointer">
                                 <x-icons.plane class="w-6 h-6" />
                             </button>
                         </form>

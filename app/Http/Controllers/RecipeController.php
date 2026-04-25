@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Ingredient;
+use App\Models\IngredientGroup;
 use App\Models\Recipe;
+use App\Models\Step;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +18,7 @@ class RecipeController extends Controller
 {
     public function index(): View
     {
-        $baseQuery = Recipe::query()
+        $baseQuery = Recipe::published()
             ->select('recipes.*')
             ->selectSub(
                 DB::table('ratings')
@@ -38,12 +41,15 @@ class RecipeController extends Controller
             ->limit(15)
             ->get();
 
-        $recently_added = Recipe::with('category')
+        $recently_added = Recipe::published()
+            ->with('category')
             ->latest()
             ->take(10)
             ->get();
 
-        $trending_categories = Category::withCount('recipes')
+        $trending_categories = Category::withCount(['recipes' => function ($q) {
+            $q->where('status', 'published');
+        }])
             ->orderByDesc('recipes_count')
             ->take(5)
             ->get();
@@ -57,134 +63,98 @@ class RecipeController extends Controller
 
     public function my(): View
     {
-        $recipes = $this->getJson('recipes.json')->recipes ?? [];
-        $my_recipes = [];
-
-        foreach ($recipes as $recipe) {
-            if ($recipe->author->id == Auth::id()) {
-                $my_recipes[] = $recipe;
-            }
-        }
+        $recipes = Recipe::where('user_id', Auth::id())->latest()->get();
 
         return view('recipes.my', [
-            'recipes' => collect($my_recipes)
+            'recipes' => collect($recipes)
         ]);
     }
 
     public function create(): View
     {
-        return view('recipes.create');
+        $categories = Category::all();
+
+        return view('recipes.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'image_url' => 'nullable|string',
+            'image' => 'required|image',
             'cook_time' => 'required|string',
             'servings' => 'required|string',
             'status' => 'required|string',
             'ingredients' => 'nullable|string',
-            'steps' => 'nullable|string',
-            'description' => 'nullable|string',
+            'steps' => 'required|string',
+            'description' => 'required|string',
             'tips' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $imagePath = null;
+
+        $slug = Str::slug($validated['title']) . '-' . Str::random(6);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images/recipe/' . $slug, 'public');
+        }
+
+        $recipe = Recipe::create([
+            'user_id' => Auth::id(),
+            'category_id' => $request->category_id,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'image' => $imagePath,
+            'cook_time' => $validated['cook_time'],
+            'servings' => $validated['servings'],
+            'status' => $validated['status'],
+            'tips' => $validated['tips'],
         ]);
 
         $ingredientsRaw = json_decode($validated['ingredients'] ?? '[]', true) ?? [];
-        $stepsRaw = json_decode($validated['steps'] ?? '[]', true) ?? [];
-
-        $ingredient_groups = [];
         $currentGroup = null;
 
         foreach ($ingredientsRaw as $item) {
             if (!empty($item['isSection'])) {
-                if ($currentGroup) {
-                    $ingredient_groups[] = $currentGroup;
-                }
-
-                $currentGroup = [
+                $currentGroup = IngredientGroup::create([
+                    'recipe_id' => $recipe->id,
                     'label' => $item['value'] ?: 'Other',
-                    'items' => []
-                ];
+                ]);
             } else {
                 if (!$currentGroup) {
-                    $currentGroup = [
+                    $currentGroup = IngredientGroup::create([
+                        'recipe_id' => $recipe->id,
                         'label' => 'Main',
-                        'items' => []
-                    ];
+                    ]);
                 }
 
-                $currentGroup['items'][] = [
+                Ingredient::create([
+                    'group_id' => $currentGroup->id,
+                    'name' => $item['value'],
                     'amount' => '',
-                    'name' => $item['value']
-                ];
+                ]);
             }
         }
 
-        if ($currentGroup) {
-            $ingredient_groups[] = $currentGroup;
-        }
-
-        $steps = [];
-
+        $stepsRaw = json_decode($validated['steps'] ?? '[]', true) ?? [];
         $stepImages = $request->file('step_images', []);
 
-        foreach ($stepsRaw as $s) {
+        foreach ($stepsRaw as $index => $s) {
             $image = null;
-
             $stepId = $s['id'] ?? null;
 
             if ($stepId && isset($stepImages[$stepId])) {
-                $image = $stepImages[$stepId]->store('recipes/steps', 'public');
+                $image = $stepImages[$stepId]->store('images/recipe/' . $slug . '/steps', 'public');
             }
 
-            $steps[] = [
+            Step::create([
+                'recipe_id' => $recipe->id,
+                'step_order' => $index + 1,
                 'text' => $s['title'] ?? '',
-                'image' => $image
-            ];
+                'image' => $image,
+            ]);
         }
-
-        $imagePath = null;
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('recipes', 'public');
-        }
-
-        $author = [
-            'id' => Auth::user()->id,
-            'name' => Auth::user()->name,
-            'username' => Auth::user()->username,
-            'avatar' => Auth::user()->avatar,
-        ];
-
-        $fullRecipe = [
-            'id' => Str::uuid()->toString(),
-            'status' => $validated['status'],
-            'title' => $validated['title'],
-            'image_url' => $imagePath ?: null,
-            'cook_time' => $validated['cook_time'],
-            'servings' => $validated['servings'],
-            'author' => $author,
-            'rating' => 0,
-            'saves_count' => "0 users",
-            'description' => $validated['description'],
-            'ingredient_groups' => $ingredient_groups,
-            'steps' => $steps,
-            'tips' => $validated['tips'],
-            'created_at' => now()->toDateTimeString(),
-            'updated_at' => now()->toDateTimeString(),
-        ];
-
-        $recipePath = 'recipes.json';
-
-        $recipeData = [
-            'recipes' => array_merge(
-                $this->getJson($recipePath)->recipes ?? [],
-                [$fullRecipe]
-            )
-        ];
-
-        Storage::put($recipePath, json_encode($recipeData, JSON_PRETTY_PRINT));
 
         return redirect()->route('recipes.my');
     }

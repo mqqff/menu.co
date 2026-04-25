@@ -18,12 +18,17 @@ class Recipe extends Model
         'category_id',
         'title',
         'description',
-        'image_url',
+        'image',
         'cook_time',
         'servings',
         'status',
         'tips',
     ];
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published');
+    }
 
     public function ingredientGroups()
     {

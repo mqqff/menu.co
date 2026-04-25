@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [RecipeController::class, 'store'])->name('recipes.store');
     });
 
-    Route::prefix('recipe/{recipe}')->group(function () {
+    Route::prefix('recipe/{recipe}')->middleware('recipe.access')->group(function () {
         Route::put('/', [RecipeController::class, 'update'])->name('recipes.update');
         Route::get('/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
         Route::delete('/', [RecipeController::class, 'destroy'])->name('recipes.destroy');
@@ -52,5 +52,7 @@ Route::prefix('recipes')->group(function () {
     Route::get('/', [RecipeController::class, 'index'])->name('recipes.index');
     Route::get('/trending', [RecipeController::class, 'trending'])->name('recipes.trending');
     Route::get('/trending/category', [RecipeController::class, 'trendingByCategory'])->name('recipes.trending.category');
-    Route::get('/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
+    Route::get('/{recipe}', [RecipeController::class, 'show'])
+        ->middleware('recipe.access')
+        ->name('recipes.show');
 });
