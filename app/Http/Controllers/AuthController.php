@@ -30,7 +30,7 @@ class AuthController extends Controller
         ]);
 
         $data['password'] = Hash::make($data['password']);
-        $data['avatar'] = 'user_avatars/default.jpg';
+        $data['avatar'] = 'images/user/default.jpg';
 
         User::create($data);
 
