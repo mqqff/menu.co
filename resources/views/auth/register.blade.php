@@ -14,7 +14,7 @@
                     Register
                 </h1>
 
-                <form method="POST" action="{{ route('register') }}" class="space-y-5">
+                <form method="POST" action="{{ route('auth.register') }}" class="space-y-5">
                     @csrf
                     <x-auth.input-field
                         name="email"
@@ -70,7 +70,7 @@
 
                     <p class="text-center text-sm text-white pt-1">
                         Already have an account?
-                        <a href="{{ route('show-login') }}"
+                        <a href="{{ route('auth.login.form') }}"
                            class="font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity ml-1">
                             Login
                         </a>

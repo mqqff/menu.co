@@ -41,7 +41,7 @@
                     Log In
                 </h1>
 
-                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                <form method="POST" action="{{ route('auth.login') }}" class="space-y-5">
                     @csrf
 
                     @if (session('success'))
@@ -90,7 +90,7 @@
 
                     <p class="text-center text-sm text-white pt-1">
                         Didn't have an account?
-                        <a href="{{ route('show-register') }}"
+                        <a href="{{ route('auth.register.form') }}"
                            class="font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity ml-1">
                             Register
                         </a>
