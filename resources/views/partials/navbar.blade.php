@@ -47,7 +47,7 @@
                                 <span class="font-medium text-sm">Your Profile</span>
                             </a>
 
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                            <a href="{{ route('settings') }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
                                 <x-icons.gear class="w-5 h-5 text-gray-500" />
                                 <span class="font-medium text-sm">Settings</span>
                             </a>
