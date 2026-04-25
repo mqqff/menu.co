@@ -78,4 +78,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bookmark::class);
     }
+
+    public function savedRecipes()
+    {
+        return $this->belongsToMany(
+            Recipe::class,
+            'bookmarks',
+            'user_id',
+            'recipe_id'
+        );
+    }
 }

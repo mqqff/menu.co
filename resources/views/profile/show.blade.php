@@ -25,24 +25,53 @@
                 </div>
             </div>
 
-            <button class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition">
-                <x-icons.three-dot class="w-5 h-5"/>
-            </button>
+            <div class="relative" id="profile-dropdown-wrapper">
+                <button
+                    id="profile-three-dot"
+                    type="button"
+                    class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition cursor-pointer"
+                >
+                    <x-icons.three-dot class="w-5 h-5"/>
+                </button>
+
+                <div
+                    id="profile-dropdown"
+                    class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1"
+                >
+                    @if(auth()->id() === $user->id)
+                        <a href="{{ route('profile.settings') }}"
+                           class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition"
+                        >
+                            <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
+                            <span class="font-medium">Edit Profile</span>
+                        </a>
+                    @else
+                        <button
+                            type="button"
+                            id="report-user-btn"
+                            class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition"
+                        >
+                            <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                            <span class="font-semibold text-red-600">Report User</span>
+                        </button>
+                    @endif
+                </div>
+            </div>
         </div>
 
         <section class="mb-12">
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Created Recipes</h2>
-                @if(count($created_recipes) > 0)
-                    <a href="{{ route('recipes.my') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
-               @endif
+{{--                @if(count($created_recipes) > 0)--}}
+{{--                    <a href="{{ route('recipes.my') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>--}}
+{{--                @endif--}}
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 @forelse ($created_recipes as $recipe)
-                    <a href="{{ route('recipes.show', ['recipe' => 1]) }}"
+                    <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block aspect-4/3">
-                        <img src="{{ Storage::url($recipe->image_url) }}"
+                        <img src="{{ Storage::url($recipe->image) }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent"></div>
@@ -78,7 +107,7 @@
                     @forelse ($saved_recipes as $recipe)
                         <a href="{{ route('recipes.show', ['recipe' => 1]) }}"
                            class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block aspect-4/3">
-                            <img src="{{ Storage::url($recipe->image_url) }}"
+                            <img src="{{ Storage::url($recipe->image) }}"
                                  alt="{{ $recipe->title }}"
                                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent"></div>
@@ -105,4 +134,26 @@
             </section>
         @endif
     </div>
+
+    <script>
+        const profileBtn = document.getElementById('profile-three-dot');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const profileWrapper = document.getElementById('profile-dropdown-wrapper');
+
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            const isOpen = profileDropdown.classList.contains('show');
+
+            profileDropdown.classList.toggle('hidden', isOpen);
+            profileDropdown.classList.toggle('show', !isOpen);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileWrapper.contains(e.target)) {
+                profileDropdown.classList.remove('show');
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    </script>
 @endsection

@@ -13,19 +13,16 @@ class ProfileController extends Controller
     {
         $user->load('preferences');
 
-        $recipes = $this->getJson('recipes.json')->recipes ?? [];
-        $created_recipes = [];
+        $created_recipes = $user->recipes()
+            ->latest()
+            ->get();
 
-        foreach ($recipes as $recipe) {
-            if ($recipe->author->id == $user->id) {
-                $created_recipes[] = $recipe;
-            }
-        }
-
-        $saved_recipes = [];
+        $saved_recipes = collect();
 
         if ($user->id === Auth::id()) {
-            $saved_recipes = collect($recipes)->where('author.id', '!=', $user->id)->random(3)->all();
+            $saved_recipes = $user->savedRecipes()
+                ->latest()
+                ->get();
         }
 
         return view('profile.show', compact('user', 'created_recipes', 'saved_recipes'));
