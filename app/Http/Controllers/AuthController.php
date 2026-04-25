@@ -51,28 +51,6 @@ class AuthController extends Controller
         return back()->with('error', 'Incorrect email or password');
     }
 
-    public function profile(User $user): View
-    {
-        $user->load('preferences');
-
-        $recipes = $this->getJson('recipes.json')->recipes ?? [];
-        $created_recipes = [];
-
-        foreach ($recipes as $recipe) {
-            if ($recipe->author->id == $user->id) {
-                $created_recipes[] = $recipe;
-            }
-        }
-
-        $saved_recipes = [];
-
-        if ($user->id === Auth::id()) {
-            $saved_recipes = collect($recipes)->where('author.id', '!=', $user->id)->random(3)->all();
-        }
-
-        return view('auth.profile', compact('user', 'created_recipes', 'saved_recipes'));
-    }
-
     public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
