@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
@@ -12,20 +15,43 @@ class RecipeController extends Controller
 {
     public function index(): View
     {
-        $recipes = $this->getJson('recipes.json')->recipes ?? [];
-        $trending_categories = $this->getJson('trending_categories.json');
+        $baseQuery = Recipe::query()
+            ->select('recipes.*')
+            ->selectSub(
+                DB::table('ratings')
+                    ->selectRaw('COALESCE(AVG(value), 0)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'avg_rating'
+            )
+            ->selectSub(
+                DB::table('bookmarks')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'bookmarks_count'
+            );
 
-        foreach ($recipes as $recipe) {
-            $recipe->popularity_score = ($recipe->rating * 2) + (intval($recipe->saves_count) * 0.5);
-        }
+        $trending_recipes = DB::query()
+            ->fromSub($baseQuery, 'r')
+            ->select('*')
+            ->selectRaw('(avg_rating * 2) + (bookmarks_count * 0.5) as popularity_score')
+            ->orderByDesc('popularity_score')
+            ->limit(15)
+            ->get();
 
-        $trending_recipes = collect($recipes)->sortByDesc('popularity_score');
-        $recently_added = collect($recipes)->sortByDesc('created_at')->take(10);
+        $recently_added = Recipe::with('category')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $trending_categories = Category::withCount('recipes')
+            ->orderByDesc('recipes_count')
+            ->take(5)
+            ->get();
 
         return view('recipes.index', [
-            'trending_recipes' => collect($trending_recipes ?? []),
-            'trending_categories' => collect($trending_categories->categories ?? []),
-            'recently_added' => collect($recently_added ?? [])
+            'trending_recipes' => $trending_recipes,
+            'trending_categories' => $trending_categories,
+            'recently_added' => $recently_added,
         ]);
     }
 
@@ -290,29 +316,37 @@ class RecipeController extends Controller
         return redirect()->route('recipes.my');
     }
 
-    public function show(string $id)
+    public function show(Recipe $recipe)
     {
-        $data = $this->getJson('recipes.json', true);
+        $recipe->load([
+            'category',
+            'user',
+            'ingredientGroups.ingredients',
+            'steps',
+            'comments.user',
+            'comments.rating',
+        ])
+            ->loadCount('bookmarks')
+            ->loadAvg('ratings', 'value');
 
-        $recipes = $data['recipes'] ?? [];
+        $recipe->loadCount('bookmarks');
 
-        $recipe = collect($recipes)->firstWhere('id', $id);
+        $isBookmarked = $recipe->bookmarks()
+            ->where('user_id', auth()->id())
+            ->exists();
 
-        if (!$recipe) {
-            abort(404);
-        }
-
-        $recipe['comments'] = $recipe['comments'] ?? [];
-
-        $recipe = json_decode(json_encode($recipe));
-        $similar_recipes = json_decode(json_encode(collect($recipes)
-            ->where('id', '!=', $id)
+        $similar_recipes = Recipe::with('category')
+            ->where('id', '!=', $recipe->id)
+            ->where('category_id', $recipe->category_id)
             ->where('status', 'published')
-            ->take(4)));
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
 
         return view('recipes.show', [
             'recipe' => $recipe,
-            'similar_recipes' => $similar_recipes
+            'similar_recipes' => $similar_recipes,
+            'isBookmarked' => $isBookmarked,
         ]);
     }
 

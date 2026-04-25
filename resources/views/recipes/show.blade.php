@@ -40,7 +40,7 @@
             <div class="flex flex-col md:flex-row gap-8 mb-8">
                 <div class="shrink-0 w-full md:w-72">
                     <img
-                        src="{{ Storage::url($recipe->image_url) }}"
+                        src="{{ Storage::url($recipe->image) }}"
                         alt="{{ $recipe->title }}"
                         class="w-full h-64 md:h-72 object-cover rounded-2xl shadow-md"
                     />
@@ -53,13 +53,13 @@
 
                     <div class="flex items-center gap-3 mt-3">
                         <img
-                            src="{{ $recipe->author->avatar }}"
-                            alt="{{ $recipe->author->name }}"
+                            src="{{ Storage::url($recipe->user->avatar) }}"
+                            alt="{{ $recipe->user->name }}"
                             class="w-10 h-10 rounded-full object-cover"
                         />
                         <div>
-                            <p class="text-sm font-semibold text-black">{{ $recipe->author->name }}</p>
-                            <p class="text-xs text-gray-700">{{ '@' . $recipe->author->username }}</p>
+                            <p class="text-sm font-semibold text-black">{{ $recipe->user->name }}</p>
+                            <p class="text-xs text-gray-700">{{ '@' . $recipe->user->username }}</p>
                         </div>
                     </div>
 
@@ -74,16 +74,28 @@
                             {{ $recipe->servings }}
                         </span>
 
-                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium cursor-pointer">
-                            <x-icons.bookmark class="w-4 h-4 text-primary" />
-                            {{ $recipe->saves_count }}
-                        </span>
+                        <form action="{{ route('bookmarks.toggle', $recipe->id) }}" method="POST">
+                            @csrf
+
+                            <button
+                                type="submit"
+                                class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium cursor-pointer"
+                            >
+                                <x-icons.bookmark
+                                    class="w-4 h-4 {{ $isBookmarked ? 'fill-primary text-primary' : 'text-primary fill-none' }}"
+                                />
+                                {{ $recipe->bookmarks_count ?? 0 }}
+                            </button>
+                        </form>
 
                         <span class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium">
+                            @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
+
                             @for ($i = 1; $i <= 5; $i++)
-                                <x-icons.star class="w-4 h-4 {{ $i <= floor($recipe->rating) ? 'text-primary' : 'text-gray-300' }}" />
+                                <x-icons.star class="w-4 h-4 {{ $i <= floor($rating) ? 'text-primary' : 'text-gray-300' }}" />
                             @endfor
-                            <span class="text-xs ml-1 text-gray-500">{{ number_format($recipe->rating, 1) }} stars</span>
+
+                            <span>{{ number_format($rating, 1) }} stars</span>
                         </span>
 
                         <div class="relative" id="three-dot-recipe-wrapper">
@@ -141,7 +153,7 @@
                 <aside>
                     <h2 class="text-2xl font-semibold text-primary mb-4">Ingredients</h2>
 
-                    @foreach ($recipe->ingredient_groups as $group)
+                    @foreach ($recipe->ingredientGroups as $group)
                         @if ($group->label)
                             <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mt-4 mb-2">
                                 {{ $group->label }}
@@ -149,7 +161,7 @@
                         @endif
 
                         <ul class="space-y-2">
-                            @foreach ($group->items as $item)
+                            @foreach ($group->ingredients as $item)
                                 <li class="border-b border-[#EAE0D8] pb-1.5 text-sm text-gray-700">
                                     <span class="font-semibold whitespace-nowrap">{{ $item->amount }}</span>
                                     <span>{{ $item->name }}</span>
@@ -203,7 +215,7 @@
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-3">
                                     <img
-                                        src="{{ $comment->user->avatar }}"
+                                        src="{{ Storage::url($comment->user->avatar) }}"
                                         alt="{{ $comment->user->name }}"
                                         class="w-14 h-14 rounded-full object-cover"
                                     />
@@ -253,15 +265,19 @@
                                 </div>
                             </div>
 
+                            @php $commentRating = $comment->rating->value ?? 0; @endphp
+
                             <div class="flex items-center mt-2">
-                                @php $commentRating = floor($comment->rating); @endphp
                                 @for ($i = 1; $i <= 5; $i++)
                                     <x-icons.star class="w-4 h-4 {{ $i <= $commentRating ? 'text-primary' : 'text-gray-300' }}" />
                                 @endfor
-                                <span class="text-xs text-gray-400 ml-1">{{ number_format($comment->rating, 1) }} stars</span>
+
+                                <span class="text-xs text-gray-400 ml-1">
+                                    {{ number_format($commentRating, 1) }} stars
+                                </span>
                             </div>
 
-                            <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $comment->body }}</p>
+                            <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $comment->content }}</p>
                         </div>
                     @empty
                         <p class="text-sm text-gray-400 italic">Belum ada komentar. Jadilah yang pertama!</p>
@@ -270,8 +286,8 @@
 
                 <div class="mt-5 flex items-center gap-3">
                     <img
-                        src="{{ Storage::url(auth()->user()->avatar) }}"
-                        alt="You"
+                        src="{{ Storage::url($recipe->user->avatar) }}"
+                        alt="{{ $recipe->user->name }}"
                         class="w-9 h-9 rounded-full object-cover shrink-0"
                     />
                     <form action="#" method="POST" class="flex-1 flex items-center gap-2">
@@ -297,7 +313,7 @@
 
                         <input
                             type="text"
-                            name="body"
+                            name="content"
                             placeholder="Add comment"
                             class="flex-1 bg-white border border-[#EAE0D8] rounded-lg px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder-gray-400"
                         />
@@ -314,11 +330,11 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     @foreach ($similar_recipes as $similar)
                         <a
-                            href="#"
+                            href="{{ route('recipes.show', $similar->id) }}"
                             class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow aspect-square block"
                         >
                             <img
-                                src="{{ Storage::url($similar->image_url) }}"
+                                src="{{ Storage::url($similar->image) }}"
                                 alt="{{ $similar->title }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
@@ -378,7 +394,13 @@
                 navigator.share({ title: document.title, url: window.location.href });
             } else {
                 navigator.clipboard.writeText(window.location.href)
-                    .then(() => alert('Link copied to clipboard!'));
+                    .then(() => {
+                        Swal.fire({
+                            title: "Link Copied!",
+                            text: "The recipe URL has been copied to your clipboard.",
+                            icon: "success"
+                        });
+                    });
             }
         }
 
