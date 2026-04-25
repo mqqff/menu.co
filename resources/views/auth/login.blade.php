@@ -62,6 +62,7 @@
                         type="email"
                         placeholder="Email"
                         autofocus="true"
+                        value="{{ old('email') }}"
                         required
                     />
 
