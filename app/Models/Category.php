@@ -18,4 +18,9 @@ class Category extends Model
             'user_id'
         );
     }
+
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class);
+    }
 }

@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('slug')->unique();
-            $table->string('image');
+            $table->foreignId('group_id')->constrained('ingredient_groups')->cascadeOnDelete();
+            $table->string('name');
+            $table->string('amount')->nullable();
             $table->timestamps();
+
+            $table->index('group_id');
         });
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('ingredients');
     }
 };

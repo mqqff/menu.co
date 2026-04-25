@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class CategorySeeder extends Seeder
 {
@@ -23,10 +24,28 @@ class CategorySeeder extends Seeder
             'Healthy',
         ];
 
+        $allImages = collect(Storage::disk('public')->files('images/category'));
+
         foreach ($categories as $category) {
+            $slug = Str::slug($category);
+
+            $images = $allImages->filter(function ($path) use ($slug) {
+                return Str::startsWith(
+                    basename($path),
+                    $slug . '-'
+                );
+            });
+
+            $randomImage = $images->isNotEmpty()
+                ? $images->random()
+                : null;
+
             Category::firstOrCreate(
                 ['name' => $category],
-                ['slug' => Str::slug($category)]
+                [
+                    'slug' => $slug,
+                    'image' => $randomImage,
+                ]
             );
         }
     }
