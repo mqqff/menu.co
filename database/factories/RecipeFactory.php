@@ -23,7 +23,7 @@ class RecipeFactory extends Factory
                     ? $files[array_rand($files)]
                     : null;
             },
-            'cook_time' => rand(10, 120) . ' minutes',
+            'cook_time' => rand(10, 120),
             'servings' => rand(1, 6),
             'status' => $this->faker->randomElement(['draft', 'published']),
             'tips' => $this->faker->sentence(),
