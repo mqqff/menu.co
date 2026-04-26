@@ -99,7 +99,7 @@
                                 <x-icons.bookmark
                                     class="w-4 h-4 {{ $isBookmarked ? 'fill-primary text-primary' : 'text-primary fill-none' }}"
                                 />
-                                {{ $recipe->bookmarks_count ?? 0 }} users
+                                {{ $recipe->bookmarks_count ? ($recipe->bookmarks_count > 1 ? $recipe->bookmarks_count . ' users' : $recipe->bookmarks_count . ' user') : 0 . ' user' }}
                             </button>
                         </form>
 
