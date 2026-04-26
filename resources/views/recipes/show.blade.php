@@ -4,9 +4,7 @@
 
 @section('content')
     <style>
-        .rating {
-            direction: rtl;
-        }
+        .rating { direction: rtl; }
 
         .rating input:checked ~ label svg,
         .rating label:hover ~ label svg,
@@ -34,53 +32,70 @@
         }
     </style>
 
-    <div class="bg-[#FEFAF6] min-h-screen pt-20 pb-32 px-4">
-        <div class="max-w-5xl mx-auto">
-
-            <div class="flex flex-col md:flex-row gap-8 mb-8">
-                <div class="shrink-0 w-full md:w-72">
+    <div class="bg-[#FEFAF6] min-h-screen pt-20 pb-32">
+        <div class="max-w-6xl mx-auto px-5">
+            <section class="flex flex-col md:flex-row gap-8 items-start">
+                <div class="w-sm shrink-0">
                     <img
-                        src="{{ Storage::url($recipe->image) }}"
+                        src="{{ $recipe->image_url }}"
                         alt="{{ $recipe->title }}"
-                        class="w-full h-64 md:h-72 object-cover rounded-2xl shadow-md"
+                        class="w-full h-72 object-cover rounded-2xl shadow-md mb-7"
                     />
+
+                    <h2 class="text-2xl font-extrabold text-orange mb-3.5">Ingredients</h2>
+
+                    @foreach ($recipe->ingredientGroups as $group)
+                        @if ($group->label)
+                            <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mt-4 mb-2">
+                                {{ $group->label }}
+                            </p>
+                        @endif
+
+                        <ul class="space-y-2">
+                            @foreach ($group->ingredients as $item)
+                                <li class="border-b border-[#EAE0D8] pb-1.5 text-sm text-gray-700">
+                                    <span class="font-semibold whitespace-nowrap">{{ $item->amount }}</span>
+                                    <span>{{ $item->name }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endforeach
+
                 </div>
 
-                <div class="flex flex-col justify-start gap-3 pt-1">
-                    <h1 class="text-3xl md:text-4xl text-primary tracking-wide font-semibold">
+                <div class="flex-1">
+
+                    <h1 class="text-3xl md:text-4xl text-primary tracking-wide font-bold">
                         {{ $recipe->title }}
                     </h1>
 
-                    <div class="flex items-center gap-3 mt-3">
+                    <div class="flex items-center gap-2.5 mb-4 mt-5">
                         <img
                             src="{{ Storage::url($recipe->user->avatar) }}"
                             alt="{{ $recipe->user->name }}"
-                            class="w-10 h-10 rounded-full object-cover"
-                        />
+                            class="w-10 h-10 rounded-full object-cover border border-white"
+                        >
                         <div>
-                            <p class="text-sm font-semibold text-black">{{ $recipe->user->name }}</p>
-                            <p class="text-xs text-gray-700">{{ '@' . $recipe->user->username }}</p>
+                            <p class="text-md font-bold text-gray-800">{{ $recipe->user->name }}</p>
+                            <p class="text-xs text-gray-400">{{ '@'.$recipe->user->username }}</p>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-3 mt-3 text-sm text-gray-600">
-                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium">
-                            <x-icons.clock class="w-4 h-4 text-primary" />
-                            {{ $recipe->cook_time }}
-                        </span>
+                    <div class="flex flex-wrap items-center gap-3 mb-4 text-sm text-gray-600">
 
-                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium">
-                            <x-icons.user-group class="w-4 h-4 text-primary" />
-                            {{ $recipe->servings }}
-                        </span>
+                    <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
+                        <x-icons.clock class="w-4 h-4 text-primary" />
+                        {{ $recipe->cook_time }}
+                    </span>
+
+                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
+                        <x-icons.user-group class="w-4 h-4 text-primary" />
+                        {{ $recipe->servings }}
+                    </span>
 
                         <form action="{{ route('bookmarks.toggle', $recipe->id) }}" method="POST">
                             @csrf
-
-                            <button
-                                type="submit"
-                                class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium cursor-pointer"
-                            >
+                            <button class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
                                 <x-icons.bookmark
                                     class="w-4 h-4 {{ $isBookmarked ? 'fill-primary text-primary' : 'text-primary fill-none' }}"
                                 />
@@ -88,31 +103,24 @@
                             </button>
                         </form>
 
-                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-1.5 rounded-lg shadow-sm font-medium">
-                            @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
+                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
+                        @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
 
                             @for ($i = 1; $i <= 5; $i++)
                                 <x-icons.star class="w-4 h-4 {{ $i <= floor($rating) ? 'text-primary' : 'text-gray-300' }}" />
                             @endfor
 
-                            <span>{{ number_format($rating, 1) }} stars</span>
-                        </span>
+                        <span>{{ number_format($rating, 1) }}</span>
+                    </span>
 
                         <div class="relative" id="three-dot-recipe-wrapper">
-                            <button
-                                id="three-dot-recipe"
-                                type="button"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                class="text-gray-400 hover:text-gray-600 transition cursor-pointer"
-                            >
+                            <button id="three-dot-recipe" class="text-gray-400 hover:text-gray-600 cursor-pointer">
                                 <x-icons.three-dot class="w-4 h-4" />
                             </button>
 
-                            <div
-                                id="recipe-dropdown"
-                                class="hidden absolute right-0 mt-2 w-52 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1"
-                            >
+                            <div id="recipe-dropdown"
+                                 class="hidden absolute right-0 mt-2 w-52 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 py-1">
+
                                 <button
                                     type="button"
                                     onclick="handleShare()"
@@ -133,82 +141,57 @@
 
                                 <div class="h-px bg-gray-100 mx-3"></div>
 
-                                @if(auth()->id() != $recipe->user_id)
-                                    <button
-                                        type="button"
-                                        onclick="handleReport()"
-                                        class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
-                                    >
-                                        <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
-                                        <span class="font-semibold text-red-600">Report Recipe</span>
-                                    </button>
-                                @endif
+                                <button
+                                    type="button"
+                                    onclick="handleReport()"
+                                    class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
+                                >
+                                    <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                                    <span class="font-semibold text-red-600">Report Recipe</span>
+                                </button>
                             </div>
                         </div>
+
                     </div>
 
-                    <p class="text-sm text-gray-600 leading-relaxed mt-1">
+                    <p class="text-sm text-gray-600 mb-5 leading-relaxed">
                         {{ $recipe->description }}
                     </p>
-                </div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-[289px_1fr] gap-8">
-                <aside>
-                    <h2 class="text-2xl font-semibold text-primary mb-4">Ingredients</h2>
-
-                    @foreach ($recipe->ingredientGroups as $group)
-                        @if ($group->label)
-                            <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mt-4 mb-2">
-                                {{ $group->label }}
-                            </p>
-                        @endif
-
-                        <ul class="space-y-2">
-                            @foreach ($group->ingredients as $item)
-                                <li class="border-b border-[#EAE0D8] pb-1.5 text-sm text-gray-700">
-                                    <span class="font-semibold whitespace-nowrap">{{ $item->amount }}</span>
-                                    <span>{{ $item->name }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endforeach
-                </aside>
-
-                <main>
-                    <h2 class="text-2xl font-semibold text-primary mb-5">Steps</h2>
+                    <h2 class="text-2xl font-extrabold text-orange mb-3.5">Steps</h2>
 
                     <ol class="space-y-6">
                         @foreach ($recipe->steps as $index => $step)
                             <li>
-                                <div class="flex gap-4 items-start">
-                                    <div class="shrink-0 w-8 h-8 mt-1 rounded-full bg-primary text-white text-sm font-bold flex items-center justify-center">
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-orange text-white flex items-center justify-center font-bold shrink-0">
                                         {{ $index + 1 }}
                                     </div>
-                                    <p class="text-sm text-gray-700 leading-relaxed flex-1">{{ $step->text }}</p>
+
+                                    <p class="text-sm text-gray-700 leading-relaxed flex-1">
+                                        {{ $step->text }}
+                                    </p>
                                 </div>
 
-                                @if (!empty($step->image))
-                                    <div class="ml-11 mt-3">
-                                        <img
-                                            src="{{ Storage::url($step->image) }}"
-                                            alt="Step {{ $index + 1 }}"
-                                            class="rounded-xl w-full max-w-xs object-cover shadow-sm"
-                                        />
-                                    </div>
+                                @if ($step->image)
+                                    <img
+                                        src="{{ $step->image_url }}"
+                                        class="ml-11 mt-3 rounded-xl w-full max-w-xs object-cover shadow-sm"
+                                    >
                                 @endif
                             </li>
                         @endforeach
                     </ol>
 
-                    @if (!empty($recipe->tips))
-                        <div class="mt-10">
-                            <h2 class="text-2xl font-semibold text-primary mb-2">Tips</h2>
+                    @if ($recipe->tips)
+                        <div class="mt-6">
+                            <h2 class="text-2xl font-extrabold text-orange mb-3.5">Tips</h2>
                             <p class="text-sm text-gray-600 leading-relaxed">{{ $recipe->tips }}</p>
                         </div>
                     @endif
-                </main>
-            </div>
+
+                </div>
+            </section>
 
             <section class="mt-12">
                 <h2 class="text-2xl font-semibold text-primary mb-5">Comments</h2>
@@ -346,7 +329,7 @@
                             class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow aspect-square block"
                         >
                             <img
-                                src="{{ Storage::url($similar->image) }}"
+                                src="{{ $similar->image_url }}"
                                 alt="{{ $similar->title }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
@@ -369,7 +352,6 @@
                     @endforeach
                 </div>
             </section>
-
         </div>
     </div>
 

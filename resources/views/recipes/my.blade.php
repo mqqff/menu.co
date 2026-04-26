@@ -31,7 +31,7 @@
                 @foreach ($published as $recipe)
                     <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 min-h-55 block group">
-                        <img src="{{ Storage::url($recipe->image) }}"
+                        <img src="{{ $recipe->image_url }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
@@ -67,7 +67,7 @@
                     @foreach ($drafts as $recipe)
                         <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                            class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 min-h-55 block group">
-                            <img src="{{ Storage::url($recipe->image) }}"
+                            <img src="{{ $recipe->image_url }}"
                                  alt="{{ $recipe->title }}"
                                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 

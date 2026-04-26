@@ -71,7 +71,7 @@
                 @forelse ($created_recipes as $recipe)
                     <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block aspect-4/3">
-                        <img src="{{ Storage::url($recipe->image) }}"
+                        <img src="{{ $recipe->image_url }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent"></div>
@@ -107,7 +107,7 @@
                     @forelse ($saved_recipes as $recipe)
                         <a href="{{ route('recipes.show', ['recipe' => 1]) }}"
                            class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block aspect-4/3">
-                            <img src="{{ Storage::url($recipe->image) }}"
+                            <img src="{{ $recipe->image_url }}"
                                  alt="{{ $recipe->title }}"
                                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent"></div>

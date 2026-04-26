@@ -5,17 +5,17 @@
 @section('content')
     <div class="toast fixed bottom-8 left-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-3xl text-sm font-semibold pointer-events-none z-999 whitespace-nowrap" id="toast"></div>
 
-    <div class="max-w-260 mx-auto my-9 px-5">
-        <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data" id="recipe-form">
+    <div class="max-w-6xl mx-auto my-9 pb-5 pt-8">
+        <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data" id="createForm">
             @csrf
             <input type="hidden" name="ingredients" id="ingredientsInput">
             <input type="hidden" name="steps" id="stepsInput">
             <input type="hidden" name="status" id="statusInput">
             <div class="flex gap-8 items-start">
-                <div class="w-70 shrink-0">
+                <div class="w-sm shrink-0">
                     <div id="photoUpload"
                          onclick="document.getElementById('mainPhotoInput').click()"
-                         class="photo-upload bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-60 p-8 cursor-pointer transition-all hover:border-orange-600 hover:bg-orange-50 relative overflow-hidden mb-7">
+                         class="photo-upload bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-72 p-8 cursor-pointer transition-all hover:border-orange-600 hover:bg-orange-50 relative overflow-hidden mb-7">
                         <input type="file" name="image" id="mainPhotoInput" accept="image/*" style="display:none" onchange="handleMainPhoto(this)">
                         <div class="photo-placeholder flex flex-col items-center">
                             <div class="w-15 h-15 rounded-full bg-gray-100 flex items-center justify-center mb-3.5 transition-colors photo-icon">
@@ -31,7 +31,7 @@
                     </div>
 
                     <div>
-                        <h2 class="text-[19px] font-extrabold text-orange mb-3.5">Ingredients</h2>
+                        <h2 class="text-2xl font-extrabold text-orange mb-3.5">Ingredients</h2>
                         <div class="flex flex-col gap-1.5" id="ingredientList"></div>
                         <div class="flex flex-col gap-2 mt-6 items-center">
                             <button type="button" onclick="addSection()"
@@ -54,7 +54,7 @@
 
                     <div class="flex items-center gap-2.5 my-4">
                         <img class="w-10 h-10 rounded-full object-cover border border-white"
-                             src="{{ Storage::url(auth()->user()->avatar) }}" alt="avatar">
+                             src="{{ Storage::url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}'s avatar">
                         <div>
                             <p class="text-md font-bold text-gray-800">{{ auth()->user()->name }}</p>
                             <p class="text-xs text-gray-400">{{ "@" . auth()->user()->username }}</p>
@@ -98,7 +98,7 @@
                               class="w-full bg-gray-100 border-none rounded-xl px-4 py-3 text-sm text-gray-600 outline-none resize-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] mb-5 placeholder:text-gray-400"></textarea>
 
                     <div>
-                        <h2 class="text-[19px] font-extrabold text-orange mb-3.5">Steps</h2>
+                        <h2 class="text-2xl font-extrabold text-orange mb-3.5">Steps</h2>
                         <div class="flex flex-col gap-5" id="stepsList"></div>
                         <div class="flex justify-end mt-4">
                             <button type="button" onclick="addStep()"
@@ -110,7 +110,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <h2 class="text-[19px] font-extrabold text-orange mb-3.5">Tips</h2>
+                        <h2 class="text-2xl font-extrabold text-orange mb-3.5">Tips</h2>
                         <textarea id="tips" rows="3" placeholder="Share your tips to recreate the dish here." name="tips"
                                   class="w-full bg-gray-100 border-none rounded-xl px-4 py-3 text-sm text-gray-600 outline-none resize-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"></textarea>
                     </div>
@@ -134,15 +134,16 @@
     </div>
 
     <script>
-        let idCounter = 1;
+        let ingredientCounter = 1;
+        let stepCounter = 1;
 
         let ingredients = [
-            { id: idCounter++, value: '', isSection: true },
-            { id: idCounter++, value: '', isSection: false },
+            { id: ingredientCounter++, name: '', amount: '', isSection: true },
+            { id: ingredientCounter++, name: '', amount: '', isSection: false },
         ];
 
         let steps = [
-            { id: idCounter++, title: '', previewUrl: null },
+            { id: stepCounter++, title: '', previewUrl: null },
         ];
 
         function renderIngredients() {
@@ -150,30 +151,68 @@
             list.innerHTML = '';
             ingredients.forEach((ing, i) => {
                 const row = document.createElement('div');
-                row.className = 'ingredient-row flex items-center gap-1.5';
+                row.className = 'ingredient-row grid grid-cols-[auto_100px_1fr_auto] items-center gap-1.5 w-full';
                 row.setAttribute('data-id', ing.id);
                 row.draggable = true;
 
                 row.innerHTML = `
-      <button type="button" class="cursor-grab text-gray-300 shrink-0 p-1 border-none bg-transparent rounded flex items-center hover:text-gray-400 active:cursor-grabbing transition-colors" type="button" title="Drag">
-        <x-icons.drag class="w-4 h-4"/>
-      </button>
-      <input
-        class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400${ing.isSection ? ' font-bold text-gray-700' : ''}"
-        type="text"
-        value="${escHtml(ing.value)}"
-        placeholder="${ing.isSection ? 'Section name' : 'e.g. 250g flour'}"
-        oninput="updateIngredient(${ing.id}, this.value)"
-      >
-      <div class="relative">
-        <button type="button" class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn" onclick="toggleDropdown(this)" type="button">
-          <x-icons.three-dot class="w-3.5 h-3.5"/>
-        </button>
-        <div class="more-dropdown absolute right-0 top-[calc(100%+4px)] bg-white border border-gray-100 rounded-xl shadow-md py-1 min-w-[120px] z-50">
-          <button type="button" class="w-full text-left bg-transparent border-none px-3.5 py-2 text-sm cursor-pointer text-red-500 hover:bg-red-50 transition-colors del-btn" onclick="removeIngredient(${i}); closeAllDropdowns()">Delete</button>
-        </div>
-      </div>
-    `;
+                <button
+                    type="button"
+                    class="cursor-grab text-gray-300 shrink-0 p-1 bg-transparent rounded flex items-center hover:text-gray-400 active:cursor-grabbing transition-colors"
+                    title="Drag"
+                >
+                    <x-icons.drag class="w-4 h-4"/>
+                </button>
+
+                ${ing.isSection ? `
+                        <input
+                            class="flex-1 bg-gray-100 col-span-2 border-none rounded-lg px-3 py-2 text-sm font-bold text-gray-700 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"
+                            style="grid-column: 2 / 4;"
+                            type="text"
+                            value="${escHtml(ing.name)}"
+                            placeholder="Section name"
+                            oninput="updateIngredientName(${ing.id}, this.value)"
+                        >
+                        `
+                        : `
+                        <input
+                            class="min-w-0 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"
+                            type="text"
+                            value="${escHtml(ing.amount)}"
+                            placeholder="250g"
+                            oninput="updateIngredientAmount(${ing.id}, this.value)"
+                        >
+
+                        <input
+                            class="min-w-0 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"
+                            type="text"
+                            value="${escHtml(ing.name)}"
+                            placeholder="Flour"
+                            oninput="updateIngredientName(${ing.id}, this.value)"
+                        >
+                        `
+                }
+
+                <div class="relative">
+                    <button
+                        type="button"
+                        class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn"
+                        onclick="toggleDropdown(this)"
+                    >
+                        <x-icons.three-dot class="w-3.5 h-3.5"/>
+                    </button>
+
+                    <div class="more-dropdown absolute right-0 top-[calc(100%+4px)] bg-white border border-gray-100 rounded-xl shadow-md py-1 min-w-[120px] z-50">
+                        <button
+                            type="button"
+                            class="w-full text-left bg-transparent border-none px-3.5 py-2 text-sm cursor-pointer text-red-500 hover:bg-red-50 transition-colors"
+                            onclick="removeIngredient(${i}); closeAllDropdowns()"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+                `;
 
                 row.addEventListener('dragstart', (e) => {
                     row.classList.add('dragging');
@@ -239,8 +278,8 @@
             </div>
           </div>
         </div>
-        <div class="step-photo bg-gray-100 rounded-xl h-[140px] w-60 flex items-center justify-center cursor-pointer transition-colors hover:bg-orange-50 relative overflow-hidden" onclick="triggerStepPhoto(${i})" id="stepPhoto_${step.id}">
-          <input type="file" name="step_images[${step.id}]" accept="image/*" style="display:none" id="stepInput_${step.id}" onchange="handleStepPhoto(this, ${i})">
+        <div class="step-photo bg-gray-100 rounded-xl h-48 w-80 flex items-center justify-center cursor-pointer transition-colors hover:bg-orange-50 relative overflow-hidden" onclick="triggerStepPhoto(${i})" id="stepPhoto_${step.id}">
+          <input type="file" name="step_images[${step.id}]" accept="image/*" style="display:none" id="stepInput_${step.id}" onchange="handleStepPhoto(this, ${step.id})">
           ${step.previewUrl
                     ? `<img src="${step.previewUrl}" alt="step photo" class="absolute inset-0 w-full h-full object-cover rounded-xl">
                <div class="step-overlay absolute inset-0 bg-black/30 flex items-center justify-center rounded-xl">
@@ -258,15 +297,19 @@
         function triggerStepPhoto(index) {
             document.getElementById('stepInput_' + steps[index].id).click();
         }
-        function handleStepPhoto(input, index) {
+        function handleStepPhoto(input, stepId) {
             const file = input.files[0];
             if (!file) return;
 
+            const step = steps.find(s => s.id === stepId);
+            if (!step) return;
+
             const url = URL.createObjectURL(file);
 
-            steps[index].previewUrl = url;
+            step.previewUrl = url;
+            step.file = file;
 
-            const container = document.getElementById(`stepPhoto_${steps[index].id}`);
+            const container = document.getElementById(`stepPhoto_${step.id}`);
 
             let img = container.querySelector('img');
             if (!img) {
@@ -296,17 +339,35 @@
             }
 
             ingredients.push({
-                id: idCounter++,
+                id: ingredientCounter++,
                 value: '',
                 isSection: true
             });
 
             renderIngredients();
         }
-        function addIngredient() { ingredients.push({ id: idCounter++, value: '', isSection: false }); renderIngredients(); }
+        function addIngredient() {
+            ingredients.push({
+                id: ingredientCounter++,
+                name: '',
+                amount: '',
+                isSection: false
+            });
+            renderIngredients();
+        }
         function removeIngredient(i) { ingredients.splice(i, 1); renderIngredients(); }
-        function addStep() { steps.push({ id: idCounter++, title: '', previewUrl: null }); renderSteps(); }
+        function addStep() { steps.push({ id: stepCounter++, title: '', previewUrl: null }); renderSteps(); }
         function removeStep(i) { steps.splice(i, 1); renderSteps(); }
+
+        function updateIngredientName(id, value) {
+            const item = ingredients.find(i => i.id === id);
+            if (item) item.name = value;
+        }
+
+        function updateIngredientAmount(id, value) {
+            const item = ingredients.find(i => i.id === id);
+            if (item) item.amount = value;
+        }
 
         function handleMainPhoto(input) {
             const file = input.files[0];
@@ -342,8 +403,8 @@
             document.getElementById('servings').value = '';
             document.getElementById('description').value = '';
             document.getElementById('tips').value = '';
-            ingredients = [{ id: idCounter++, value: '', isSection: true }];
-            steps = [{ id: idCounter++, title: '', previewUrl: null }];
+            ingredients = [{ id: ingredientCounter++, value: '', isSection: true }];
+            steps = [{ id: stepCounter++, title: '', previewUrl: null }];
             renderIngredients();
             renderSteps();
             const wrap = document.getElementById('photoUpload');
@@ -363,13 +424,13 @@
                 const current = ingredients[i];
                 const next = ingredients[i + 1];
 
-                if (current.isSection && !current.value.trim()) {
+                if (current.isSection && !current.name.trim()) {
                     showToast('Section name cannot be empty');
                     return false;
                 }
 
-                if (!current.isSection && !current.value.trim()) {
-                    showToast('Ingredient cannot be empty');
+                if (!current.isSection && (!current.name.trim() || !current.amount.trim())) {
+                    showToast('Ingredient must have amount and name');
                     return false;
                 }
 
@@ -438,11 +499,25 @@
             if (!validateSteps()) return;
             if (!validateImage()) return;
 
-            document.getElementById('statusInput').value = status;
-            document.getElementById('ingredientsInput').value = JSON.stringify(ingredients);
-            document.getElementById('stepsInput').value = JSON.stringify(steps);
+            const form = document.getElementById('createForm');
+            const formData = new FormData(form);
 
-            document.querySelector('#recipe-form').submit();
+            formData.append('status', status);
+            formData.append('ingredients', JSON.stringify(ingredients));
+            formData.append('steps', JSON.stringify(steps));
+
+            steps.forEach((step, i) => {
+                if (step.file) {
+                    formData.append(`step_images[${step.id}]`, step.file);
+                }
+            });
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                location.reload();
+            });
         }
 
         function showToast(msg) {

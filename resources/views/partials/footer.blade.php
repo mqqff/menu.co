@@ -27,14 +27,15 @@
 
             <div class="w-px bg-white/30 self-stretch"></div>
 
-            <div>
-                <p class="font-bold mb-2">Account</p>
-                <ul class="space-y-1 text-sm text-white">
-                    <li><a href="{{ route('profile.show', ['user' => auth()->user()->username]) }}" class="transition-colors duration-200 hover:text-white/80">Your Profile</a></li>
-                    <li><a href="{{ route('profile.settings') }}" class="transition-colors duration-200 hover:text-white/80">Settings</a></li>
-                </ul>
-            </div>
-
+            @auth
+                <div>
+                    <p class="font-bold mb-2">Account</p>
+                    <ul class="space-y-1 text-sm text-white">
+                        <li><a href="{{ route('profile.show', ['user' => auth()->user()->username]) }}" class="transition-colors duration-200 hover:text-white/80">Your Profile</a></li>
+                        <li><a href="{{ route('profile.settings') }}" class="transition-colors duration-200 hover:text-white/80">Settings</a></li>
+                    </ul>
+                </div>
+            @endauth
         </div>
     </div>
 </footer>

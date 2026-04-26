@@ -33,8 +33,8 @@ class RecipeController extends Controller
                 'bookmarks_count'
             );
 
-        $trending_recipes = DB::query()
-            ->fromSub($baseQuery, 'r')
+        $trending_recipes = Recipe::fromSub($baseQuery, 'r')
+            ->published()
             ->select('*')
             ->selectRaw('(avg_rating * 2) + (bookmarks_count * 0.5) as popularity_score')
             ->orderByDesc('popularity_score')
@@ -119,7 +119,7 @@ class RecipeController extends Controller
             if (!empty($item['isSection'])) {
                 $currentGroup = IngredientGroup::create([
                     'recipe_id' => $recipe->id,
-                    'label' => $item['value'] ?: 'Other',
+                    'label' => $item['name'] ?: 'Other',
                 ]);
             } else {
                 if (!$currentGroup) {
@@ -131,8 +131,8 @@ class RecipeController extends Controller
 
                 Ingredient::create([
                     'group_id' => $currentGroup->id,
-                    'name' => $item['value'],
-                    'amount' => '',
+                    'name' => $item['name'],
+                    'amount' => $item['amount'],
                 ]);
             }
         }
@@ -159,25 +159,12 @@ class RecipeController extends Controller
         return redirect()->route('recipes.my');
     }
 
-    public function edit(string $id)
+    public function edit(Recipe $recipe)
     {
-        $data = $this->getJson('recipes.json', true);
+        $recipe = $recipe->load('ingredientGroups.ingredients', 'steps');
+        $categories = Category::all();
 
-        $recipes = $data['recipes'] ?? [];
-
-        $recipe = collect($recipes)->firstWhere('id', $id);
-
-        if (!$recipe) {
-            abort(404);
-        }
-
-        if ($recipe['author']['id'] != Auth::id()) {
-            abort(403);
-        }
-
-        return view('recipes.edit', [
-            'recipe' => json_decode(json_encode($recipe))
-        ]);
+        return view('recipes.edit', compact('recipe', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -330,25 +317,9 @@ class RecipeController extends Controller
 
     }
 
-    public function destroy(string $id)
+    public function destroy(Recipe $recipe)
     {
-        $data = $this->getJson('recipes.json', true);
-
-        $recipes = $data['recipes'] ?? [];
-
-        $recipeIndex = collect($recipes)->search(fn($r) => $r['id'] == $id);
-
-        if ($recipeIndex === false) {
-            abort(404);
-        }
-
-        if ($recipes[$recipeIndex]['author']['id'] != Auth::id()) {
-            abort(403);
-        }
-
-        array_splice($recipes, $recipeIndex, 1);
-
-        Storage::put('recipes.json', json_encode(['recipes' => $recipes], JSON_PRETTY_PRINT));
+        $recipe->delete();
 
         return redirect()->route('recipes.my');
     }
