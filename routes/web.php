@@ -14,7 +14,10 @@ Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register.form');
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login.form');
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::get('/auth/login', function () {
+        return redirect()->route('login');
+    })->name('auth.login.form');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 });
 
@@ -34,7 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [RecipeController::class, 'store'])->name('recipes.store');
     });
 
-    Route::prefix('recipe/{recipe}')->middleware('recipe.access')->group(function () {
+    Route::prefix('recipes/{recipe}')->middleware(['recipe.owner'])->group(function () {
         Route::put('/', [RecipeController::class, 'update'])->name('recipes.update');
         Route::get('/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
         Route::delete('/', [RecipeController::class, 'destroy'])->name('recipes.destroy');
