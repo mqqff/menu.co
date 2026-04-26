@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('group_id')->constrained('ingredient_groups')->cascadeOnDelete();
             $table->string('name');
-            $table->string('amount')->nullable();
+            $table->string('amount');
             $table->timestamps();
 
             $table->index('group_id');
