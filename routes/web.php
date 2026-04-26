@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('recipes/{recipe}')->middleware(['recipe.owner'])->group(function () {
-        Route::put('/', [RecipeController::class, 'update'])->name('recipes.update');
+        Route::patch('/', [RecipeController::class, 'update'])->name('recipes.update');
         Route::get('/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
         Route::delete('/', [RecipeController::class, 'destroy'])->name('recipes.destroy');
 

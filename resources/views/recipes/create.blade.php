@@ -61,16 +61,26 @@
                         </div>
                     </div>
 
-                    <div class="flex gap-3 mb-3.5 flex-wrap">
-                        <div class="flex items-center gap-2 flex-1 min-w-40">
-                            <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Cook time:</span>
-                            <input type="text" id="cookTime" name="cook_time" placeholder="1 hr 30 mins" required
-                                   class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
+                    <div class="flex gap-3 mb-3.5">
+                        <div class="flex gap-x-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Cook time:</span>
+                                <input type="number" id="cookTime" name="cook_time" placeholder="45" required
+                                       class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <select class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
+                                    <option value="minutes" selected>Minutes</option>
+                                    <option value="hours">Hours</option>
+                                    <option value="days">Days</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="flex items-center gap-2 flex-1 min-w-40">
+                        <div class="flex items-center gap-2">
                             <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Servings:</span>
-                            <input type="text" id="servings" placeholder="1 serving" name="servings" required
+                            <input type="number" id="servings" placeholder="4" name="servings" required
                                    class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
                         </div>
                     </div>
@@ -94,6 +104,7 @@
                         </select>
                     </div>
 
+                    <p class="text-sm font-semibold text-gray-500 mb-1.5">Description:</p>
                     <textarea id="description" rows="2" placeholder="Share a little more about this dish." name="description"
                               class="w-full bg-gray-100 border-none rounded-xl px-4 py-3 text-sm text-gray-600 outline-none resize-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] mb-5 placeholder:text-gray-400"></textarea>
 
@@ -502,6 +513,13 @@
             const form = document.getElementById('createForm');
             const formData = new FormData(form);
 
+            const cookTime = parseInt(document.getElementById('cookTime').value);
+            const unit = form.querySelector('select').value;
+            let cookTimeInMinutes = cookTime;
+            if (unit === 'hours') cookTimeInMinutes *= 60;
+            else if (unit === 'days') cookTimeInMinutes *= 1440;
+
+            formData.set('cook_time', cookTimeInMinutes);
             formData.append('status', status);
             formData.append('ingredients', JSON.stringify(ingredients));
             formData.append('steps', JSON.stringify(steps));
@@ -516,7 +534,7 @@
                 method: 'POST',
                 body: formData
             }).then(() => {
-                location.reload();
+                window.location.href = '{{ route('recipes.my') }}';
             });
         }
 

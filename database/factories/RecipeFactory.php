@@ -24,8 +24,8 @@ class RecipeFactory extends Factory
                     : null;
             },
             'cook_time' => rand(10, 120) . ' minutes',
-            'servings' => rand(1, 6) . ' servings',
-            'status' => 'published',
+            'servings' => rand(1, 6),
+            'status' => $this->faker->randomElement(['draft', 'published']),
             'tips' => $this->faker->sentence(),
         ];
     }

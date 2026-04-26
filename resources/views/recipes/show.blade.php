@@ -90,7 +90,7 @@
 
                         <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
                         <x-icons.user-group class="w-4 h-4 text-primary" />
-                        {{ $recipe->servings }}
+                        {{ $recipe->servings }} servings
                     </span>
 
                         <form action="{{ route('bookmarks.toggle', $recipe->id) }}" method="POST">
@@ -99,7 +99,7 @@
                                 <x-icons.bookmark
                                     class="w-4 h-4 {{ $isBookmarked ? 'fill-primary text-primary' : 'text-primary fill-none' }}"
                                 />
-                                {{ $recipe->bookmarks_count ?? 0 }}
+                                {{ $recipe->bookmarks_count ?? 0 }} users
                             </button>
                         </form>
 
@@ -344,7 +344,7 @@
                                     <span>·</span>
                                     <div class="flex items-center justify-center gap-x-1">
                                         <x-icons.user-group class="w-4 h-4" />
-                                        <span>{{ $similar->servings }}</span>
+                                        <span>{{ $similar->servings }} servings</span>
                                     </div>
                                 </div>
                             </div>

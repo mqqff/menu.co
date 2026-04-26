@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image');
-            $table->string('cook_time');
-            $table->string('servings');
+            $table->integer('cook_time');
+            $table->integer('servings');
             $table->enum('status', ['draft', 'published']);
             $table->text('tips')->nullable();
             $table->timestamps();
