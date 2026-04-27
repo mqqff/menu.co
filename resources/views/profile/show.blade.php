@@ -105,7 +105,7 @@
         @if(auth()->id() == $user->id)
             <section>
                 <div class="flex items-center justify-between mb-5">
-                    <h2 class="text-xl font-bold text-primary">Saved Recipe</h2>
+                    <h2 class="text-xl font-bold text-primary">Saved Recipes</h2>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">

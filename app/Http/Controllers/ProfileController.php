@@ -15,14 +15,24 @@ class ProfileController extends Controller
 
         $created_recipes = $user->recipes()
             ->latest()
-            ->get();
+            ->take(10)
+            ->get()
+            ->map(function ($recipe) {
+                $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+                return $recipe;
+            });
 
         $saved_recipes = collect();
 
         if ($user->id === Auth::id()) {
-            $saved_recipes = $user->savedRecipes()
+            $saved_recipes = $user->bookmarks()
                 ->latest()
-                ->get();
+                ->take(20)
+                ->get()
+                ->map(function ($bookmark) {
+                    $bookmark->recipe->cook_time = $this->formatCookTime($bookmark->recipe->cook_time);
+                    return $bookmark->recipe;
+                });
         }
 
         return view('profile.show', compact('user', 'created_recipes', 'saved_recipes'));
