@@ -47,4 +47,18 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('home');
     }
+
+    public function createdRecipes(User $user): View
+    {
+        $recipes = $user->recipes()
+            ->latest()
+            ->paginate(75);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('profile.created_recipes', compact('user', 'recipes'));
+    }
 }

@@ -423,15 +423,4 @@ class RecipeController extends Controller
             ]);
         }
     }
-
-    private function formatCookTime($cookTime)
-    {
-        if ($cookTime >= 1440) {
-            return ceil($cookTime / 1440) . ' days';
-        } elseif ($cookTime >= 60) {
-            return ceil($cookTime / 60) . ' hours';
-        }
-
-        return $cookTime . ' minutes';
-    }
 }

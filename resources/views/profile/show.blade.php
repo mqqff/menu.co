@@ -62,9 +62,9 @@
         <section class="mb-12">
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Created Recipes</h2>
-{{--                @if(count($created_recipes) > 0)--}}
-{{--                    <a href="{{ route('recipes.my') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>--}}
-{{--                @endif--}}
+                @if(count($created_recipes) > 0)
+                    <a href="{{ route('profile.recipes', $user->username) }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                @endif
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">

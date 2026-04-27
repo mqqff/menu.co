@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Storage;
 
 abstract class Controller
 {
-    protected function getJson(string $path, bool $assoc = false)
+    protected function formatCookTime($cookTime)
     {
-        if (!Storage::exists($path)) {
-            return null;
+        if ($cookTime >= 1440) {
+            return ceil($cookTime / 1440) . ' days';
+        } elseif ($cookTime >= 60) {
+            return ceil($cookTime / 60) . ' hours';
         }
 
-        return json_decode(Storage::get($path), $assoc);
+        return $cookTime . ' minutes';
     }
 }

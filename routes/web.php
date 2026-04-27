@@ -50,7 +50,10 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile.show');
+Route::prefix('profile/{user:username}')->group(function () {
+    Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/recipes', [ProfileController::class, 'createdRecipes'])->name('profile.recipes');
+});
 
 Route::prefix('recipes')->group(function () {
     Route::get('/search', [RecipeController::class, 'search'])->name('recipes.search');
