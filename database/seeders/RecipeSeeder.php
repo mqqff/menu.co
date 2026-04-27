@@ -12,7 +12,7 @@ class RecipeSeeder extends Seeder
 {
     public function run(): void
     {
-        Recipe::factory(30)->create()->each(function ($recipe) {
+        Recipe::factory(200)->create()->each(function ($recipe) {
 
             $groups = IngredientGroup::factory(rand(1, 3))
                 ->create([

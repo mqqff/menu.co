@@ -3,7 +3,7 @@
 
         <a href="/" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
 
-        <a href="{{ route('recipes.index') }}" class="font-semibold hover:text-white transition {{ request()->routeIs('recipes.index') ? 'text-white' : 'text-white/80' }}">Trending</a>
+        <a href="{{ route('recipes.trending') }}" class="font-semibold hover:text-white transition {{ request()->routeIs('recipes.trending') ? 'text-white' : 'text-white/80' }}">Trending</a>
         @auth <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>@endauth
 
         <div class="flex-1 mx-6">

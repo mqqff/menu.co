@@ -8,7 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
 
-Route::redirect('/', '/recipes')->name('home');
+Route::get('/', [RecipeController::class, 'index'])->name('home');
 
 Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register.form');
@@ -52,9 +52,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('recipes')->group(function () {
-    Route::get('/', [RecipeController::class, 'index'])->name('recipes.index');
-    Route::get('/trending', [RecipeController::class, 'trending'])->name('recipes.trending');
-    Route::get('/trending/category', [RecipeController::class, 'trendingByCategory'])->name('recipes.trending.category');
+    Route::get('/trending', [RecipeController::class, 'trendingRecipes'])->name('recipes.trending');
+    Route::get('/trending/category', [RecipeController::class, 'trendingCategories'])->name('recipes.trending.categories');
+    Route::get('/recent', [RecipeController::class, 'recentlyAdded'])->name('recipes.recent');
+    Route::get('/category/{category:slug}', [RecipeController::class, 'recipeByCategory'])->name('recipes.byCategory');
     Route::get('/{recipe}', [RecipeController::class, 'show'])
         ->middleware('recipe.access')
         ->name('recipes.show');

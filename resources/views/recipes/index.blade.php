@@ -54,12 +54,12 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Category</h2>
-                <a href="{{ route('recipes.trending.category') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.trending.categories') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide scroll-smooth" x-ref="track">
                 @foreach ($trending_categories as $category)
-                    <a href="#"
+                    <a href="{{ route('recipes.byCategory', $category->slug) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ Storage::url($category->image) }}"
                              alt="{{ $category->name }}"
@@ -76,7 +76,7 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Recipes</h2>
-                <a href="#" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.trending') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
@@ -108,7 +108,7 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Recently Added</h2>
-                <a href="#" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.recent') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">

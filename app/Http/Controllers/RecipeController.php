@@ -68,6 +68,75 @@ class RecipeController extends Controller
         ));
     }
 
+    public function trendingRecipes(): View
+    {
+        $recipes = Recipe::published()
+            ->with('category')
+            ->select('recipes.*')
+            ->selectSub(
+                DB::table('ratings')
+                    ->selectRaw('COALESCE(AVG(value), 0)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'avg_rating'
+            )
+            ->selectSub(
+                DB::table('bookmarks')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'bookmarks_count'
+            )
+            ->orderByDesc(DB::raw('(avg_rating * 2) + (bookmarks_count * 0.5)'))
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.trending', compact('recipes'));
+    }
+
+    public function recentlyAdded(): View
+    {
+        $recipes = Recipe::published()
+            ->with('category')
+            ->latest()
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.recent', compact('recipes'));
+    }
+
+    public function trendingCategories(): View
+    {
+        $categories = Category::withCount(['recipes' => function ($q) {
+            $q->where('status', 'published');
+        }])
+            ->orderByDesc('recipes_count')
+            ->paginate(15);
+
+        return view('recipes.trending_categories', compact('categories'));
+    }
+
+    public function recipeByCategory(Category $category): View
+    {
+        $recipes = Recipe::published()
+            ->where('category_id', $category->id)
+            ->latest()
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.by_category', compact('recipes', 'category'));
+    }
+
     public function my(): View
     {
         $recipes = Recipe::where('user_id', Auth::id())
