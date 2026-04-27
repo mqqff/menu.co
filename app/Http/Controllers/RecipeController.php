@@ -48,7 +48,11 @@ class RecipeController extends Controller
             ->with('category')
             ->latest()
             ->take(10)
-            ->get();
+            ->get()
+            ->map(function ($recipe) {
+                $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+                return $recipe;
+            });
 
         $trending_categories = Category::withCount(['recipes' => function ($q) {
             $q->where('status', 'published');
