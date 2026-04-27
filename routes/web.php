@@ -26,7 +26,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('profile')->group(function () {
         Route::get('/settings', [ProfileController::class, 'edit'])->name('profile.settings');
-        Route::get('/{user:username}', [ProfileController::class, 'show'])->name('profile.show');
         Route::put('/{user}', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/{user}', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
@@ -50,6 +49,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     });
 });
+
+Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile.show');
 
 Route::prefix('recipes')->group(function () {
     Route::get('/search', [RecipeController::class, 'search'])->name('recipes.search');
