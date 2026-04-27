@@ -96,7 +96,7 @@
                                 </span>
                                 <span class="flex items-center gap-1">
                                     <x-icons.user-group class="w-4 h-4" />
-                                    {{ $recipe->servings }}
+                                    {{ $recipe->servings }} servings
                                 </span>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                                 </span>
                                 <span class="flex items-center gap-1">
                                     <x-icons.user-group class="w-4 h-4" />
-                                    {{ $recipe->servings }}
+                                    {{ $recipe->servings }} servings
                                 </span>
                             </div>
                         </div>

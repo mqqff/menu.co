@@ -42,11 +42,12 @@
                             <div class="flex items-center justify-center gap-3 text-xs text-white/90">
                                 <span class="flex items-center gap-1">
                                 <x-icons.bookmark class="w-5 h-5" />
-                                {{ $recipe->saves_count }}
+                                {{ $recipe->bookmarks_count ? ($recipe->bookmarks_count > 1 ? $recipe->bookmarks_count . ' users' : $recipe->bookmarks_count . ' user') : 0 . ' user' }}
                             </span>
                                 <span class="flex items-center gap-1">
                                 <x-icons.star class="w-5 h-5" />
-                                {{ $recipe->rating }}
+                                @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
+                                {{ number_format($rating, 0) }}
                             </span>
                             </div>
                         </div>
