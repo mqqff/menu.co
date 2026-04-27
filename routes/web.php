@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('recipes')->group(function () {
+    Route::get('/search', [RecipeController::class, 'search'])->name('recipes.search');
     Route::get('/trending', [RecipeController::class, 'trendingRecipes'])->name('recipes.trending');
     Route::get('/trending/category', [RecipeController::class, 'trendingCategories'])->name('recipes.trending.categories');
     Route::get('/recent', [RecipeController::class, 'recentlyAdded'])->name('recipes.recent');

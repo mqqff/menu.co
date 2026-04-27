@@ -68,6 +68,43 @@ class RecipeController extends Controller
         ));
     }
 
+    public function search(Request $request): View
+    {
+        $query = $request->input('q');
+
+        $recipes = Recipe::published()
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%")
+                    ->orWhereHas('category', function ($q2) use ($query) {
+                        $q2->where('name', 'like', "%{$query}%");
+                    });
+            })
+            ->with('category')
+            ->select('recipes.*')
+            ->selectSub(
+                DB::table('ratings')
+                    ->selectRaw('COALESCE(AVG(value), 0)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'avg_rating'
+            )
+            ->selectSub(
+                DB::table('bookmarks')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'bookmarks_count'
+            )
+            ->orderByDesc(DB::raw('(avg_rating * 2) + (bookmarks_count * 0.5)'))
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.search', compact('recipes', 'query'));
+    }
+
     public function trendingRecipes(): View
     {
         $recipes = Recipe::published()

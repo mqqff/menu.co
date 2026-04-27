@@ -1,13 +1,13 @@
 <nav class="w-full px-10 py-4 bg-primary">
     <div class="max-w-8xl mx-auto flex items-center gap-8">
 
-        <a href="/" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
+        <a href="{{ route('home') }}" class="text-white text-2xl font-bold mr-4">Menu.Co</a>
 
         <a href="{{ route('recipes.trending') }}" class="font-semibold hover:text-white transition {{ request()->routeIs('recipes.trending') ? 'text-white' : 'text-white/80' }}">Trending</a>
         @auth <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>@endauth
 
         <div class="flex-1 mx-6">
-            <form action="" method="GET">
+            <form action="{{ route('recipes.search') }}" method="GET">
                 <div class="flex items-center bg-white rounded-full max-w-sm px-4 py-2 gap-2">
                     <input
                         type="text"
