@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profile')
+@section('title', $user->username.'\'s Profile')
 
 @section('content')
     <div class="bg-[#faf8f5] min-h-screen px-8 md:px-28 py-10">
@@ -17,11 +17,16 @@
             <div class="flex-1">
                 <p class="text-gray-600 text-sm font-semibold mb-2">Food Preference:</p>
                 <div class="flex flex-wrap gap-2">
-                    @foreach ($user->preferences as $pref)
-                        <a href="{{ route('recipes.byCategory', $pref->slug) }}" class="border border-gray-300 text-gray-700 text-xs font-semibold px-3 py-1 rounded-lg shadow-md">
-                        {{ $pref->name }}
-                    </a>
-                    @endforeach
+                    @forelse ($user->preferences as $pref)
+                        <a href="{{ route('recipes.byCategory', $pref->slug) }}"
+                           class="border border-gray-300 text-gray-700 text-xs font-semibold px-3 py-1 rounded-lg shadow-md">
+                            {{ $pref->name }}
+                        </a>
+                    @empty
+                        <span class="text-gray-400 text-sm">
+                            No preferences selected yet.
+                        </span>
+                    @endforelse
                 </div>
             </div>
 
