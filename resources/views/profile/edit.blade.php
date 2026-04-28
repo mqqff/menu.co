@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'User Settings')
+
 @section('content')
     <div class="bg-gray-100 min-h-screen py-10">
         <div class="max-w-6xl mx-auto flex gap-16 px-4">
@@ -96,47 +98,51 @@
                 </section>
 
                 <section id="account" class="max-w-2xl">
-                    <h2 class="text-2xl font-semibold text-primary mb-2">
-                        Account
-                    </h2>
-                    <p class="text-sm text-gray-800 mb-6">
-                        Make changes to your email or password.
-                    </p>
+                    <form action="{{ route('profile.update.account', ['user' => auth()->id()]) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <h2 class="text-2xl font-semibold text-primary mb-2">
+                            Account
+                        </h2>
+                        <p class="text-sm text-gray-800 mb-6">
+                            Make changes to your email or password.
+                        </p>
 
-                    <div class="space-y-5">
-                        <div>
-                            <label class="block text-sm text-primary mb-1 font-medium">Email</label>
-                            <x-profile.input type="email" value="{{ old('email') ?? auth()->user()->email }}" placeholder="Enter your email" name="email"/>
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">Email</label>
+                                <x-profile.input type="email" value="{{ old('email') ?? auth()->user()->email }}" placeholder="Enter your email" name="email"/>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">Old Password</label>
+                                <x-profile.input type="password" placeholder="Enter old password if you want to change" name="old_password" autocomplete="off"/>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">New Password</label>
+                                <x-profile.input type="password" placeholder="Enter new password" name="password" autocomplete="off"/>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">Confirm New Password</label>
+                                <x-profile.input type="password" placeholder="Confirm new password" name="password_confirmation" autocomplete="off"/>
+                            </div>
+
                         </div>
 
-                        <div>
-                            <label class="block text-sm text-primary mb-1 font-medium">Old Password</label>
-                            <x-profile.input type="password" placeholder="Enter old password if you want to change" name="old_password"/>
+                        <div class="flex justify-center gap-4 mt-6">
+                            <button type="button" class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium">
+                                <x-icons.trash class="w-4"/>
+                                Discard Changes
+                            </button>
+
+                            <button type="submit" class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm">
+                                <x-icons.save class="w-4"/>
+                                Save Changes
+                            </button>
                         </div>
-
-                        <div>
-                            <label class="block text-sm text-primary mb-1 font-medium">New Password</label>
-                            <x-profile.input type="password" placeholder="Enter new password" name="password"/>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm text-primary mb-1 font-medium">Confirm New Password</label>
-                            <x-profile.input type="password" placeholder="Confirm new password" name="password_confirmation"/>
-                        </div>
-
-                    </div>
-
-                    <div class="flex justify-center gap-4 mt-6">
-                        <button class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium">
-                            <x-icons.trash class="w-4"/>
-                            Discard Changes
-                        </button>
-
-                        <button class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm">
-                            <x-icons.save class="w-4"/>
-                            Save Changes
-                        </button>
-                    </div>
+                    </form>
 
                     <div class="my-10 border-t border-dashed border-gray-300" />
 
@@ -164,6 +170,22 @@
             </div>
         </div>
     </div>
+
+    @if(session('success'))
+        {{ session('success') }}
+    @endif
+
+    @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '{{ session('success') }}',
+                })
+            })
+        </script>
+    @endif
 
     <script>
         const profile = document.getElementById('profile');

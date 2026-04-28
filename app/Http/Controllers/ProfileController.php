@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -45,9 +46,35 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
-    public function update(Request $request)
+    public function updateAccount(Request $request, User $user)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'old_password' => 'required_with:password|string',
+            'password' => 'nullable|string|min:8|confirmed',
+            'password_confirmation' => 'required_if:password,filled|same:password',
+        ]);
 
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->withFragment('account');
+        }
+
+        $user->email = $request->email;
+
+        if ($request->filled('password')) {
+            if (!Hash::check($request->old_password, $user->password)) {
+                return back()->withFragment('account')->withErrors(['old_password' => 'Incorrect current password.']);
+            }
+
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('profile.settings')->with('success', 'Account updated successfully.');
     }
 
     public function destroy(Request $request, User $user)
