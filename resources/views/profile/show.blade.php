@@ -107,7 +107,7 @@
                 <div class="flex items-center justify-between mb-5">
                     <h2 class="text-xl font-bold text-primary">Saved Recipes</h2>
                     @if(count($saved_recipes) > 0)
-                        <a href="{{ route('profile.recipes', $user->username) }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                        <a href="{{ route('profile.bookmarks') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
                     @endif
                 </div>
 
