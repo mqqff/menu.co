@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -15,7 +16,7 @@ class ProfileController extends Controller
 
         $created_recipes = $user->recipes()
             ->latest()
-            ->take(10)
+            ->take(15)
             ->get()
             ->map(function ($recipe) {
                 $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
@@ -27,7 +28,7 @@ class ProfileController extends Controller
         if ($user->id === Auth::id()) {
             $saved_recipes = $user->bookmarks()
                 ->latest()
-                ->take(20)
+                ->take(15)
                 ->get()
                 ->map(function ($bookmark) {
                     $bookmark->recipe->cook_time = $this->formatCookTime($bookmark->recipe->cook_time);
@@ -70,5 +71,19 @@ class ProfileController extends Controller
         });
 
         return view('profile.created_recipes', compact('user', 'recipes'));
+    }
+
+    public function bookmarks(): View
+    {
+        $recipes = Auth::user()->bookmarks()
+            ->latest()
+            ->take(15)
+            ->get()
+            ->map(function ($bookmark) {
+                $bookmark->recipe->cook_time = $this->formatCookTime($bookmark->recipe->cook_time);
+                return $bookmark->recipe;
+            });
+
+        return view('profile.bookmarks', compact('recipes'));
     }
 }
