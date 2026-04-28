@@ -64,7 +64,6 @@
                 </div>
 
                 <div class="flex-1">
-
                     <h1 class="text-3xl md:text-4xl text-primary tracking-wide font-bold">
                         {{ $recipe->title }}
                     </h1>
@@ -75,52 +74,53 @@
                             alt="{{ $recipe->user->name }}"
                             class="w-10 h-10 rounded-full object-cover border border-white"
                         >
-                        <div>
+                        <a href="{{{ route('profile.show', $recipe->user->username) }}}">
                             <p class="text-md font-bold text-gray-800">{{ $recipe->user->name }}</p>
                             <p class="text-xs text-gray-400">{{ '@'.$recipe->user->username }}</p>
-                        </div>
+                        </a>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-3 mb-4 text-sm text-gray-600">
 
-                    <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
+                    <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white">
                         <x-icons.clock class="w-4 h-4 text-primary" />
                         {{ $recipe->cook_time }}
                     </span>
 
-                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
+                    <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white">
                         <x-icons.user-group class="w-4 h-4 text-primary" />
                         {{ $recipe->servings }} servings
                     </span>
 
-                        <form action="{{ route('bookmarks.toggle', $recipe->id) }}" method="POST">
-                            @csrf
-                            <button class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
-                                <x-icons.bookmark
-                                    class="w-4 h-4 {{ $isBookmarked ? 'fill-primary text-primary' : 'text-primary fill-none' }}"
-                                />
-                                {{ $recipe->bookmarks_count ? ($recipe->bookmarks_count > 1 ? $recipe->bookmarks_count . ' users' : $recipe->bookmarks_count . ' user') : 0 . ' user' }}
-                            </button>
-                        </form>
+                    <form action="{{ route('bookmarks.toggle', $recipe->id) }}" method="POST">
+                        @csrf
+                        <button class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white">
+                            <x-icons.bookmark
+                                class="w-4 h-4 {{ $isBookmarked ? 'fill-primary text-primary' : 'text-primary fill-none' }}"
+                            />
+                            {{ $recipe->bookmarks_count ? ($recipe->bookmarks_count > 1 ? $recipe->bookmarks_count . ' users' : $recipe->bookmarks_count . ' user') : 0 . ' user' }}
+                        </button>
+                    </form>
 
-                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium">
+                    <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white">
                         @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
 
                             @for ($i = 1; $i <= 5; $i++)
                                 <x-icons.star class="w-4 h-4 {{ $i <= floor($rating) ? 'text-primary' : 'text-gray-300' }}" />
                             @endfor
 
-                        <span>{{ number_format($rating, 1) }}</span>
+                        <span>{{ number_format($rating, 1) }} stars</span>
                     </span>
 
-                        <div class="relative" id="three-dot-recipe-wrapper">
-                            <button id="three-dot-recipe" class="text-gray-400 hover:text-gray-600 cursor-pointer">
-                                <x-icons.three-dot class="w-4 h-4" />
-                            </button>
+                    <div class="relative" id="three-dot-recipe-wrapper">
+                        <button id="three-dot-recipe" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+                            <x-icons.three-dot class="w-4 h-4" />
+                        </button>
 
-                            <div id="recipe-dropdown"
-                                 class="hidden absolute right-0 mt-2 w-52 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 py-1">
+                        <div id="recipe-dropdown"
+                             class="hidden absolute right-0 mt-2 w-52 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 py-1">
 
+                            @if($recipe->status == 'published')
                                 <button
                                     type="button"
                                     onclick="handleShare()"
@@ -129,16 +129,18 @@
                                     <x-icons.plane class="w-5 h-5 text-gray-600 shrink-0" />
                                     <span class="font-medium">Share Recipe</span>
                                 </button>
+                            @endif
 
-                                @if(auth()->id() === $recipe->user_id)
-                                    <a href="{{ route('recipes.edit', ['recipe' => $recipe->id]) }}"
-                                       class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition-colors cursor-pointer"
-                                    >
-                                        <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
-                                        <span class="font-medium">Edit Recipe</span>
-                                    </a>
-                                @endif
+                            @if(auth()->id() === $recipe->user_id)
+                                <a href="{{ route('recipes.edit', ['recipe' => $recipe->id]) }}"
+                                   class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-800 hover:bg-gray-50 transition-colors cursor-pointer"
+                                >
+                                    <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
+                                    <span class="font-medium">Edit Recipe</span>
+                                </a>
+                            @endif
 
+                            @if(auth()->check() && $recipe->user->id != auth()->id())
                                 <div class="h-px bg-gray-100 mx-3"></div>
 
                                 <button
@@ -149,46 +151,47 @@
                                     <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
                                     <span class="font-semibold text-red-600">Report Recipe</span>
                                 </button>
-                            </div>
+                            @endif
                         </div>
-
                     </div>
 
-                    <p class="text-sm text-gray-600 mb-5 leading-relaxed">
-                        {{ $recipe->description }}
-                    </p>
+                </div>
 
-                    <h2 class="text-2xl font-extrabold text-orange mb-3.5">Steps</h2>
+                <p class="text-sm text-gray-600 mb-5 leading-relaxed">
+                    {{ $recipe->description }}
+                </p>
 
-                    <ol class="space-y-6">
-                        @foreach ($recipe->steps as $index => $step)
-                            <li>
-                                <div class="flex gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-orange text-white flex items-center justify-center font-bold shrink-0">
-                                        {{ $index + 1 }}
-                                    </div>
+                <h2 class="text-2xl font-extrabold text-orange mb-3.5">Steps</h2>
 
-                                    <p class="text-sm text-gray-700 leading-relaxed flex-1">
-                                        {{ $step->text }}
-                                    </p>
+                <ol class="space-y-6">
+                    @foreach ($recipe->steps as $index => $step)
+                        <li>
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-orange text-white flex items-center justify-center font-bold shrink-0">
+                                    {{ $index + 1 }}
                                 </div>
 
-                                @if ($step->image)
-                                    <img
-                                        src="{{ $step->image_url }}"
-                                        class="ml-11 mt-3 rounded-xl w-full max-w-xs object-cover shadow-sm"
-                                    >
-                                @endif
-                            </li>
-                        @endforeach
-                    </ol>
+                                <p class="text-sm text-gray-700 leading-relaxed flex-1">
+                                    {{ $step->text }}
+                                </p>
+                            </div>
 
-                    @if ($recipe->tips)
-                        <div class="mt-6">
-                            <h2 class="text-2xl font-extrabold text-orange mb-3.5">Tips</h2>
-                            <p class="text-sm text-gray-600 leading-relaxed">{{ $recipe->tips }}</p>
-                        </div>
-                    @endif
+                            @if ($step->image)
+                                <img
+                                    src="{{ $step->image_url }}"
+                                    class="ml-11 mt-3 rounded-xl w-full max-w-xs object-cover shadow-sm"
+                                >
+                            @endif
+                        </li>
+                    @endforeach
+                </ol>
+
+                @if ($recipe->tips)
+                    <div class="mt-6">
+                        <h2 class="text-2xl font-extrabold text-orange mb-3.5">Tips</h2>
+                        <p class="text-sm text-gray-600 leading-relaxed">{{ $recipe->tips }}</p>
+                    </div>
+                @endif
 
                 </div>
             </section>
@@ -206,10 +209,10 @@
                                         alt="{{ $comment->user->name }}"
                                         class="w-14 h-14 rounded-full object-cover"
                                     />
-                                    <div>
+                                    <a href="{{ route('profile.show', $comment->user->username) }}">
                                         <p class="text-md font-bold text-gray-800">{{ $comment->user->name }}</p>
                                         <p class="text-sm text-gray-400">{{ '@' . $comment->user->username }}</p>
-                                    </div>
+                                    </a>
                                 </div>
 
                                 <div class="relative comment-wrapper">
@@ -279,8 +282,8 @@
                 @auth
                     <div class="mt-5 flex items-center gap-3">
                         <img
-                            src="{{ Storage::url($recipe->user->avatar) }}"
-                            alt="{{ $recipe->user->name }}"
+                            src="{{ Storage::url(auth()->user()->avatar) }}"
+                            alt="{{ auth()->user()->name }}"
                             class="w-9 h-9 rounded-full object-cover shrink-0"
                         />
                         <form action="{{ route('comments.store', $recipe->id) }}" method="POST" id="comment-form"

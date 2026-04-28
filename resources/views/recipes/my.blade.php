@@ -47,7 +47,7 @@
                                 <span class="flex items-center gap-1">
                                 <x-icons.star class="w-5 h-5" />
                                 @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
-                                {{ number_format($rating, 0) }}
+                                {{ number_format($rating, 0) }} stars
                             </span>
                             </div>
                         </div>

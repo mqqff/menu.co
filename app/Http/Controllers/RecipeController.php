@@ -180,7 +180,11 @@ class RecipeController extends Controller
             ->latest()
             ->get()
             ->loadCount('bookmarks')
-            ->loadAvg('ratings', 'value');
+            ->loadAvg('ratings', 'value')
+            ->map(function ($recipe) {
+                $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+                return $recipe;
+            });
 
         return view('recipes.my', compact('recipes'));
     }
@@ -324,7 +328,11 @@ class RecipeController extends Controller
             ->where('status', 'published')
             ->inRandomOrder()
             ->take(4)
-            ->get();
+            ->get()
+            ->map(function ($r) {
+                $r->cook_time = $this->formatCookTime($r->cook_time);
+                return $r;
+            });
 
         return view('recipes.show', compact(
             'recipe',
