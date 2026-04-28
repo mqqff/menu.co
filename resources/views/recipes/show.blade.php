@@ -270,7 +270,9 @@
                             <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $comment->content }}</p>
                         </div>
                     @empty
-                        <p class="text-sm text-gray-400 italic">Belum ada komentar. Jadilah yang pertama!</p>
+                        @auth
+                            <p class="text-sm text-gray-400 italic">No reviews yet. Be the first!</p>
+                        @endauth
                     @endforelse
                 </div>
 
