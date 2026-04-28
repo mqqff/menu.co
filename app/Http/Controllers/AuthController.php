@@ -51,6 +51,11 @@ class AuthController extends Controller
         return back()->with('error', 'Incorrect email or password')->withInput();
     }
 
+    public function showForgotPassword(): View
+    {
+        return view('auth.forgot-password');
+    }
+
     public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
