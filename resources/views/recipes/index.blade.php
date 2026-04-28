@@ -54,7 +54,7 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Category</h2>
-                <a href="{{ route('recipes.trending.categories') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.trending.categories') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide scroll-smooth" x-ref="track">
@@ -76,7 +76,7 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Recipes</h2>
-                <a href="{{ route('recipes.trending') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.trending') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
@@ -108,7 +108,7 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Recently Added</h2>
-                <a href="{{ route('recipes.recent') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.recent') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
