@@ -15,9 +15,7 @@ Route::prefix('auth')->middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::get('/auth/login', function () {
-        return redirect()->route('login');
-    })->name('auth.login.form');
+    Route::get('/auth/login', fn () => redirect()->route('login'))->name('auth.login.form');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 });
 
@@ -26,7 +24,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('profile')->group(function () {
         Route::get('/settings', [ProfileController::class, 'edit'])->name('profile.settings');
-        Route::put('/{user}', [ProfileController::class, 'update'])->name('profile.update');
+        Route::patch('/{user}/updateAccount', [ProfileController::class, 'updateAccount'])->name('profile.update.account');
         Route::delete('/{user}', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
@@ -34,15 +32,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/my', [RecipeController::class, 'my'])->name('recipes.my');
         Route::get('/create', [RecipeController::class, 'create'])->name('recipes.create');
         Route::post('/', [RecipeController::class, 'store'])->name('recipes.store');
+        Route::post('/{recipe}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
+        Route::post('/{recipe}/comment', [CommentController::class, 'store'])->name('comments.store');
     });
 
-    Route::prefix('recipes/{recipe}')->middleware(['recipe.owner'])->group(function () {
-        Route::patch('/', [RecipeController::class, 'update'])->name('recipes.update');
+    Route::prefix('recipes/{recipe}')->middleware('recipe.owner')->group(function () {
         Route::get('/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
+        Route::patch('/', [RecipeController::class, 'update'])->name('recipes.update');
         Route::delete('/', [RecipeController::class, 'destroy'])->name('recipes.destroy');
-
-        Route::post('/bookmark', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
-        Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     });
 
     Route::prefix('comments')->group(function () {
@@ -61,7 +58,5 @@ Route::prefix('recipes')->group(function () {
     Route::get('/trending/category', [RecipeController::class, 'trendingCategories'])->name('recipes.trending.categories');
     Route::get('/recent', [RecipeController::class, 'recentlyAdded'])->name('recipes.recent');
     Route::get('/category/{category:slug}', [RecipeController::class, 'recipeByCategory'])->name('recipes.byCategory');
-    Route::get('/{recipe}', [RecipeController::class, 'show'])
-        ->middleware('recipe.access')
-        ->name('recipes.show');
+    Route::get('/{recipe}', [RecipeController::class, 'show'])->middleware('recipe.access')->name('recipes.show');
 });
