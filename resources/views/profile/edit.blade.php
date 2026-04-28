@@ -217,19 +217,6 @@
         </script>
     @endpush
 
-
-    @if(session('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: '{{ session('success') }}',
-                })
-            })
-        </script>
-    @endif
-
     <script>
         const profile = document.getElementById('profile');
         const account = document.getElementById('account');
