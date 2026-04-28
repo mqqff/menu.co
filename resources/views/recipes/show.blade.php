@@ -70,7 +70,7 @@
 
                     <div class="flex items-center gap-2.5 mb-4 mt-5">
                         <img
-                            src="{{ Storage::url($recipe->user->avatar) }}"
+                            src="{{ $recipe->user->avatar_url }}"
                             alt="{{ $recipe->user->name }}"
                             class="w-10 h-10 rounded-full object-cover border border-white"
                         >
@@ -210,7 +210,7 @@
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-3">
                                     <img
-                                        src="{{ Storage::url($comment->user->avatar) }}"
+                                        src="{{ $comment->user->avatar_url }}"
                                         alt="{{ $comment->user->name }}"
                                         class="w-14 h-14 rounded-full object-cover"
                                     />
@@ -292,7 +292,7 @@
                 @auth
                     <div class="mt-5 flex items-center gap-3">
                         <img
-                            src="{{ Storage::url(auth()->user()->avatar) }}"
+                            src="{{ auth()->user()->avatar_url }}"
                             alt="{{ auth()->user()->name }}"
                             class="w-9 h-9 rounded-full object-cover shrink-0"
                         />

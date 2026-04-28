@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute()
     {
-        return $this->image ? Storage::url($this->image) : null;
+        return $this->avatar ? Storage::url($this->avatar) : null;
     }
 
     public function preferences(): BelongsToMany

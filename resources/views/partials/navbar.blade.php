@@ -36,7 +36,7 @@
                             onclick="toggleDropdown()"
                             class="w-10 h-10 rounded-full overflow-hidden border-2 border-white focus:outline-none cursor-pointer"
                         >
-                            <img src="{{ Storage::url(auth()->user()->avatar) }}" alt="User Image" class="w-full h-full object-cover" />
+                            <img src="{{ auth()->user()->avatar_url }}" alt="User Image" class="w-full h-full object-cover" />
                         </button>
 
                         <div

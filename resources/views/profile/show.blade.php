@@ -5,7 +5,7 @@
 @section('content')
     <div class="bg-[#faf8f5] min-h-screen px-8 md:px-28 py-10">
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-10">
-            <img src="{{ Storage::url($user->avatar) }}"
+            <img src="{{ $user->avatar_url }}"
                  alt="Profile Picture"
                  class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md shrink-0">
 

@@ -61,7 +61,7 @@
                 @foreach ($trending_categories as $category)
                     <a href="{{ route('recipes.byCategory', $category->slug) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
-                        <img src="{{ Storage::url($category->image) }}"
+                        <img src="{{ $category->image_url }}"
                              alt="{{ $category->name }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"></div>

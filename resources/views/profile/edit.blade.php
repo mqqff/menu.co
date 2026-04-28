@@ -61,7 +61,7 @@
                         </p>
 
                         <div class="flex items-center gap-4 mb-6">
-                            <img id="avatar-preview" src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}"
+                            <img id="avatar-preview" src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
                                  class="w-14 h-14 rounded-full object-cover">
 
                             <button type="button" id="change-picture-btn"

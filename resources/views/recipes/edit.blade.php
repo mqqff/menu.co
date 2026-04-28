@@ -55,7 +55,7 @@
 
                     <div class="flex items-center gap-2.5 my-4">
                         <img class="w-10 h-10 rounded-full object-cover border border-white"
-                             src="{{ Storage::url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}'s avatar">
+                             src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}'s avatar">
                         <div>
                             <p class="text-md font-bold text-gray-800">{{ auth()->user()->name }}</p>
                             <p class="text-xs text-gray-400">{{ "@" . auth()->user()->username }}</p>
