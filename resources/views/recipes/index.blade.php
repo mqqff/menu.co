@@ -32,7 +32,7 @@
             </div>
 
             <div class="hero-slide absolute inset-0 px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-0 z-0">
-                <div class="absolute right-8 top-6 w-40 h-40">
+                <div class="absolute right-8 top-6   ">
                     <x-auth.egg />
                 </div>
                 <p class="text-white/90 font-semibold text-3xl mb-1">Community Spotlight</p>
