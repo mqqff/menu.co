@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,39 @@ class ProfileController extends Controller
     public function edit(): View
     {
         $user = Auth::user();
-        return view('profile.edit', compact('user'));
+        $user->load('preferences');
+        $categories = Category::all();
+
+        return view('profile.edit', compact('user', 'categories'));
+    }
+
+    public function updateProfile(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'name' => 'required|string|max:255',
+            'preferences' => 'nullable|array',
+            'preferences.*' => 'exists:categories,id',
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->withFragment('profile');
+        }
+
+        $user->update([
+            'username' => $request->username,
+            'name' => $request->name,
+        ]);
+
+        $user->preferences()->sync($request->preferences ?? []);
+
+        return redirect()
+            ->route('profile.settings')
+            ->withFragment('profile')
+            ->with('success', 'Profile updated successfully.');
     }
 
     public function updateAccount(Request $request, User $user)
@@ -74,7 +107,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile.settings')->with('success', 'Account updated successfully.');
+        return redirect()->route('profile.settings')->withFragment('account')->with('success', 'Account updated successfully.');
     }
 
     public function destroy(Request $request, User $user)

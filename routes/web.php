@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings', [ProfileController::class, 'edit'])->name('profile.settings');
         Route::get('/bookmarks', [ProfileController::class, 'bookmarks'])->name('profile.bookmarks');
         Route::patch('/{user}/updateAccount', [ProfileController::class, 'updateAccount'])->name('profile.update.account');
+        Route::patch('/{user}/updateProfile', [ProfileController::class, 'updateProfile'])->name('profile.update.profile');
         Route::delete('/{user}', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
