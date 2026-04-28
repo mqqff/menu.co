@@ -106,11 +106,14 @@
             <section>
                 <div class="flex items-center justify-between mb-5">
                     <h2 class="text-xl font-bold text-primary">Saved Recipes</h2>
+                    @if(count($saved_recipes) > 0)
+                        <a href="{{ route('profile.recipes', $user->username) }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                    @endif
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                     @forelse ($saved_recipes as $recipe)
-                        <a href="{{ route('recipes.show', ['recipe' => 1]) }}"
+                        <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                            class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block aspect-4/3">
                             <img src="{{ $recipe->image_url }}"
                                  alt="{{ $recipe->title }}"
