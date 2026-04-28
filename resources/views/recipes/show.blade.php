@@ -143,6 +143,10 @@
                             @if(auth()->check() && $recipe->user->id != auth()->id())
                                 <div class="h-px bg-gray-100 mx-3"></div>
 
+                                <form id="form-report-recipe" action="{{ route('recipes.report', $recipe->id) }}" method="POST">
+                                    @csrf
+                                </form>
+
                                 <button
                                     type="button"
                                     onclick="handleReport()"
@@ -180,6 +184,7 @@
                                 <img
                                     src="{{ $step->image_url }}"
                                     class="ml-11 mt-3 rounded-xl w-full max-w-xs object-cover shadow-sm"
+                                    alt=""
                                 >
                             @endif
                         </li>
@@ -227,17 +232,18 @@
                                         class="comment-dropdown hidden absolute right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1"
                                         style="min-width: 220px;"
                                     >
-                                        <button
-                                            type="button"
-                                            class="edit-btn w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 transition-colors cursor-pointer"
-                                            data-id="{{ $comment->id }}"
-                                            data-content="{{ $comment->content }}"
-                                            data-rating="{{ $comment->rating->value ?? 0 }}"
-                                        >
-                                            <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
-                                            <span class="font-medium">Edit</span>
-                                        </button>
                                         @if (auth()->check() && auth()->id() == $comment->user_id)
+                                            <button
+                                                type="button"
+                                                class="edit-btn w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 transition-colors cursor-pointer"
+                                                data-id="{{ $comment->id }}"
+                                                data-content="{{ $comment->content }}"
+                                                data-rating="{{ $comment->rating->value ?? 0 }}"
+                                            >
+                                                <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
+                                                <span class="font-medium">Edit</span>
+                                            </button>
+
                                             <form method="POST" action="{{ route('comments.destroy', $comment->id) }}">
                                                 @csrf
                                                 @method('DELETE')
@@ -250,13 +256,17 @@
                                                 </button>
                                             </form>
                                         @else
-                                            <button
-                                                type="button"
-                                                class="report-btn w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
-                                            >
-                                                <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
-                                                <span class="font-semibold text-red-600">Report Comment</span>
-                                            </button>
+                                            <form id="form-report-comment" action="{{ route('comments.report', $comment->id) }}" method="POST">
+                                                @csrf
+
+                                                <button
+                                                    type="button"
+                                                    class="report-btn w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
+                                                >
+                                                    <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                                                    <span class="font-semibold text-red-600">Report Comment</span>
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
                                 </div>
@@ -361,6 +371,10 @@
     </div>
 
     <script>
+        function handleReportComment() {
+
+        }
+
         const btn     = document.getElementById('three-dot-recipe');
         const dropdown = document.getElementById('recipe-dropdown');
         const wrapper  = document.getElementById('three-dot-recipe-wrapper');
@@ -405,7 +419,19 @@
 
         function handleReport() {
             closeDropdown();
-            window.location.href = "";
+            Swal.fire({
+                title: "Report",
+                text: "Please only report if it contains advertisements, nudity, hate speech or irrelevant content. Our team will review it shortly.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc2626",
+                cancelButtonColor: "#6b7280",
+                confirmButtonText: "Yes, report"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-report-recipe').submit();
+                }
+            });
         }
 
         function closeDropdown() {
@@ -468,8 +494,8 @@
                     .querySelector('.comment-dropdown')
                     .classList.add('hidden');
                 Swal.fire({
-                    title: "Report this comment?",
-                    text: "We will review this content.",
+                    title: "Report?",
+                    text: "Please only report if it contains advertisements, nudity, hate speech or irrelevant content. Our team will review it shortly.",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#dc2626",
@@ -477,8 +503,7 @@
                     confirmButtonText: "Yes, report"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // TODO: route report
-                        console.log('Reported');
+                        this.closest('form').submit();
                     }
                 });
             });

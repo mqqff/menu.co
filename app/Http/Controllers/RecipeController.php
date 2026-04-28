@@ -348,6 +348,14 @@ class RecipeController extends Controller
         return redirect()->route('recipes.my');
     }
 
+    public function report(Recipe $recipe)
+    {
+        $recipe->reports()->create([
+            'user_id' => Auth::id()
+        ]);
+        return redirect()->back()->with('success', 'Recipe reported successfully!');
+    }
+
     private function validateRecipe($request, $isCreate = true)
     {
         return $request->validate([

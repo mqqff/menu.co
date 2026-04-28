@@ -33,4 +33,9 @@ class Comment extends Model
         return $this->hasOne(Rating::class, 'user_id', 'user_id')
             ->whereColumn('recipe_id', 'recipe_id');
     }
+
+    public function reports()
+    {
+        return $this->morphMany(Report::class, 'reportable');
+    }
 }
