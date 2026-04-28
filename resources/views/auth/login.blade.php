@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="flex min-h-screen">
-
         <div class="hidden lg:flex lg:w-1/2 bg-[#F7B555] items-center justify-center relative overflow-hidden">
             <div class="w-full h-full relative select-none pointer-events-none overflow-hidden">
                 <div class="absolute -left-10 top-6 w-64 h-36">
@@ -45,7 +44,7 @@
                     @csrf
 
                     @if (session('success'))
-                        <div class="bg-green-300 border border-green-400/60 text-green-800 font-medium text-center text-sm rounded-md px-4 py-2">
+                        <div class="bg-green-200 border border-green-400/60 text-green-700 font-medium text-center text-sm rounded-md px-4 py-2">
                             {{ session('success') }}
                         </div>
                     @endif
@@ -76,16 +75,16 @@
                     />
 
                     <div class="flex justify-end -mt-2">
-                        <a href="#"
+                        <a href="{{ route('auth.password.forgot.form') }}"
                            class="text-sm text-white font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity">
                             Forgot Password
                         </a>
                     </div>
 
                     <div class="pt-2 flex justify-center">
-                        <button type="submit" class="bg-white text-primary font-bold text-sm px-10 py-2 rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-150 shadow-sm cursor-pointer">
+                        <x-auth.button type="submit" class="px-10 py-2">
                             Submit
-                        </button>
+                        </x-auth.button>
                     </div>
 
                     <p class="text-center text-sm text-white pt-1">

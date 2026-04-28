@@ -17,6 +17,15 @@ Route::prefix('auth')->middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::get('/auth/login', fn () => redirect()->route('login'))->name('auth.login.form');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+
+    Route::prefix('password')->name('auth.password.')->group(function () {
+        Route::get('/forgot', [AuthController::class, 'showForgotPassword'])->name('forgot.form');
+        Route::post('/forgot', [AuthController::class, 'sendVerificationCode'])->name('forgot.send');
+        Route::get('/verify', [AuthController::class, 'showVerifyCodeForm'])->name('verify.form');
+        Route::post('/verify', [AuthController::class, 'verifyCode'])->name('verify.check');
+        Route::get('/reset', [AuthController::class, 'showResetPassword'])->name('reset.form');
+        Route::patch('/reset', [AuthController::class, 'resetPassword'])->name('reset.update');
+    });
 });
 
 Route::middleware('auth')->group(function () {

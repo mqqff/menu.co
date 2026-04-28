@@ -24,6 +24,6 @@ class BookmarkController extends Controller
             ]);
         }
 
-        return back();
+        return back()->with('success', $existing ? 'Recipe removed from bookmarks.' : 'Recipe added to bookmarks.');
     }
 }

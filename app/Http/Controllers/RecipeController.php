@@ -228,7 +228,7 @@ class RecipeController extends Controller
             $slug
         );
 
-        return redirect()->route('recipes.my');
+        return redirect()->route('recipes.my')->with('success', 'Recipe created successfully!');
     }
 
     public function edit(Recipe $recipe)
@@ -296,7 +296,7 @@ class RecipeController extends Controller
             $slug
         );
 
-        return redirect()->route('recipes.my');
+        return redirect()->route('recipes.my')->with('success', 'Recipe updated successfully!');
     }
 
     public function show(Recipe $recipe)
@@ -345,7 +345,7 @@ class RecipeController extends Controller
     public function destroy(Recipe $recipe)
     {
         $recipe->delete();
-        return redirect()->route('recipes.my');
+        return redirect()->route('recipes.my')->with('success', 'Recipe deleted successfully!');
     }
 
     public function report(Recipe $recipe)

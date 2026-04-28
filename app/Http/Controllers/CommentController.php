@@ -17,7 +17,7 @@ class CommentController extends Controller
             'rating' => 'required|integer|min:1|max:5',
         ]);
 
-        Comment::updateOrCreate([
+        $comment = Comment::updateOrCreate([
             'user_id' => auth()->id(),
             'recipe_id' => $recipe->id,
         ], [
@@ -31,7 +31,7 @@ class CommentController extends Controller
             'value' => $request->rating,
         ]);
 
-        return back()->with('success', 'Review submitted!');
+        return back()->withFragment('comment-' . $comment->id)->with('success', 'Review submitted!');
     }
 
     public function destroy(Comment $comment)
@@ -46,7 +46,7 @@ class CommentController extends Controller
 
         $comment->delete();
 
-        return back();
+        return back()->withFragment('comments-section')->with('success', 'Comment deleted successfully!');
     }
 
     public function report(Comment $comment)

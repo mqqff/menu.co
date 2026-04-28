@@ -63,9 +63,9 @@
                     />
 
                     <div class="pt-2 flex justify-center">
-                        <button type="submit" class="bg-white text-primary font-bold text-sm px-10 py-2 rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-150 shadow-sm cursor-pointer">
+                        <x-auth.button type="submit" class="px-10 py-2">
                             Submit
-                        </button>
+                        </x-auth.button>
                     </div>
 
                     <p class="text-center text-sm text-white pt-1">
