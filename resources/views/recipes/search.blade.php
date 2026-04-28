@@ -14,7 +14,7 @@
             @forelse ($recipes as $recipe)
                 @if ($loop->first)
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                        @endif
+                @endif
 
                         <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                            class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 min-h-55 block group">
@@ -31,20 +31,20 @@
                                 </p>
 
                                 <div class="flex items-center justify-center gap-3 text-xs text-white/90">
-                            <span class="flex items-center gap-1">
-                                <x-icons.bookmark class="w-5 h-5" />
-                                {{ $recipe->cook_time }}
-                            </span>
+                                    <span class="flex items-center gap-1">
+                                        <x-icons.clock class="w-5 h-5" />
+                                        {{ $recipe->cook_time }}
+                                    </span>
 
                                     <span class="flex items-center gap-1">
-                                <x-icons.star class="w-5 h-5" />
-                                {{ $recipe->servings }} servings
-                            </span>
+                                        <x-icons.user-group class="w-5 h-5" />
+                                        {{ $recipe->servings }} servings
+                                    </span>
                                 </div>
                             </div>
                         </a>
 
-                        @if ($loop->last)
+                @if ($loop->last)
                     </div>
                 @endif
 

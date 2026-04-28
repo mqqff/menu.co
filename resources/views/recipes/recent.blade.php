@@ -25,12 +25,11 @@
                             <p class="font-bold text-md leading-tight mb-2 drop-shadow">{{ Str::limit($recipe->title, 30) }}</p>
                             <div class="flex items-center justify-center gap-3 text-xs text-white/90">
                                 <span class="flex items-center gap-1">
-                                <x-icons.bookmark class="w-5 h-5" />
+                                <x-icons.clock class="w-5 h-5" />
                                 {{ $recipe->cook_time }}
                             </span>
                                 <span class="flex items-center gap-1">
-                                <x-icons.star class="w-5 h-5" />
-                                @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
+                                <x-icons.user-group class="w-5 h-5" />
                                 {{ $recipe->servings }} servings
                             </span>
                             </div>
