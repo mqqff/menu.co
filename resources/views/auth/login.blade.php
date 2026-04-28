@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="flex min-h-screen">
+
         <div class="hidden lg:flex lg:w-1/2 bg-[#F7B555] items-center justify-center relative overflow-hidden">
             <div class="w-full h-full relative select-none pointer-events-none overflow-hidden">
                 <div class="absolute -left-10 top-6 w-64 h-36">
@@ -31,7 +32,7 @@
         </div>
 
         <div class="relative w-full lg:w-1/2 bg-primary flex flex-col px-10 py-8">
-            <a href="#" class="inline-flex items-center text-white hover:opacity-70 transition-opacity w-fit">
+            <a href="{{ route('home') }}" class="inline-flex items-center text-white hover:opacity-70 transition-opacity w-fit">
                 <x-icons.arrow-left class="w-6 h-6" />
             </a>
 
@@ -42,12 +43,26 @@
 
                 <form method="POST" action="{{ route('auth.login') }}" class="space-y-5">
                     @csrf
+
+                    @if (session('success'))
+                        <div class="bg-green-300 border border-green-400/60 text-green-800 font-medium text-center text-sm rounded-md px-4 py-2">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="bg-red-300 border border-red-400/60 text-red-800 font-medium text-center text-sm rounded-md px-4 py-2">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <x-auth.input-field
                         name="email"
                         label="Email"
                         type="email"
                         placeholder="Email"
                         autofocus="true"
+                        value="{{ old('email') }}"
                         required
                     />
 
@@ -75,7 +90,7 @@
 
                     <p class="text-center text-sm text-white pt-1">
                         Didn't have an account?
-                        <a href="{{ route('auth.show-register') }}"
+                        <a href="{{ route('auth.register.form') }}"
                            class="font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity ml-1">
                             Register
                         </a>

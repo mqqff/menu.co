@@ -5,7 +5,7 @@
 @section('content')
     <div class="min-h-screen bg-[#faf8f5] px-8 py-10">
 
-        <h2 class="text-2xl font-bold text-[#c0522a] mb-7">
+        <h2 class="text-2xl font-bold text-primary mb-7">
             Trending Category
             <span class="text-gray-400 font-semibold">({{ $categories->count() }})</span>
         </h2>

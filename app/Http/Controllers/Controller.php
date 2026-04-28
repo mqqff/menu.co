@@ -6,17 +6,14 @@ use Illuminate\Support\Facades\Storage;
 
 abstract class Controller
 {
-    protected $userId = 'db4ff9bc-47f9-44d6-8d0d-f9b419c21159';
-    protected $userName = 'John Doe';
-    protected $username = 'johndoe';
-    protected $userAvatar = "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60";
-
-    protected function getJson(string $path, bool $assoc = false)
+    protected function formatCookTime($cookTime)
     {
-        if (!Storage::exists($path)) {
-            return null;
+        if ($cookTime >= 1440) {
+            return ceil($cookTime / 1440) . ' days';
+        } elseif ($cookTime >= 60) {
+            return ceil($cookTime / 60) . ' hours';
         }
 
-        return json_decode(Storage::get($path), $assoc);
+        return $cookTime . ' minutes';
     }
 }

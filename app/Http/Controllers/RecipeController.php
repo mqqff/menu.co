@@ -2,344 +2,425 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Ingredient;
+use App\Models\IngredientGroup;
+use App\Models\Recipe;
+use App\Models\Step;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
 
 class RecipeController extends Controller
 {
     public function index(): View
     {
-        $recipes = $this->getJson('recipes.json')->recipes ?? [];
-        $trending_categories = $this->getJson('trending_categories.json');
+        $baseQuery = Recipe::published()
+            ->select('recipes.*')
+            ->selectSub(
+                DB::table('ratings')
+                    ->selectRaw('COALESCE(AVG(value), 0)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'avg_rating'
+            )
+            ->selectSub(
+                DB::table('bookmarks')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'bookmarks_count'
+            );
 
-        foreach ($recipes as $recipe) {
-            $recipe->popularity_score = ($recipe->rating * 2) + (intval($recipe->saves_count) * 0.5);
-        }
+        $trending_recipes = Recipe::fromSub($baseQuery, 'r')
+            ->select('*')
+            ->selectRaw('(avg_rating * 2) + (bookmarks_count * 0.5) as popularity_score')
+            ->orderByDesc('popularity_score')
+            ->limit(15)
+            ->get()
+            ->map(function ($recipe) {
+                $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+                return $recipe;
+            });
 
-        $trending_recipes = collect($recipes)->sortByDesc('popularity_score');
-        $recently_added = collect($recipes)->sortByDesc('created_at')->take(10);
+        $recently_added = Recipe::published()
+            ->with('category')
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(function ($recipe) {
+                $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+                return $recipe;
+            });
 
-        return view('recipes.index', [
-            'trending_recipes' => collect($trending_recipes ?? []),
-            'trending_categories' => collect($trending_categories->categories ?? []),
-            'recently_added' => collect($recently_added ?? [])
-        ]);
+        $trending_categories = Category::withCount(['recipes' => function ($q) {
+            $q->where('status', 'published');
+        }])
+            ->orderByDesc('recipes_count')
+            ->take(5)
+            ->get();
+
+        return view('recipes.index', compact(
+            'trending_recipes',
+            'trending_categories',
+            'recently_added'
+        ));
+    }
+
+    public function search(Request $request): View
+    {
+        $query = $request->input('q');
+
+        $recipes = Recipe::published()
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%")
+                    ->orWhereHas('category', function ($q2) use ($query) {
+                        $q2->where('name', 'like', "%{$query}%");
+                    });
+            })
+            ->with('category')
+            ->select('recipes.*')
+            ->selectSub(
+                DB::table('ratings')
+                    ->selectRaw('COALESCE(AVG(value), 0)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'avg_rating'
+            )
+            ->selectSub(
+                DB::table('bookmarks')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'bookmarks_count'
+            )
+            ->orderByDesc(DB::raw('(avg_rating * 2) + (bookmarks_count * 0.5)'))
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.search', compact('recipes', 'query'));
+    }
+
+    public function trendingRecipes(): View
+    {
+        $recipes = Recipe::published()
+            ->with('category')
+            ->select('recipes.*')
+            ->selectSub(
+                DB::table('ratings')
+                    ->selectRaw('COALESCE(AVG(value), 0)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'avg_rating'
+            )
+            ->selectSub(
+                DB::table('bookmarks')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('recipe_id', 'recipes.id'),
+                'bookmarks_count'
+            )
+            ->orderByDesc(DB::raw('(avg_rating * 2) + (bookmarks_count * 0.5)'))
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.trending', compact('recipes'));
+    }
+
+    public function recentlyAdded(): View
+    {
+        $recipes = Recipe::published()
+            ->with('category')
+            ->latest()
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.recent', compact('recipes'));
+    }
+
+    public function trendingCategories(): View
+    {
+        $categories = Category::withCount(['recipes' => function ($q) {
+            $q->where('status', 'published');
+        }])
+            ->orderByDesc('recipes_count')
+            ->paginate(15);
+
+        return view('recipes.trending_categories', compact('categories'));
+    }
+
+    public function recipeByCategory(Category $category): View
+    {
+        $recipes = Recipe::published()
+            ->where('category_id', $category->id)
+            ->latest()
+            ->paginate(100);
+
+        $recipes->getCollection()->transform(function ($recipe) {
+            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+            return $recipe;
+        });
+
+        return view('recipes.by_category', compact('recipes', 'category'));
     }
 
     public function my(): View
     {
-        $recipes = $this->getJson('recipes.json')->recipes ?? [];
-        $my_recipes = [];
+        $recipes = Recipe::where('user_id', Auth::id())
+            ->latest()
+            ->get()
+            ->loadCount('bookmarks')
+            ->loadAvg('ratings', 'value');
 
-        foreach ($recipes as $recipe) {
-            if ($recipe->author->id == $this->userId) {
-                $my_recipes[] = $recipe;
-            }
-        }
-
-        return view('recipes.my', [
-            'recipes' => collect($my_recipes)
-        ]);
+        return view('recipes.my', compact('recipes'));
     }
 
     public function create(): View
     {
-        return view('recipes.create');
+        return view('recipes.create', [
+            'categories' => Category::all()
+        ]);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'image_url' => 'nullable|string',
-            'cook_time' => 'required|string',
-            'servings' => 'required|string',
-            'status' => 'required|string',
-            'ingredients' => 'nullable|string',
-            'steps' => 'nullable|string',
-            'description' => 'nullable|string',
-            'tips' => 'nullable|string',
-        ]);
+        $validated = $this->validateRecipe($request, true);
 
-        $ingredientsRaw = json_decode($validated['ingredients'] ?? '[]', true) ?? [];
-        $stepsRaw = json_decode($validated['steps'] ?? '[]', true) ?? [];
+        $slug = $this->generateSlug($validated['title']);
 
-        $ingredient_groups = [];
-        $currentGroup = null;
+        $imagePath = $this->handleImageUpload($request, $slug);
 
-        foreach ($ingredientsRaw as $item) {
-            if (!empty($item['isSection'])) {
-                if ($currentGroup) {
-                    $ingredient_groups[] = $currentGroup;
-                }
-
-                $currentGroup = [
-                    'label' => $item['value'] ?: 'Other',
-                    'items' => []
-                ];
-            } else {
-                if (!$currentGroup) {
-                    $currentGroup = [
-                        'label' => 'Main',
-                        'items' => []
-                    ];
-                }
-
-                $currentGroup['items'][] = [
-                    'amount' => '',
-                    'name' => $item['value']
-                ];
-            }
-        }
-
-        if ($currentGroup) {
-            $ingredient_groups[] = $currentGroup;
-        }
-
-        $steps = [];
-
-        $stepImages = $request->file('step_images', []);
-
-        foreach ($stepsRaw as $s) {
-            $image = null;
-
-            $stepId = $s['id'] ?? null;
-
-            if ($stepId && isset($stepImages[$stepId])) {
-                $image = $stepImages[$stepId]->store('recipes/steps', 'public');
-            }
-
-            $steps[] = [
-                'text' => $s['title'] ?? '',
-                'image' => $image
-            ];
-        }
-
-        $imagePath = null;
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('recipes', 'public');
-        }
-
-        $author = [
-            'id' => $this->userId,
-            'name' => $this->userName,
-            'username' => $this->username,
-            'avatar_url' => $this->userAvatar,
-        ];
-
-        $fullRecipe = [
-            'id' => Str::uuid()->toString(),
-            'status' => $validated['status'],
+        $recipe = Recipe::create([
+            'user_id' => Auth::id(),
+            'category_id' => $validated['category_id'],
             'title' => $validated['title'],
-            'image_url' => $imagePath ?: null,
+            'description' => $validated['description'],
+            'image' => $imagePath,
             'cook_time' => $validated['cook_time'],
             'servings' => $validated['servings'],
-            'author' => $author,
-            'rating' => 0,
-            'saves_count' => "0 users",
-            'description' => $validated['description'],
-            'ingredient_groups' => $ingredient_groups,
-            'steps' => $steps,
+            'status' => $validated['status'],
             'tips' => $validated['tips'],
-            'created_at' => now()->toDateTimeString(),
-            'updated_at' => now()->toDateTimeString(),
-        ];
+        ]);
 
-        $recipePath = 'recipes.json';
+        $this->syncIngredients(
+            $recipe->id,
+            json_decode($validated['ingredients'] ?? '[]', true)
+        );
 
-        $recipeData = [
-            'recipes' => array_merge(
-                $this->getJson($recipePath)->recipes ?? [],
-                [$fullRecipe]
-            )
-        ];
-
-        Storage::put($recipePath, json_encode($recipeData, JSON_PRETTY_PRINT));
+        $this->syncSteps(
+            $recipe->id,
+            json_decode($validated['steps'], true),
+            $request->file('step_images', []),
+            $slug
+        );
 
         return redirect()->route('recipes.my');
     }
 
-    public function edit(string $id)
+    public function edit(Recipe $recipe)
     {
-        $data = $this->getJson('recipes.json', true);
+        $recipe->load('ingredientGroups.ingredients', 'steps');
 
-        $recipes = $data['recipes'] ?? [];
+        $cookTime = $recipe->cook_time;
+        $recipe->cook_unit = 'minutes';
 
-        $recipe = collect($recipes)->firstWhere('id', $id);
-
-        if (!$recipe) {
-            abort(404);
-        }
-
-        if ($recipe['author']['id'] != $this->userId) {
-            abort(403);
+        if ($cookTime >= 1440) {
+            $recipe->cook_time = ceil($cookTime / 1440);
+            $recipe->cook_unit = 'days';
+        } elseif ($cookTime >= 60) {
+            $recipe->cook_time = ceil($cookTime / 60);
+            $recipe->cook_unit = 'hours';
         }
 
         return view('recipes.edit', [
-            'recipe' => json_decode(json_encode($recipe))
+            'recipe' => $recipe,
+            'categories' => Category::all()
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Recipe $recipe)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'cook_time' => 'required|string',
-            'servings' => 'required|string',
-            'status' => 'required|string',
-            'ingredients' => 'nullable|string',
-            'steps' => 'nullable|string',
-            'description' => 'nullable|string',
-            'tips' => 'nullable|string',
-            'image_url' => 'nullable|string',
+        $validated = $this->validateRecipe($request, false);
+
+        $slug = $this->generateSlug($validated['title']);
+
+        $imagePath = $this->handleImageUpload(
+            $request,
+            $slug,
+            $recipe->image
+        );
+
+        $recipe->update([
+            'category_id' => $validated['category_id'],
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'image' => $imagePath,
+            'cook_time' => $validated['cook_time'],
+            'servings' => $validated['servings'],
+            'status' => $validated['status'],
+            'tips' => $validated['tips'],
         ]);
 
-        $ingredientsRaw = json_decode($validated['ingredients'] ?? '[]', true) ?? [];
-        $stepsRaw = json_decode($validated['steps'] ?? '[]', true) ?? [];
+        IngredientGroup::where('recipe_id', $recipe->id)->delete();
 
-        $ingredient_groups = [];
+        foreach ($recipe->steps as $step) {
+            if ($step->image) {
+                Storage::disk('public')->delete($step->image);
+            }
+        }
+        Step::where('recipe_id', $recipe->id)->delete();
+
+        $this->syncIngredients(
+            $recipe->id,
+            json_decode($validated['ingredients'] ?? '[]', true)
+        );
+
+        $this->syncSteps(
+            $recipe->id,
+            json_decode($validated['steps'], true),
+            $request->file('step_images', []),
+            $slug
+        );
+
+        return redirect()->route('recipes.my');
+    }
+
+    public function show(Recipe $recipe)
+    {
+        $recipe->load([
+            'category',
+            'user',
+            'ingredientGroups.ingredients',
+            'steps',
+            'comments.user',
+            'comments.rating',
+        ])
+            ->loadCount('bookmarks')
+            ->loadAvg('ratings', 'value');
+
+        $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+
+        $isBookmarked = $recipe->bookmarks()
+            ->where('user_id', auth()->id())
+            ->exists();
+
+        $hasReviewed = $recipe->comments()
+            ->where('user_id', auth()->id())
+            ->exists();
+
+        $similar_recipes = Recipe::with('category')
+            ->where('id', '!=', $recipe->id)
+            ->where('category_id', $recipe->category_id)
+            ->where('status', 'published')
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        return view('recipes.show', compact(
+            'recipe',
+            'similar_recipes',
+            'isBookmarked',
+            'hasReviewed'
+        ));
+    }
+
+    public function destroy(Recipe $recipe)
+    {
+        $recipe->delete();
+        return redirect()->route('recipes.my');
+    }
+
+    private function validateRecipe($request, $isCreate = true)
+    {
+        return $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => $isCreate ? 'required|image' : 'nullable|image',
+            'cook_time' => 'required',
+            'servings' => 'required',
+            'status' => 'required|string',
+            'ingredients' => 'nullable|string',
+            'steps' => 'required|string',
+            'description' => 'required|string',
+            'tips' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+    }
+
+    private function generateSlug($title)
+    {
+        return Str::slug($title) . '-' . Str::random(6);
+    }
+
+    private function handleImageUpload($request, $slug, $oldImage = null)
+    {
+        if ($request->hasFile('image')) {
+            if ($oldImage) {
+                Storage::disk('public')->delete($oldImage);
+            }
+
+            return $request->file('image')
+                ->store("images/recipe/{$slug}", 'public');
+        }
+
+        return $oldImage;
+    }
+
+    private function syncIngredients($recipeId, $ingredientsRaw)
+    {
         $currentGroup = null;
 
         foreach ($ingredientsRaw as $item) {
             if (!empty($item['isSection'])) {
-                if ($currentGroup) {
-                    $ingredient_groups[] = $currentGroup;
-                }
-
-                $currentGroup = [
-                    'label' => $item['value'] ?: 'Other',
-                    'items' => []
-                ];
+                $currentGroup = IngredientGroup::create([
+                    'recipe_id' => $recipeId,
+                    'label' => $item['name'] ?: 'Other',
+                ]);
             } else {
                 if (!$currentGroup) {
-                    $currentGroup = [
+                    $currentGroup = IngredientGroup::create([
+                        'recipe_id' => $recipeId,
                         'label' => 'Main',
-                        'items' => []
-                    ];
+                    ]);
                 }
 
-                $currentGroup['items'][] = [
-                    'amount' => '',
-                    'name' => $item['value']
-                ];
+                Ingredient::create([
+                    'group_id' => $currentGroup->id,
+                    'name' => $item['name'],
+                    'amount' => $item['amount'],
+                ]);
             }
         }
+    }
 
-        if ($currentGroup) {
-            $ingredient_groups[] = $currentGroup;
-        }
-
-        $stepImages = $request->file('step_images', []);
-        $steps = [];
-
-        $oldSteps = collect($this->getJson('recipes.json')->recipes ?? [])->firstWhere('id', $id)->steps ?? [];
-
+    private function syncSteps($recipeId, $stepsRaw, $stepImages, $slug)
+    {
         foreach ($stepsRaw as $index => $s) {
+            $image = null;
             $stepId = $s['id'] ?? null;
 
-            $image = $oldSteps[$index]->image ?? null;
-
             if ($stepId && isset($stepImages[$stepId])) {
-                $image = $stepImages[$stepId]->store('recipes/steps', 'public');
+                $image = $stepImages[$stepId]->store(
+                    "images/recipe/{$slug}/steps",
+                    'public'
+                );
             }
 
-            $steps[] = [
+            Step::create([
+                'recipe_id' => $recipeId,
+                'step_order' => $index + 1,
                 'text' => $s['title'] ?? '',
-                'image' => $image
-            ];
+                'image' => $image,
+            ]);
         }
-
-        $imagePath = null;
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('recipes', 'public');
-            $imagePath = $path;
-        }
-
-        $recipePath = 'recipes.json';
-        $data = $this->getJson($recipePath);
-        $recipes = $data->recipes ?? [];
-
-        foreach ($recipes as $recipe) {
-            if ($recipe->id === $id) {
-                $recipe->title = $validated['title'];
-                $recipe->cook_time = $validated['cook_time'];
-                $recipe->servings = $validated['servings'];
-                $recipe->status = $validated['status'];
-                $recipe->description = $validated['description'];
-                $recipe->tips = $validated['tips'];
-                $recipe->update_at = now()->toDateTimeString();
-
-                if ($imagePath) {
-                    $recipe->image_url = $imagePath;
-                }
-
-                $recipe->ingredient_groups = $ingredient_groups;
-                $recipe->steps = $steps;
-
-                break;
-            }
-        }
-
-        Storage::put($recipePath, json_encode(['recipes' => $recipes], JSON_PRETTY_PRINT));
-
-        return redirect()->route('recipes.my');
-    }
-
-    public function show(string $id)
-    {
-        $data = $this->getJson('recipes.json', true);
-
-        $recipes = $data['recipes'] ?? [];
-
-        $recipe = collect($recipes)->firstWhere('id', $id);
-
-        if (!$recipe) {
-            abort(404);
-        }
-
-        $recipe['comments'] = $recipe['comments'] ?? [];
-
-        $recipe = json_decode(json_encode($recipe));
-        $similar_recipes = json_decode(json_encode(collect($recipes)
-            ->where('id', '!=', $id)
-            ->where('status', 'published')
-            ->take(4)));
-
-        return view('recipes.show', [
-            'recipe' => $recipe,
-            'similar_recipes' => $similar_recipes
-        ]);
-    }
-
-    public function trendingByCategory(Request $request)
-    {
-
-    }
-
-    public function destroy(string $id)
-    {
-        $data = $this->getJson('recipes.json', true);
-
-        $recipes = $data['recipes'] ?? [];
-
-        $recipeIndex = collect($recipes)->search(fn($r) => $r['id'] == $id);
-
-        if ($recipeIndex === false) {
-            abort(404);
-        }
-
-        if ($recipes[$recipeIndex]['author']['id'] != $this->userId) {
-            abort(403);
-        }
-
-        array_splice($recipes, $recipeIndex, 1);
-
-        Storage::put('recipes.json', json_encode(['recipes' => $recipes], JSON_PRETTY_PRINT));
-
-        return redirect()->route('recipes.my');
     }
 }

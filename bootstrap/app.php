@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'recipe.access' => \App\Http\Middleware\EnsureRecipeIsPublishedOrOwner::class,
+            'recipe.owner' => \App\Http\Middleware\EnsureRecipeOwner::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

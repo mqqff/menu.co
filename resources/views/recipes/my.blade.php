@@ -11,7 +11,7 @@
     <div class="min-h-screen bg-[#faf8f5] px-8 py-10">
 
         <section class="mb-12">
-            <h2 class="text-2xl font-bold text-[#c0522a] mb-6">
+            <h2 class="text-2xl font-bold text-primary! mb-6">
                 My Recipes
                 <span class="text-gray-400 font-semibold">({{ $published->count() }})</span>
             </h2>
@@ -20,7 +20,7 @@
 
                 <a href="{{ route('recipes.create') }}"
                    class="flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-gray-300 bg-white
-                      min-h-55 text-[#c0522a] hover:border-[#c0522a] hover:bg-orange-50
+                      min-h-55 text-primary! hover:border-primary! hover:bg-orange-50
                       transition-all duration-200 cursor-pointer group">
                     <div class="w-12 h-12 rounded-full bg-gray-100 group-hover:bg-orange-100 flex items-center justify-center transition-colors duration-200">
                         <x-icons.plus class="w-6 h-6" />
@@ -31,7 +31,7 @@
                 @foreach ($published as $recipe)
                     <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 min-h-55 block group">
-                        <img src="{{ Storage::url($recipe->image_url) }}"
+                        <img src="{{ $recipe->image_url }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
@@ -42,11 +42,12 @@
                             <div class="flex items-center justify-center gap-3 text-xs text-white/90">
                                 <span class="flex items-center gap-1">
                                 <x-icons.bookmark class="w-5 h-5" />
-                                {{ $recipe->saves_count }}
+                                {{ $recipe->bookmarks_count ? ($recipe->bookmarks_count > 1 ? $recipe->bookmarks_count . ' users' : $recipe->bookmarks_count . ' user') : 0 . ' user' }}
                             </span>
                                 <span class="flex items-center gap-1">
                                 <x-icons.star class="w-5 h-5" />
-                                {{ $recipe->rating }}
+                                @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
+                                {{ number_format($rating, 0) }}
                             </span>
                             </div>
                         </div>
@@ -58,7 +59,7 @@
 
         @if ($drafts->isNotEmpty())
             <section>
-                <h2 class="text-2xl font-bold text-[#c0522a] mb-6">
+                <h2 class="text-2xl font-bold text-primary! mb-6">
                     Draft
                     <span class="text-gray-400 font-semibold">({{ $drafts->count() }})</span>
                 </h2>
@@ -67,7 +68,7 @@
                     @foreach ($drafts as $recipe)
                         <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                            class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 min-h-55 block group">
-                            <img src="{{ Storage::url($recipe->image_url) }}"
+                            <img src="{{ $recipe->image_url }}"
                                  alt="{{ $recipe->title }}"
                                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
@@ -82,7 +83,7 @@
                                     </span>
                                     <span class="flex items-center gap-1">
                                         <x-icons.user-group class="w-5 h-5" />
-                                        {{ $recipe->servings }}
+                                        {{ $recipe->servings }} servings
                                     </span>
                                 </div>
                             </div>

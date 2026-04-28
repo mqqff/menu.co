@@ -28,9 +28,13 @@
             class="w-full rounded-full bg-white/95 text-gray-500 placeholder-gray-400
                    text-sm px-5 py-3 outline-none focus:ring-2 focus:ring-white/60
                    transition-all duration-200
+                   {{ $errors->has($name) ? 'border-red-400' : 'border-transparent' }}
                    {{ $showToggle ? 'pr-12' : '' }}"
             {{ $showToggle ? 'x-ref="input_' . $name . '"' : '' }}
         />
+        @error($name)
+            <p class="text-red-700 font-semibold text-xs mt-2">{{ $message }}</p>
+        @enderror
 
         @if ($showToggle)
             <button
@@ -40,7 +44,7 @@
                        hover:text-gray-600 transition-colors focus:outline-none"
                 aria-label="Toggle password visibility">
                 <svg id="eye-icon-{{ $name }}" xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                     class="h-5 w-5 cursor-pointer" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

@@ -5,7 +5,7 @@
 @section('content')
 <div class="flex min-h-screen">
         <div class="relative w-full lg:w-1/2 bg-primary flex flex-col px-10 py-8">
-            <a href="#" class="inline-flex items-center text-white hover:opacity-70 transition-opacity w-fit">
+            <a href="{{ route('home') }}" class="inline-flex items-center text-white hover:opacity-70 transition-opacity w-fit">
                 <x-icons.arrow-left class="w-6 h-6" />
             </a>
 
@@ -20,8 +20,27 @@
                         name="email"
                         label="Email"
                         type="email"
+                        value="{{ old('email') }}"
                         placeholder="Email"
                         autofocus="true"
+                        required
+                    />
+
+                    <x-auth.input-field
+                        name="name"
+                        label="Name"
+                        type="text"
+                        value="{{ old('name') }}"
+                        placeholder="Name"
+                        required
+                    />
+
+                    <x-auth.input-field
+                        name="username"
+                        label="Username"
+                        type="text"
+                        value="{{ old('username') }}"
+                        placeholder="Username"
                         required
                     />
 
@@ -51,7 +70,7 @@
 
                     <p class="text-center text-sm text-white pt-1">
                         Already have an account?
-                        <a href="{{ route('auth.show-login') }}"
+                        <a href="{{ route('auth.login.form') }}"
                            class="font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity ml-1">
                             Login
                         </a>

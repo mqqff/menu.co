@@ -54,14 +54,14 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Category</h2>
-                <a href="{{ route('recipes.trending.category') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.trending.categories') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide scroll-smooth" x-ref="track">
                 @foreach ($trending_categories as $category)
-                    <a href="#"
+                    <a href="{{ route('recipes.byCategory', $category->slug) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
-                        <img src="{{ $category->image_url }}"
+                        <img src="{{ Storage::url($category->image) }}"
                              alt="{{ $category->name }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"></div>
@@ -76,14 +76,14 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Recipes</h2>
-                <a href="#" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.trending') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 @foreach ($trending_recipes as $recipe)
-                    <a href="#"
+                    <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
-                        <img src="{{ Storage::url($recipe->image_url) }}"
+                        <img src="{{ $recipe->image_url }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/15 to-transparent"></div>
@@ -96,7 +96,7 @@
                                 </span>
                                 <span class="flex items-center gap-1">
                                     <x-icons.user-group class="w-4 h-4" />
-                                    {{ $recipe->servings }}
+                                    {{ $recipe->servings }} servings
                                 </span>
                             </div>
                         </div>
@@ -108,14 +108,14 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Recently Added</h2>
-                <a href="#" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors">See More</a>
+                <a href="{{ route('recipes.recent') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                 @foreach ($recently_added as $recipe)
-                    <a href="#"
+                    <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
-                        <img src="{{ Storage::url($recipe->image_url) }}"
+                        <img src="{{ $recipe->image_url }}"
                              alt="{{ $recipe->title }}"
                              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/15 to-transparent"></div>
@@ -128,7 +128,7 @@
                                 </span>
                                 <span class="flex items-center gap-1">
                                     <x-icons.user-group class="w-4 h-4" />
-                                    {{ $recipe->servings }}
+                                    {{ $recipe->servings }} servings
                                 </span>
                             </div>
                         </div>
