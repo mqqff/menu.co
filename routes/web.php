@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/{user}/updateAccount', [ProfileController::class, 'updateAccount'])->name('profile.update.account');
         Route::patch('/{user}/updateProfile', [ProfileController::class, 'updateProfile'])->name('profile.update.profile');
         Route::delete('/{user}', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::post('/{user}/report', [ProfileController::class, 'report'])->name('profile.report');
     });
 
     Route::prefix('recipes')->group(function () {
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [RecipeController::class, 'store'])->name('recipes.store');
         Route::post('/{recipe}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
         Route::post('/{recipe}/comment', [CommentController::class, 'store'])->name('comments.store');
+        Route::post('/{recipe}/report', [RecipeController::class, 'report'])->name('recipes.report');
     });
 
     Route::prefix('recipes/{recipe}')->middleware('recipe.owner')->group(function () {
@@ -44,8 +46,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [RecipeController::class, 'destroy'])->name('recipes.destroy');
     });
 
-    Route::prefix('comments')->group(function () {
-        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::prefix('comments/{comment}')->group(function () {
+        Route::delete('/', [CommentController::class, 'destroy'])->name('comments.destroy');
+        Route::post('/report', [CommentController::class, 'report'])->name('comments.report');
     });
 });
 

@@ -6,6 +6,7 @@ use App\Models\Recipe;
 use App\Models\Comment;
 use App\Models\Rating;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -46,5 +47,14 @@ class CommentController extends Controller
         $comment->delete();
 
         return back();
+    }
+
+    public function report(Comment $comment)
+    {
+        $comment->reports()->create([
+            'user_id' => Auth::id(),
+        ]);
+
+        return back()->with('success', 'Comment reported successfully!');
     }
 }

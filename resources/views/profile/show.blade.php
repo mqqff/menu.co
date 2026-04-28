@@ -51,14 +51,17 @@
                             <span class="font-medium">Edit Profile</span>
                         </a>
                     @else
-                        <button
-                            type="button"
-                            id="report-user-btn"
-                            class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition"
-                        >
-                            <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
-                            <span class="font-semibold text-red-600">Report User</span>
-                        </button>
+                        <form id="form-report-user" action="{{ route('profile.report', $user->id) }}" method="POST">
+                            @csrf
+                            <button
+                                type="button"
+                                id="report-user-btn"
+                                class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition"
+                            >
+                                <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                                <span class="font-semibold text-red-600">Report User</span>
+                            </button>
+                        </form>
                     @endif
                 </div>
             </div>
@@ -162,6 +165,23 @@
                 profileDropdown.classList.remove('show');
                 profileDropdown.classList.add('hidden');
             }
+        });
+
+        const reportBtn = document.getElementById('report-user-btn');
+        reportBtn.addEventListener('click', () => {
+            Swal.fire({
+                title: "Report",
+                text: "Please only report if it contains advertisements, nudity, hate speech or irrelevant content. Our team will review it shortly.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc2626",
+                cancelButtonColor: "#6b7280",
+                confirmButtonText: "Yes, report"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-report-user').submit();
+                }
+            });
         });
     </script>
 @endsection

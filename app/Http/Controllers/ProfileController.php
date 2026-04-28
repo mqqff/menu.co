@@ -162,4 +162,13 @@ class ProfileController extends Controller
 
         return view('profile.bookmarks', compact('recipes'));
     }
+
+    public function report(User $user)
+    {
+        $user->reports()->create([
+            'user_id' => Auth::id(),
+        ]);
+
+        return back()->with('success', 'User reported successfully!');
+    }
 }
