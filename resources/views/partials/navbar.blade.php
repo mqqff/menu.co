@@ -13,6 +13,7 @@
                         type="text"
                         name="q"
                         placeholder="Search"
+                        autocomplete="off"
                         class="flex-1 bg-transparent outline-none text-gray-500 text-sm"
                     />
                     <button type="submit">
