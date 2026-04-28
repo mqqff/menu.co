@@ -1,10 +1,10 @@
 @props([
+    'name',
     'label' => null,
     'type' => 'text',
-    'value' => null,
-    'placeholder' => null
+    'value' => '',
+    'placeholder' => ''
 ])
-@props(['error' => null])
 
 <div>
     @if ($label)
@@ -16,12 +16,13 @@
     <input
         type="{{ $type }}"
         value="{{ $value }}"
+        name="{{ $name }}"
         placeholder="{{ $placeholder }}"
         {{ $attributes->merge([
             'class' => 'w-full bg-gray-200 rounded-lg px-4 py-2 outline-none'
         ]) }}
     >
-    @if ($error)
-        <p class="text-red-500 text-xs mt-1">{{ $error }}</p>
-    @endif
+    @error($name)
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+    @enderror
 </div>
