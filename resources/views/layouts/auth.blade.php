@@ -6,11 +6,10 @@
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <title>@yield('title')</title>
 
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen font-sans">
     @yield('content')
-
     @stack('scripts')
 </body>
 </html>

@@ -201,12 +201,12 @@
                 </div>
             </section>
 
-            <section class="mt-12">
+            <section class="mt-12" id="comments-section">
                 <h2 class="text-2xl font-semibold text-primary mb-5">Comments</h2>
 
                 <div class="space-y-5">
                     @forelse ($recipe->comments as $comment)
-                        <div class="bg-white rounded-2xl p-5 shadow-sm border border-[#EAE0D8]">
+                        <div class="bg-white rounded-2xl p-5 shadow-sm border border-[#EAE0D8]" id="comment-{{ $comment->id }}">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-3">
                                     <img

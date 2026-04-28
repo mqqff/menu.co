@@ -132,7 +132,7 @@ class ProfileController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', 'Your account has been deleted successfully.');
     }
 
     public function createdRecipes(User $user): View
