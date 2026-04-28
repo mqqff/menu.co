@@ -49,7 +49,7 @@
 
             <div class="w-3/4">
                 <section id="profile" class="mb-12 max-w-2xl">
-                    <form id="form-profile" action="{{ route('profile.update.profile', $user->id) }}" method="POST">
+                    <form id="form-profile" action="{{ route('profile.update.profile', $user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
                         <h2 class="text-2xl font-semibold text-primary mb-2">
@@ -61,13 +61,16 @@
                         </p>
 
                         <div class="flex items-center gap-4 mb-6">
-                            <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}"
+                            <img id="avatar-preview" src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}"
                                  class="w-14 h-14 rounded-full object-cover">
 
-                            <button class="flex items-center gap-2 bg-primary! text-white px-4 py-1.5 rounded-lg text-sm">
+                            <button type="button" id="change-picture-btn"
+                                    class="flex items-center gap-2 bg-primary! text-white px-4 py-1.5 rounded-lg text-sm">
                                 <x-icons.picture-upload class="w-5"/>
                                 Change Picture
                             </button>
+
+                            <input type="file" id="avatar-input" name="avatar" class="hidden" accept="image/*">
                         </div>
 
                         <div class="space-y-5">
@@ -253,23 +256,23 @@
             }
         });
 
-        const deleteBtn = document.getElementById('delete-account-btn');
-        const deleteForm = document.getElementById('delete-account-form');
+        const changeBtn = document.getElementById('change-picture-btn');
+        const fileInput = document.getElementById('avatar-input');
+        const previewImg = document.getElementById('avatar-preview');
 
-        deleteBtn.addEventListener('click', () => {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteForm.submit();
-                }
-            });
+        changeBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         });
 
         const formProfile = document.getElementById('form-profile');
@@ -313,6 +316,25 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     resetForm(formAccount);
+                }
+            });
+        });
+
+        const deleteBtn = document.getElementById('delete-account-btn');
+        const deleteForm = document.getElementById('delete-account-form');
+
+        deleteBtn.addEventListener('click', () => {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteForm.submit();
                 }
             });
         });

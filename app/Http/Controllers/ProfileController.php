@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
@@ -57,6 +58,7 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'preferences' => 'nullable|array',
             'preferences.*' => 'exists:categories,id',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -70,6 +72,20 @@ class ProfileController extends Controller
             'username' => $request->username,
             'name' => $request->name,
         ]);
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && $user->avatar !== 'images/user/default.jpg') {
+                if (Storage::disk('public')->exists($user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+            }
+
+            $path = $request->file('avatar')->store('avatars', 'public');
+
+            $user->update([
+                'avatar' => $path
+            ]);
+        }
 
         $user->preferences()->sync($request->preferences ?? []);
 
