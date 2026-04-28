@@ -7,6 +7,7 @@
     <title>@yield('title')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 <body class="min-h-screen font-sans flex flex-col">
     @include('partials.navbar')
