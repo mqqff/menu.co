@@ -12,22 +12,23 @@
                 <p class="font-bold mb-2">Home</p>
                 <ul class="space-y-1 text-sm text-white">
                     <li><a href="{{ route('recipes.trending') }}" class="transition-colors duration-200 hover:text-white/80">Trending</a></li>
-                    <li><a href="#" class="transition-colors duration-200 hover:text-white/80">Recently Added</a></li>
+                    <li><a href="{{ route('recipes.recent') }}" class="transition-colors duration-200 hover:text-white/80">Recently Added</a></li>
                 </ul>
             </div>
-
-            <div class="w-px bg-white/30 self-stretch"></div>
-
-            <div>
-                <p class="font-bold mb-2">Your Recipe</p>
-                <ul class="space-y-1 text-sm text-white">
-                    <li><a href="{{ route('recipes.create') }}" class="transition-colors duration-200 hover:text-white/80">Add New Recipe</a></li>
-                </ul>
-            </div>
-
-            <div class="w-px bg-white/30 self-stretch"></div>
 
             @auth
+                <div class="w-px bg-white/30 self-stretch"></div>
+
+                <div>
+                    <p class="font-bold mb-2">Your Recipe</p>
+                    <ul class="space-y-1 text-sm text-white">
+                        <li><a href="{{ route('recipes.my') }}" class="transition-colors duration-200 hover:text-white/80">My Recipes</a></li>
+                        <li><a href="{{ route('recipes.create') }}" class="transition-colors duration-200 hover:text-white/80">Add New Recipe</a></li>
+                    </ul>
+                </div>
+
+                <div class="w-px bg-white/30 self-stretch"></div>
+
                 <div>
                     <p class="font-bold mb-2">Account</p>
                     <ul class="space-y-1 text-sm text-white">
