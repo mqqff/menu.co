@@ -12,7 +12,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             @foreach ($categories as $category)
-                <a href="#"
+                <a href="{{ route('recipes.byCategory', $category->slug) }}"
                    class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group
                           aspect-4/3 block">
 
