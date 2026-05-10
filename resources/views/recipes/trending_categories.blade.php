@@ -11,7 +11,7 @@
         </h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-            @foreach ($categories as $category)
+            @forelse ($categories as $category)
                 <a href="{{ route('recipes.byCategory', $category->slug) }}"
                    class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group
                           aspect-4/3 block">
@@ -29,7 +29,11 @@
                     </div>
 
                 </a>
-            @endforeach
+            @empty
+                <p class="text-gray-500 text-center col-span-full">
+                    No trending categories found.
+                </p>
+            @endforelse
         </div>
 
     </div>
