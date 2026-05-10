@@ -65,7 +65,7 @@
                                  class="w-14 h-14 rounded-full object-cover">
 
                             <button type="button" id="change-picture-btn"
-                                    class="flex items-center gap-2 bg-primary! text-white px-4 py-1.5 rounded-lg text-sm">
+                                    class="flex items-center gap-2 bg-primary! text-white px-4 py-1.5 rounded-lg text-sm cursor-pointer">
                                 <x-icons.picture-upload class="w-5"/>
                                 Change Picture
                             </button>
@@ -103,14 +103,14 @@
                         <div class="flex justify-center gap-4 mt-6">
                             <button
                                 type="button" id="discard-profile-btn"
-                                class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium">
+                                class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium cursor-pointer">
                                 <x-icons.trash class="w-4"/>
                                 Discard Changes
                             </button>
 
                             <button
                                 type="submit"
-                                class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm font-medium">
+                                class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm font-medium cursor-pointer">
                                 <x-icons.save class="w-4"/>
                                 Save Changes
                             </button>
@@ -160,13 +160,13 @@
 
                         <div class="flex justify-center gap-4 mt-6">
                             <button type="button" id="discard-account-btn"
-                                    class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium">
+                                    class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium cursor-pointer">
                                 <x-icons.trash class="w-4"/>
                                 Discard Changes
                             </button>
 
                             <button type="submit"
-                                    class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm font-medium">
+                                    class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm font-medium cursor-pointer">
                                 <x-icons.save class="w-4"/>
                                 Save Changes
                             </button>

@@ -134,7 +134,7 @@
                             Save and Close
                         </button>
                         <button type="button" onclick="saveRecipe('published')"
-                                class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-600 bg-orange-600 text-white shadow-pub hover:bg-[#d6541e] hover:border-orange-hover hover:shadow-pub-hover">
+                                class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-500 bg-orange-500 text-white shadow-pub hover:bg-orange-600 hover:border-orange-600 hover:shadow-pub-hover">
                             <x-icons.arrow-up-right class="w-4 h-4"/>
                             Publish
                         </button>
