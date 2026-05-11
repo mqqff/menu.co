@@ -151,7 +151,7 @@
                                     onclick="handleDelete()"
                                     class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
                                 >
-                                    <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                                    <x-icons.trash class="w-5 h-5 text-red-600 shrink-0" />
                                     <span class="font-semibold text-red-600">Delete Recipe</span>
                                 </button>
                             @endif
