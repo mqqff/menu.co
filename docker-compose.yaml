@@ -52,8 +52,8 @@ services:
     image: mysql:5.7
     restart: unless-stopped
     user: mysql
-    ports:
-      - "${DB_PORT}:3306"
+    expose:
+      - "3306"
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
