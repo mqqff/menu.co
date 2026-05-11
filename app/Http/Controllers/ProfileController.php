@@ -128,11 +128,24 @@ class ProfileController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        $user->delete();
+        if ($user->id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($user->avatar && $user->avatar !== 'images/user/default.jpg') {
+            if (Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+        }
+
         Auth::logout();
+
+        $user->delete();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('home')->with('success', 'Your account has been deleted successfully.');
+
+        return redirect()->route('home')->with('success', 'Account deleted successfully.');
     }
 
     public function createdRecipes(User $user): View
