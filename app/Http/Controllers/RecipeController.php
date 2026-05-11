@@ -74,10 +74,8 @@ class RecipeController extends Controller
 
         $recipes = Recipe::published()
             ->where(function ($q) use ($query) {
-                if ($query != '' || $query != null) {
-                    $q->where('title', 'like', '%' . $query . '%')
-                        ->orWhere('description', 'like', '%' . $query . '%');
-                }
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%");
             })
             ->with('category')
             ->select('recipes.*')

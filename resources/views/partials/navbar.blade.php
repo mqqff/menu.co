@@ -15,6 +15,7 @@
                         placeholder="Search"
                         autocomplete="off"
                         class="flex-1 bg-transparent outline-none text-gray-500 text-sm"
+                        required
                     />
                     <button type="submit">
                         <x-icons.magnifying-glass class="w-5 h-5 text-gray-500" />
