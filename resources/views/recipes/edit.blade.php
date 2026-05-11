@@ -134,7 +134,7 @@
                             Save and Close
                         </button>
                         <button type="button" onclick="saveRecipe('published')"
-                                class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-600 bg-orange-600 text-white shadow-pub hover:bg-[#d6541e] hover:border-orange-hover hover:shadow-pub-hover">
+                                class="inline-flex items-center gap-1.75 px-5 py-2 rounded-3xl text-sm font-bold cursor-pointer transition-all border-2 border-orange-500 bg-orange-500 text-white shadow-pub hover:bg-orange-600 hover:border-orange-600 hover:shadow-pub-hover">
                             <x-icons.arrow-up-right class="w-4 h-4"/>
                             Publish
                         </button>
@@ -227,7 +227,7 @@
                     <button
                         type="button"
                         class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn"
-                        onclick="toggleDropdown(this)"
+                        onclick="toggleDetailDropdown(this)"
                     >
                         <x-icons.three-dot class="w-3.5 h-3.5"/>
                     </button>
@@ -300,7 +300,7 @@
             oninput="updateStep(${step.id}, this.value)"
           >
           <div class="relative">
-            <button type="button" class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn" onclick="toggleDropdown(this)" type="button">
+            <button type="button" class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn" onclick="toggleDetailDropdown(this)" type="button">
               <x-icons.three-dot class="w-3.5 h-3.5"/>
             </button>
             <div class="more-dropdown absolute right-0 top-[calc(100%+4px)] bg-white border border-gray-100 rounded-xl shadow-md py-1 min-w-[120px] z-50">
@@ -415,7 +415,7 @@
             wrap.querySelector('.photo-placeholder').style.display = 'none';
         }
 
-        function toggleDropdown(btn) {
+        function toggleDetailDropdown(btn) {
             const dd = btn.nextElementSibling;
             const isOpen = dd.classList.contains('open');
             closeAllDropdowns();

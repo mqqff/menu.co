@@ -11,7 +11,7 @@
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                @foreach ($recipes as $recipe)
+                @forelse ($recipes as $recipe)
                     <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 min-h-55 block group">
                         <img src="{{ $recipe->image_url }}"
@@ -34,8 +34,9 @@
                             </div>
                         </div>
                     </a>
-                @endforeach
-
+                @empty
+                    <p class="text-gray-500 col-span-full text-center py-10">No recipes found in this category.</p>
+                @endforelse
             </div>
         </section>
 

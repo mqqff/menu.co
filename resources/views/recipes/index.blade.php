@@ -54,11 +54,13 @@
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Category</h2>
-                <a href="{{ route('recipes.trending.categories') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                @if(count($trending_categories) > 0)
+                    <a href="{{ route('recipes.trending.categories') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                @endif
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide scroll-smooth" x-ref="track">
-                @foreach ($trending_categories as $category)
+                @forelse ($trending_categories as $category)
                     <a href="{{ route('recipes.byCategory', $category->slug) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ $category->image_url }}"
@@ -69,18 +71,22 @@
                             <span class="text-white font-bold text-3xl drop-shadow-md">{{ $category->name }}</span>
                         </div>
                     </a>
-                @endforeach
+                @empty
+                    <p class="text-gray-500 italic">No trending categories at the moment. Check back later!</p>
+                @endforelse
             </div>
         </section>
 
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Trending Recipes</h2>
-                <a href="{{ route('recipes.trending') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                @if(count($trending_recipes) > 0)
+                    <a href="{{ route('recipes.trending') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                @endif
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                @foreach ($trending_recipes as $recipe)
+                @forelse ($trending_recipes as $recipe)
                     <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ $recipe->image_url }}"
@@ -101,18 +107,22 @@
                             </div>
                         </div>
                     </a>
-                @endforeach
+                @empty
+                    <p class="text-gray-500 italic">No trending recipes at the moment. Check back later!</p>
+                @endforelse
             </div>
         </section>
 
         <section>
             <div class="flex items-center justify-between mb-5">
                 <h2 class="text-xl font-bold text-primary">Recently Added</h2>
-                <a href="{{ route('recipes.recent') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                @if(count($recently_added) > 0)
+                    <a href="{{ route('recipes.recent') }}" class="text-sm text-gray-500 hover:text-primary font-semibold transition-colors underline">See More</a>
+                @endif
             </div>
 
             <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                @foreach ($recently_added as $recipe)
+                @forelse ($recently_added as $recipe)
                     <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative shrink-0 w-80 h-72 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group block">
                         <img src="{{ $recipe->image_url }}"
@@ -133,7 +143,9 @@
                             </div>
                         </div>
                     </a>
-                @endforeach
+                @empty
+                    <p class="text-gray-500 italic">No recently added recipes at the moment. Check back later!</p>
+                @endforelse
             </div>
         </section>
 

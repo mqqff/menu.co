@@ -57,7 +57,7 @@
 
                             <form method="POST" action="{{ route('auth.logout') }}" id="logoutForm">
                                 @csrf
-                                <button type="button" class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                                <button type="button" class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition cursor-pointer">
                                     <x-icons.sign-out class="w-5 h-5 text-gray-500" />
                                     <span class="font-medium text-sm">Log Out</span>
                                 </button>

@@ -54,7 +54,14 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute()
     {
-        return $this->avatar ? Storage::url($this->avatar) : null;
+        $avatar_url = $this->avatar;
+        if (!$avatar_url == 'images/user/default.jpg') {
+            $avatar_url = Storage::url($avatar_url);
+        } else {
+            $avatar_url = asset('images/user/default.jpg');
+        }
+
+        return $avatar_url;
     }
 
     public function preferences(): BelongsToMany

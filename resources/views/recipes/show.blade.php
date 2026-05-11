@@ -94,7 +94,7 @@
 
                     <form action="{{ route('bookmarks.toggle', $recipe->id) }}" method="POST">
                         @csrf
-                        <button class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white">
+                        <button class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white cursor-pointer">
                             <x-icons.bookmark
                                 class="w-4 h-4 {{ $isBookmarked ? 'fill-primary text-primary' : 'text-primary fill-none' }}"
                             />
@@ -138,6 +138,22 @@
                                     <x-icons.pencil class="w-5 h-5 text-gray-600 shrink-0" />
                                     <span class="font-medium">Edit Recipe</span>
                                 </a>
+
+                                <div class="h-px bg-gray-100 mx-3"></div>
+
+                                <form id="form-delete-recipe" action="{{ route('recipes.destroy', $recipe->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+
+                                <button
+                                    type="button"
+                                    onclick="handleDelete()"
+                                    class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-red-50 transition-colors cursor-pointer"
+                                >
+                                    <x-icons.warning class="w-5 h-5 text-red-600 shrink-0" />
+                                    <span class="font-semibold text-red-600">Delete Recipe</span>
+                                </button>
                             @endif
 
                             @if(auth()->check() && $recipe->user->id != auth()->id())
@@ -334,45 +350,59 @@
                 @endauth
             </section>
 
-            <section class="mt-14">
-                <h2 class="text-2xl font-semibold text-primary mb-5">Similar Recipes</h2>
+            @if(count($similar_recipes) > 0)
+                <section class="mt-14">
+                    <h2 class="text-2xl font-semibold text-primary mb-5">Similar Recipes</h2>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                    @foreach ($similar_recipes as $similar)
-                        <a
-                            href="{{ route('recipes.show', $similar->id) }}"
-                            class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow aspect-square block"
-                        >
-                            <img
-                                src="{{ $similar->image_url }}"
-                                alt="{{ $similar->title }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                            <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 right-0 p-3">
-                                <p class="text-white text-md font-bold text-center leading-tight line-clamp-2">{{ $similar->title }}</p>
-                                <div class="flex items-center justify-center gap-2 mt-1 text-white/70 text-xs">
-                                    <div class="flex items-center gap-x-1 justify-center">
-                                        <x-icons.clock class="w-4 h-4" />
-                                        <span>{{ $similar->cook_time }}</span>
-                                    </div>
-                                    <span>·</span>
-                                    <div class="flex items-center justify-center gap-x-1">
-                                        <x-icons.user-group class="w-4 h-4" />
-                                        <span>{{ $similar->servings }} servings</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        @foreach ($similar_recipes as $similar)
+                            <a
+                                href="{{ route('recipes.show', $similar->id) }}"
+                                class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow aspect-square block"
+                            >
+                                <img
+                                    src="{{ $similar->image_url }}"
+                                    alt="{{ $similar->title }}"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-3">
+                                    <p class="text-white text-md font-bold text-center leading-tight line-clamp-2">{{ $similar->title }}</p>
+                                    <div class="flex items-center justify-center gap-2 mt-1 text-white/70 text-xs">
+                                        <div class="flex items-center gap-x-1 justify-center">
+                                            <x-icons.clock class="w-4 h-4" />
+                                            <span>{{ $similar->cook_time }}</span>
+                                        </div>
+                                        <span>·</span>
+                                        <div class="flex items-center justify-center gap-x-1">
+                                            <x-icons.user-group class="w-4 h-4" />
+                                            <span>{{ $similar->servings }} servings</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
-            </section>
+                            </a>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
         </div>
     </div>
 
     <script>
         function handleReportComment() {
-
+                Swal.fire({
+                    title: "Report?",
+                    text: "Please only report if it contains advertisements, nudity, hate speech or irrelevant content. Our team will review it shortly.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc2626",
+                    cancelButtonColor: "#6b7280",
+                    confirmButtonText: "Yes, report"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('form-report-comment').submit();
+                    }
+                });
         }
 
         const btn     = document.getElementById('three-dot-recipe');
@@ -430,6 +460,23 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('form-report-recipe').submit();
+                }
+            });
+        }
+
+        function handleDelete() {
+            closeDropdown();
+            Swal.fire({
+                title: "Report",
+                text: "Are you sure you want to delete this recipe? This action cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc2626",
+                cancelButtonColor: "#6b7280",
+                confirmButtonText: "Yes, delete"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-delete-recipe').submit();
                 }
             });
         }

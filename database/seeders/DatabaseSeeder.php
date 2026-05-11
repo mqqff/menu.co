@@ -18,8 +18,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategorySeeder::class,
-            UserSeeder::class,
-            RecipeSeeder::class,
+            UserSeeder::class
         ]);
+
+        if (app()->environment() !== 'production') {
+            $this->call(RecipeSeeder::class);
+        }
     }
 }
