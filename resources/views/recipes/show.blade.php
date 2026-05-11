@@ -301,6 +301,8 @@
                     @empty
                         @auth
                             <p class="text-sm text-gray-400 italic">No reviews yet. Be the first!</p>
+                        @else
+                            <p class="text-sm text-gray-400 italic">No reviews yet. Please <a href="{{ route('login') }}" class="text-primary hover:underline">login</a> to leave a review.</p>
                         @endauth
                     @endforelse
                 </div>
