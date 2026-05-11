@@ -13,7 +13,7 @@ class Category extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? Storage::url($this->image) : null;
+        return $this->image ? asset($this->image) : null;
     }
 
     public function users(): BelongsToMany
