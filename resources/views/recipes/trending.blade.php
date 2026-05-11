@@ -12,7 +12,7 @@
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                @foreach ($recipes as $recipe)
+                @forelse ($recipes as $recipe)
                     <a href="{{ route('recipes.show', ['recipe' => $recipe->id]) }}"
                        class="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 min-h-55 block group">
                         <img src="{{ $recipe->image_url }}"
@@ -31,13 +31,14 @@
                                 <span class="flex items-center gap-1">
                                 <x-icons.user-group class="w-5 h-5" />
                                 @php $rating = $recipe->ratings_avg_value ?? 0; @endphp
-                                {{ $recipe->servings }} servings
+                                    {{ $recipe->servings }} servings
                             </span>
                             </div>
                         </div>
                     </a>
-                @endforeach
-
+                @empty
+                    <p class="text-gray-500 italic">No recipes found.</p>
+                @endforelse
             </div>
         </section>
 
