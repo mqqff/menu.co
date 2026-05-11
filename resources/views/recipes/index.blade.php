@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="bg-[#faf8f5]">
-
     <div class="relative bg-primary overflow-hidden" id="hero-slider">
         <div class="relative h-85 md:h-95">
             <div class="hero-slide absolute inset-0 px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-100 z-10">
@@ -44,9 +43,9 @@
         </div>
 
         <div class="absolute bottom-5 left-0 right-0 flex justify-center gap-2 z-20" id="hero-dots">
-            <button data-index="0" class="hero-dot h-2 w-2 rounded-full bg-white transition-all duration-300"></button>
-            <button data-index="1" class="hero-dot h-2 w-2 rounded-full bg-white/40 transition-all duration-300"></button>
-            <button data-index="2" class="hero-dot h-2 w-2 rounded-full bg-white/40 transition-all duration-300"></button>
+            <button data-index="0" class="hero-dot bg-white"></button>
+            <button data-index="1" class="hero-dot bg-white/40"></button>
+            <button data-index="2" class="hero-dot bg-white/40"></button>
         </div>
     </div>
 
