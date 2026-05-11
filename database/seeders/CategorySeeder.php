@@ -4,47 +4,70 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class CategorySeeder extends Seeder
 {
     public function run(): void
     {
         $categories = [
-            'Seafood',
-            'Asian Food',
-            'Noodles',
-            'Western',
-            'Dessert',
-            'Vegetarian',
-            'Vegan',
-            'Spicy',
-            'Street Food',
-            'Healthy',
+            [
+                'name' => 'Seafood',
+                'slug' => 'seafood',
+                'image' => 'images/category/seafood.jpg',
+            ],
+            [
+                'name' => 'Asian Food',
+                'slug' => 'asian-food',
+                'image' => 'images/category/asian-food.webp',
+            ],
+            [
+                'name' => 'Noodles',
+                'slug' => 'noodles',
+                'image' => 'images/category/noodles.jpg',
+            ],
+            [
+                'name' => 'Western',
+                'slug' => 'western',
+                'image' => 'images/category/western.webp',
+            ],
+            [
+                'name' => 'Dessert',
+                'slug' => 'dessert',
+                'image' => 'images/category/dessert.webp',
+            ],
+            [
+                'name' => 'Vegetarian',
+                'slug' => 'vegetarian',
+                'image' => 'images/category/vegetarian.webp',
+            ],
+            [
+                'name' => 'Vegan',
+                'slug' => 'vegan',
+                'image' => 'images/category/vegan.jpeg',
+            ],
+            [
+                'name' => 'Spicy',
+                'slug' => 'spicy',
+                'image' => 'images/category/spicy.jpeg',
+            ],
+            [
+                'name' => 'Street Food',
+                'slug' => 'street-food',
+                'image' => 'images/category/street-food.jpg',
+            ],
+            [
+                'name' => 'Healthy',
+                'slug' => 'healthy',
+                'image' => 'images/category/healthy.jpg',
+            ],
         ];
 
-        $allImages = collect(Storage::disk('public')->files('images/category'));
-
         foreach ($categories as $category) {
-            $slug = Str::slug($category);
-
-            $images = $allImages->filter(function ($path) use ($slug) {
-                return Str::startsWith(
-                    basename($path),
-                    $slug . '-'
-                );
-            });
-
-            $randomImage = $images->isNotEmpty()
-                ? $images->random()
-                : null;
-
             Category::firstOrCreate(
-                ['name' => $category],
+                ['name' => $category['name']],
                 [
-                    'slug' => $slug,
-                    'image' => $randomImage,
+                    'slug' => $category['slug'],
+                    'image' => $category['image'],
                 ]
             );
         }
