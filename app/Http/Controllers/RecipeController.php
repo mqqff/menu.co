@@ -209,7 +209,7 @@ class RecipeController extends Controller
             'cook_time' => $validated['cook_time'],
             'servings' => $validated['servings'],
             'status' => $validated['status'],
-            'tips' => $validated['tips'],
+            'tips' => $validated['tips'] ?? null,
         ]);
 
         $this->syncIngredients(
