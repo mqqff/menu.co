@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'slug'];
+    use HasFactory;
+    protected $fillable = ['name', 'slug', 'image'];
     protected $appends = ['image_url'];
 
     public function getImageUrlAttribute()

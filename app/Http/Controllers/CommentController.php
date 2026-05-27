@@ -51,6 +51,10 @@ class CommentController extends Controller
 
     public function report(Comment $comment)
     {
+        if ($comment->reports()->where('user_id', auth()->id())->exists()) {
+            return back()->with('error', 'You have already reported this comment.');
+        }
+
         $comment->reports()->create([
             'user_id' => Auth::id(),
         ]);

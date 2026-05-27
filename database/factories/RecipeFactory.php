@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\Models\Category;
-use Illuminate\Support\Facades\Storage;
 
 class RecipeFactory extends Factory
 {
@@ -13,20 +11,28 @@ class RecipeFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'category_id' => Category::inRandomOrder()->value('id'),
+            'category_id' => CategoryFactory::new(),
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
-            'image' => function () {
-                $files = Storage::disk('public')->files('images/recipe');
-
-                return count($files)
-                    ? $files[array_rand($files)]
-                    : null;
-            },
+            'image' => 'images/recipe/test.jpg',
             'cook_time' => rand(10, 120),
             'servings' => rand(1, 6),
             'status' => $this->faker->randomElement(['draft', 'published']),
             'tips' => $this->faker->sentence(),
         ];
+    }
+
+    public function published(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'published',
+        ]);
+    }
+
+    public function draft(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'draft',
+        ]);
     }
 }
