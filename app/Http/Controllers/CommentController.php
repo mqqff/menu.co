@@ -21,7 +21,7 @@ class CommentController extends Controller
             'user_id' => auth()->id(),
             'recipe_id' => $recipe->id,
         ], [
-            'content' => $request->content,
+            'content' => $request['content'],
         ]);
 
         Rating::updateOrCreate([
@@ -52,7 +52,7 @@ class CommentController extends Controller
     public function report(Comment $comment)
     {
         if ($comment->reports()->where('user_id', auth()->id())->exists()) {
-            return back()->with('error', 'You have already reported this comment.');
+            return redirect()->back()->with('error', 'You have already reported this comment.');
         }
 
         $comment->reports()->create([

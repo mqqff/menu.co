@@ -18,6 +18,18 @@
 
     @include('partials.footer')
 
+    @if(session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('error') }}',
+                })
+            })
+        </script>
+    @endif
+
     @if(session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {
