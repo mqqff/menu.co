@@ -346,6 +346,10 @@ class RecipeController extends Controller
 
     public function report(Recipe $recipe)
     {
+        if ($recipe->reports()->where('user_id', auth()->id())->exists()) {
+            return redirect()->back()->with('error', 'You have already reported this recipe.');
+        }
+
         $recipe->reports()->create([
             'user_id' => Auth::id()
         ]);
