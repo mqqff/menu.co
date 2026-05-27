@@ -178,8 +178,8 @@ class ProfileController extends Controller
 
     public function report(User $user)
     {
-        if ($user->reports()->where('reporter_id', Auth::id())->exists()) {
-            return Res::error('You have already reported this user.');
+        if ($user->reports()->where('user_id', Auth::id())->exists()) {
+            return redirect()->back()->with('error', 'You have already reported this user.');
         }
 
         $user->reports()->create([

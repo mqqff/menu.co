@@ -32,6 +32,18 @@
         }
     </style>
 
+    @if(session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('error') }}',
+                })
+            })
+        </script>
+    @endif
+
     <div class="bg-[#FEFAF6] min-h-screen pt-20 pb-32">
         <div class="max-w-6xl mx-auto px-5">
             <section class="flex flex-col md:flex-row gap-8 items-start">
