@@ -141,8 +141,8 @@
                                     {{ $recipe->cook_time }}
                                 </span>
                                     <span class="flex items-center gap-1">
-                                    <x-icons.clock class="w-3 h-3" />
-                                    {{ $recipe->servings }}
+                                    <x-icons.user-group class="w-3 h-3" />
+                                    {{ $recipe->servings }} servings
                                 </span>
                                 </div>
                             </div>
