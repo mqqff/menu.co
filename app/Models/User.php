@@ -28,7 +28,8 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
-        'user_id'
+        'user_id',
+        'restricted_at',
     ];
 
     /**
@@ -49,6 +50,7 @@ class User extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'restricted_at' => 'datetime',
         ];
     }
 
@@ -107,5 +109,22 @@ class User extends Authenticatable
     public function reports()
     {
         return $this->morphMany(Report::class, 'reportable');
+    }
+
+    public function isRestricted(): bool
+    {
+        return !is_null($this->restricted_at);
+    }
+
+    public function checkRestriction(): void
+    {
+        if ($this->reports()->count() >= 10) {
+            $this->update(['restricted_at' => now()]);
+        }
+    }
+
+    public function scopeNotRestricted($query)
+    {
+        return $query->whereNull('restricted_at');
     }
 }

@@ -19,6 +19,7 @@ class RecipeController extends Controller
     public function index(): View
     {
         $baseQuery = Recipe::published()
+            ->withoutRestricted()
             ->select('recipes.*')
             ->selectSub(
                 DB::table('ratings')
@@ -45,6 +46,7 @@ class RecipeController extends Controller
             });
 
         $recently_added = Recipe::published()
+            ->withoutRestricted()
             ->with('category')
             ->latest()
             ->take(10)
@@ -73,6 +75,7 @@ class RecipeController extends Controller
         $query = $request->input('q');
 
         $recipes = Recipe::published()
+            ->withoutRestricted()
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                     ->orWhere('description', 'like', "%{$query}%");
@@ -105,6 +108,7 @@ class RecipeController extends Controller
     public function trendingRecipes(): View
     {
         $recipes = Recipe::published()
+            ->withoutRestricted()
             ->with('category')
             ->select('recipes.*')
             ->selectSub(
@@ -133,6 +137,7 @@ class RecipeController extends Controller
     public function recentlyAdded(): View
     {
         $recipes = Recipe::published()
+            ->withoutRestricted()
             ->with('category')
             ->latest()
             ->paginate(100);
@@ -159,6 +164,7 @@ class RecipeController extends Controller
     public function recipeByCategory(Category $category): View
     {
         $recipes = Recipe::published()
+            ->withoutRestricted()
             ->where('category_id', $category->id)
             ->latest()
             ->paginate(100);
@@ -320,6 +326,7 @@ class RecipeController extends Controller
             ->exists();
 
         $similar_recipes = Recipe::with('category')
+            ->withoutRestricted()
             ->where('id', '!=', $recipe->id)
             ->where('category_id', $recipe->category_id)
             ->where('status', 'published')
@@ -354,6 +361,9 @@ class RecipeController extends Controller
         $recipe->reports()->create([
             'user_id' => Auth::id()
         ]);
+
+        $recipe->checkRestriction();
+
         return redirect()->back()->with('success', 'Recipe reported successfully!');
     }
 

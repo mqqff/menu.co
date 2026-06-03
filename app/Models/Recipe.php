@@ -25,7 +25,15 @@ class Recipe extends Model
         'servings',
         'status',
         'tips',
+        'restricted_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'restricted_at' => 'datetime',
+        ];
+    }
 
     protected static function booted()
     {
@@ -58,6 +66,24 @@ class Recipe extends Model
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
+    }
+
+    public function scopeWithoutRestricted($query)
+    {
+        return $query->whereNull('recipes.restricted_at')
+            ->whereHas('user', fn($q) => $q->whereNull('restricted_at'));
+    }
+
+    public function isRestricted(): bool
+    {
+        return !is_null($this->restricted_at);
+    }
+
+    public function checkRestriction(): void
+    {
+        if ($this->reports()->count() >= 10) {
+            $this->update(['restricted_at' => now()]);
+        }
     }
 
     public function ingredientGroups()

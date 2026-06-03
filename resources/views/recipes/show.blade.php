@@ -76,9 +76,14 @@
                 </div>
 
                 <div class="flex-1">
-                    <h1 class="text-3xl md:text-4xl text-primary tracking-wide font-bold">
-                        {{ $recipe->title }}
-                    </h1>
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-3xl md:text-4xl text-primary tracking-wide font-bold">
+                            {{ $recipe->title }}
+                        </h1>
+                        @if($recipe->isRestricted())
+                            <span class="bg-red-100 text-red-600 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">RESTRICTED</span>
+                        @endif
+                    </div>
 
                     <div class="flex items-center gap-2.5 mb-4 mt-5">
                         <img
