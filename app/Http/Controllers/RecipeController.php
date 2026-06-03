@@ -360,6 +360,9 @@ class RecipeController extends Controller
         $recipe->reports()->create([
             'user_id' => Auth::id()
         ]);
+
+        $recipe->checkRestriction();
+
         return redirect()->back()->with('success', 'Recipe reported successfully!');
     }
 

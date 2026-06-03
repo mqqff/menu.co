@@ -20,6 +20,10 @@ class EnsureRecipeIsPublishedOrOwner
             abort(404);
         }
 
+        if ($recipe->isRestricted() && (!auth()->check() || auth()->id() !== $recipe->user_id)) {
+            abort(404);
+        }
+
         return $next($request);
     }
 }
