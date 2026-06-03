@@ -15,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'recipe.access' => \App\Http\Middleware\EnsureRecipeIsPublishedOrOwner::class,
             'recipe.owner' => \App\Http\Middleware\EnsureRecipeOwner::class,
         ]);
+
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
