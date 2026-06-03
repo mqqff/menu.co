@@ -10,7 +10,12 @@
                  class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md shrink-0">
 
             <div class="flex-1">
-                <h1 class="text-2xl font-extrabold text-primary">{{ $user->name }}</h1>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-2xl font-extrabold text-primary">{{ $user->name }}</h1>
+                    @if($user->isRestricted())
+                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2.5 py-0.5 rounded-full">RESTRICTED</span>
+                    @endif
+                </div>
                 <p class="text-gray-500 text-sm mt-0.5">{{ "@".$user->username }}</p>
             </div>
 
@@ -98,9 +103,15 @@
                         </div>
                     </a>
                 @empty
-                    <p class="text-gray-400">
-                        No recipes created yet.
-                    </p>
+                    @if($user->isRestricted() && auth()->id() !== $user->id)
+                        <p class="text-gray-400">
+                            This user has been restricted and their recipes are no longer available.
+                        </p>
+                    @else
+                        <p class="text-gray-400">
+                            No recipes created yet.
+                        </p>
+                    @endif
                 @endforelse
             </div>
         </section>
