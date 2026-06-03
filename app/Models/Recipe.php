@@ -60,6 +60,11 @@ class Recipe extends Model
         return $query->where('status', 'published');
     }
 
+    public function scopeWithoutRestricted($query)
+    {
+        return $query->whereHas('user', fn($q) => $q->whereNull('restricted_at'));
+    }
+
     public function ingredientGroups()
     {
         return $this->hasMany(IngredientGroup::class);
