@@ -12,10 +12,11 @@ class EnsureRecipeIsPublishedOrOwner
     {
         $recipe = $request->route('recipe');
 
-        if (
-            $recipe->status !== 'published' &&
-            (!auth()->check() || auth()->id() !== $recipe->user_id)
-        ) {
+        if ($recipe->status !== 'published' && (!auth()->check() || auth()->id() !== $recipe->user_id)) {
+            abort(404);
+        }
+
+        if ($recipe->user->isRestricted() && (!auth()->check() || auth()->id() !== $recipe->user_id)) {
             abort(404);
         }
 

@@ -17,14 +17,18 @@ class ProfileController extends Controller
     {
         $user->load('preferences');
 
-        $created_recipes = $user->recipes()
-            ->latest()
-            ->take(15)
-            ->get()
-            ->map(function ($recipe) {
-                $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
-                return $recipe;
-            });
+        if ($user->isRestricted() && Auth::id() !== $user->id) {
+            $created_recipes = collect();
+        } else {
+            $created_recipes = $user->recipes()
+                ->latest()
+                ->take(15)
+                ->get()
+                ->map(function ($recipe) {
+                    $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+                    return $recipe;
+                });
+        }
 
         $saved_recipes = collect();
 
@@ -150,14 +154,18 @@ class ProfileController extends Controller
 
     public function createdRecipes(User $user): View
     {
-        $recipes = $user->recipes()
-            ->latest()
-            ->paginate(75);
+        if ($user->isRestricted() && Auth::id() !== $user->id) {
+            $recipes = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 75);
+        } else {
+            $recipes = $user->recipes()
+                ->latest()
+                ->paginate(75);
 
-        $recipes->getCollection()->transform(function ($recipe) {
-            $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
-            return $recipe;
-        });
+            $recipes->getCollection()->transform(function ($recipe) {
+                $recipe->cook_time = $this->formatCookTime($recipe->cook_time);
+                return $recipe;
+            });
+        }
 
         return view('profile.created_recipes', compact('user', 'recipes'));
     }
@@ -185,6 +193,8 @@ class ProfileController extends Controller
         $user->reports()->create([
             'user_id' => Auth::id(),
         ]);
+
+        $user->checkRestriction();
 
         return back()->with('success', 'User reported successfully!');
     }
