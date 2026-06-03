@@ -59,6 +59,8 @@ class CommentController extends Controller
             'user_id' => Auth::id(),
         ]);
 
+        $comment->checkAndDelete();
+
         return back()->with('success', 'Comment reported successfully!');
     }
 }
