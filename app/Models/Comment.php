@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Models\Rating;
 
 class Comment extends Model
 {
@@ -38,5 +39,15 @@ class Comment extends Model
     public function reports()
     {
         return $this->morphMany(Report::class, 'reportable');
+    }
+
+    public function checkAndDelete(): void
+    {
+        if ($this->reports()->count() >= 5) {
+            Rating::where('user_id', $this->user_id)
+                ->where('recipe_id', $this->recipe_id)
+                ->delete();
+            $this->delete();
+        }
     }
 }
