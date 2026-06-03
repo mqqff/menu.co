@@ -6,30 +6,29 @@ services:
     restart: unless-stopped
     volumes:
       - menuco_storage:/var/www/storage:ro
-      - menuco_build:/var/www/build
     networks:
       - menuco
     ports:
-      - "80:80"
+      - "8081:80"
     depends_on:
-      php-fpm:
+      octane:
         condition: service_healthy
 
-  php-fpm:
+  octane:
     build:
       context: .
-      dockerfile: ./docker/php-fpm/Dockerfile
-      target: production
+      dockerfile: ./docker/octane/Dockerfile
     restart: unless-stopped
     volumes:
       - menuco_storage:/var/www/storage
-      - menuco_build:/var/www/public/build
+    environment:
+      DB_HOST: mysql
     env_file:
       - .env
     networks:
       - menuco
     healthcheck:
-      test: ["CMD-SHELL", "php-fpm-healthcheck || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/up"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -43,6 +42,8 @@ services:
       dockerfile: ./docker/php-cli/Dockerfile
     tty: true
     stdin_open: true
+    environment:
+      DB_HOST: mysql
     env_file:
       - .env
     networks:
@@ -77,4 +78,3 @@ networks:
 volumes:
   mysql_data:
   menuco_storage:
-  menuco_build:
