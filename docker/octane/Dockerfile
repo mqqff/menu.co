@@ -28,6 +28,11 @@ COPY . /var/www
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install && npm run build \
+    && rm -rf node_modules
+
 RUN ./vendor/bin/rr get --no-interaction --location /usr/local/bin
 
 FROM php:8.5-cli
