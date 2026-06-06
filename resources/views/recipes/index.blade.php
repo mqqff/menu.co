@@ -16,7 +16,7 @@
                 </div>
                 <div class="max-w-2xl z-50">
                     <p class="text-white/90 font-semibold text-2xl sm:text-3xl mb-1">Menu.co Monthly Event!</p>
-                    <h1 class="text-white font-black text-4xl sm:text-4xl md:text-7xl lg:text-8xl leading-tight mb-4 break-words">#MenuCoAprilicious</h1>
+                    <h1 class="text-white font-black text-4xl sm:text-4xl md:text-7xl lg:text-8xl leading-tight mb-4 wrap-break-word xl:wrap-normal">#MenuCoAprilicious</h1>
                     <p class="text-white text-base sm:text-md leading-relaxed">
                         Share your most delicious dish and share it on your Instagram with the hashtag to win
                         for each category <strong>Rp.200.000!!</strong>
@@ -28,7 +28,7 @@
                 <div class="absolute right-12 top-8 rounded-full bg-[#f5e9c8]/60 hidden lg:block pointer-events-none select-none w-32 h-32"></div>
                 <div class="max-w-2xl">
                     <p class="text-white/90 font-semibold text-2xl sm:text-3xl mb-1">New This Week</p>
-                    <h1 class="text-white font-black text-4xl sm:text-4xl md:text-7xl lg:text-8xl leading-tight mb-4 break-words">#FreshFromKitchen</h1>
+                    <h1 class="text-white font-black text-4xl sm:text-4xl md:text-7xl lg:text-8xl leading-tight mb-4 wrap-break-word xl:wrap-normal">#FreshFromKitchen</h1>
                     <p class="text-white/85 text-base sm:text-md leading-relaxed">
                         Discover the newest recipes added by our community every week. Get inspired and start cooking today!
                     </p>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="max-w-2xl">
                     <p class="text-white/90 font-semibold text-2xl sm:text-3xl mb-1">Community Spotlight</p>
-                    <h1 class="text-white font-black text-4xl sm:text-4xl md:text-7xl lg:text-8xl leading-tight mb-4 break-words">#MenuCoChefs</h1>
+                    <h1 class="text-white font-black text-4xl sm:text-4xl md:text-7xl lg:text-8xl leading-tight mb-4 wrap-break-word xl:wrap-normal">#MenuCoChefs</h1>
                     <p class="text-white/85 text-base sm:text-md leading-relaxed">
                         Our community is growing! Share your secret recipes and become a featured chef on Menu.co.
                     </p>
