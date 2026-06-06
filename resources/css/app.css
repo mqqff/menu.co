@@ -77,3 +77,7 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+.hero-dot {
+    @apply h-2 w-2 rounded-full transition-all duration-300 cursor-pointer;
+}
