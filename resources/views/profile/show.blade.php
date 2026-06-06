@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <div class="relative" id="profile-dropdown-wrapper">
+            <div class="hidden sm:block sm:self-center" id="profile-dropdown-wrapper">
                 <button
                     id="profile-three-dot"
                     type="button"
