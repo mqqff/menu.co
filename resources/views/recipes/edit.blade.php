@@ -5,7 +5,7 @@
 @section('content')
     <div class="toast fixed bottom-8 left-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-3xl text-sm font-semibold pointer-events-none z-999 whitespace-nowrap" id="toast"></div>
 
-    <div class="max-w-6xl mx-auto my-9 pb-5 pt-8">
+    <div class="max-w-6xl mx-auto my-9 pb-5 pt-8 px-4 sm:px-6">
         <form method="POST" action="{{ route('recipes.update', $recipe->id) }}" enctype="multipart/form-data" id="editForm">
             @csrf
             @method('PATCH')
@@ -62,16 +62,16 @@
                         </div>
                     </div>
 
-                    <div class="flex gap-3 mb-3.5">
+                    <div class="flex flex-wrap gap-3 mb-3.5">
                         <div class="flex gap-x-1">
                             <div class="flex items-center gap-2">
                                 <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Cook time:</span>
                                 <input type="number" id="cookTime" name="cook_time" placeholder="45" value="{{ $recipe->cook_time }}" required
-                                       class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
+                                       class="w-16 sm:w-20 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <select class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
+                                <select class="bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
                                     <option value="minutes" {{ $recipe->cook_unit == 'minutes' ? 'selected' : '' }}>Minutes</option>
                                     <option value="hours" {{ $recipe->cook_unit == 'hours' ? 'selected' : '' }}>Hours</option>
                                     <option value="days" {{ $recipe->cook_unit == 'days' ? 'selected' : '' }}>Days</option>
@@ -82,10 +82,10 @@
                         <div class="flex items-center gap-2">
                             <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Servings:</span>
                             <input type="number" id="servings" placeholder="4" name="servings" value="{{ $recipe->servings }}" required
-                                   class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
+                                   class="w-16 sm:w-20 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
                         </div>
                     </div>
-                    <div class="mb-4 flex items-center gap-4">
+                    <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                         <div>
                             <label class="text-sm font-semibold text-gray-500 mb-1 block">Category</label>
                         </div>
@@ -181,7 +181,7 @@
             list.innerHTML = '';
             ingredients.forEach((ing, i) => {
                 const row = document.createElement('div');
-                row.className = 'ingredient-row grid grid-cols-[auto_100px_1fr_auto] items-center gap-1.5 w-full';
+                row.className = 'ingredient-row grid grid-cols-[auto_1fr_1fr_auto] sm:grid-cols-[auto_100px_1fr_auto] items-center gap-1.5 w-full';
                 row.setAttribute('data-id', ing.id);
                 row.draggable = true;
 
