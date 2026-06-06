@@ -54,24 +54,9 @@
                         class="w-full h-72 object-cover rounded-2xl shadow-md mb-7"
                     />
 
-                    <h2 class="text-2xl font-extrabold text-orange mb-3.5">Ingredients</h2>
-
-                    @foreach ($recipe->ingredientGroups as $group)
-                        @if ($group->label)
-                            <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mt-4 mb-2">
-                                {{ $group->label }}
-                            </p>
-                        @endif
-
-                        <ul class="space-y-2">
-                            @foreach ($group->ingredients as $item)
-                                <li class="border-b border-[#EAE0D8] pb-1.5 text-sm text-gray-700">
-                                    <span class="font-semibold whitespace-nowrap">{{ $item->amount }}</span>
-                                    <span>{{ $item->name }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endforeach
+                    <div class="hidden md:block">
+                        @include('recipes.partials.ingredients')
+                    </div>
 
                 </div>
 
@@ -197,6 +182,10 @@
                 <p class="text-sm text-gray-600 mb-5 leading-relaxed">
                     {{ $recipe->description }}
                 </p>
+
+                <div class="md:hidden mb-6">
+                    @include('recipes.partials.ingredients')
+                </div>
 
                 <h2 class="text-2xl font-extrabold text-orange mb-3.5">Steps</h2>
 
