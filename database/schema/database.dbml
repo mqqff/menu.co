@@ -1,0 +1,259 @@
+Enum "recipes_status_enum" {
+  "draft"
+  "published"
+}
+
+Table "bookmarks" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "user_id" char(36) [not null]
+  "recipe_id" char(36) [not null]
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    (user_id, recipe_id) [unique, name: "bookmarks_user_id_recipe_id_unique"]
+  }
+}
+
+Table "cache" {
+  "key" varchar(255) [pk, not null]
+  "value" mediumtext [not null]
+  "expiration" int [not null]
+
+  Indexes {
+    expiration [type: btree, name: "cache_expiration_index"]
+  }
+}
+
+Table "cache_locks" {
+  "key" varchar(255) [pk, not null]
+  "owner" varchar(255) [not null]
+  "expiration" int [not null]
+
+  Indexes {
+    expiration [type: btree, name: "cache_locks_expiration_index"]
+  }
+}
+
+Table "categories" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "name" varchar(255) [unique, not null]
+  "slug" varchar(255) [unique, not null]
+  "image" varchar(255) [not null]
+  "created_at" timestamp
+  "updated_at" timestamp
+}
+
+Table "comments" {
+  "id" char(36) [pk, not null]
+  "user_id" char(36) [not null]
+  "recipe_id" char(36) [not null]
+  "content" text [not null]
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    recipe_id [type: btree, name: "comments_recipe_id_index"]
+    user_id [type: btree, name: "comments_user_id_index"]
+    (user_id, recipe_id) [unique, name: "comments_user_id_recipe_id_unique"]
+  }
+}
+
+Table "failed_jobs" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "uuid" varchar(255) [unique, not null]
+  "connection" text [not null]
+  "queue" text [not null]
+  "payload" longtext [not null]
+  "exception" longtext [not null]
+  "failed_at" timestamp [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table "ingredient_groups" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "recipe_id" char(36) [not null]
+  "label" varchar(255)
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    recipe_id [type: btree, name: "ingredient_groups_recipe_id_index"]
+  }
+}
+
+Table "ingredients" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "group_id" "bigint unsigned" [not null]
+  "name" varchar(255) [not null]
+  "amount" varchar(255) [not null]
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    group_id [type: btree, name: "ingredients_group_id_index"]
+  }
+}
+
+Table "job_batches" {
+  "id" varchar(255) [pk, not null]
+  "name" varchar(255) [not null]
+  "total_jobs" int [not null]
+  "pending_jobs" int [not null]
+  "failed_jobs" int [not null]
+  "failed_job_ids" longtext [not null]
+  "options" mediumtext
+  "cancelled_at" int
+  "created_at" int [not null]
+  "finished_at" int
+}
+
+Table "jobs" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "queue" varchar(255) [not null]
+  "payload" longtext [not null]
+  "attempts" "tinyint unsigned" [not null]
+  "reserved_at" "int unsigned"
+  "available_at" "int unsigned" [not null]
+  "created_at" "int unsigned" [not null]
+
+  Indexes {
+    (available_at, reserved_at, queue) [type: btree, name: "jobs_queue_reserved_at_available_at_index"]
+  }
+}
+
+Table "migrations" {
+  "id" "int unsigned" [pk, not null, increment]
+  "migration" varchar(255) [not null]
+  "batch" int [not null]
+}
+
+Table "password_reset_tokens" {
+  "email" varchar(255) [pk, not null]
+  "token" varchar(255) [not null]
+  "created_at" timestamp
+}
+
+Table "ratings" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "user_id" char(36) [not null]
+  "recipe_id" char(36) [not null]
+  "value" "tinyint unsigned" [not null]
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    (user_id, recipe_id) [unique, name: "ratings_user_id_recipe_id_unique"]
+  }
+}
+
+Table "recipes" {
+  "id" char(36) [pk, not null]
+  "user_id" char(36) [not null]
+  "category_id" "bigint unsigned" [not null]
+  "title" varchar(255) [not null]
+  "description" text [not null]
+  "image" varchar(255) [not null]
+  "cook_time" int [not null]
+  "servings" int [not null]
+  "status" recipes_status_enum [not null]
+  "tips" text
+  "restricted_at" timestamp
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    category_id [type: btree, name: "recipes_category_id_index"]
+    user_id [type: btree, name: "recipes_user_id_index"]
+  }
+}
+
+Table "reports" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "user_id" char(36) [not null]
+  "reportable_type" varchar(255) [not null]
+  "reportable_id" char(36) [not null]
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    (reportable_type, reportable_id) [type: btree, name: "reports_reportable_type_reportable_id_index"]
+    (user_id, reportable_id, reportable_type) [unique, name: "reports_user_id_reportable_id_reportable_type_unique"]
+  }
+}
+
+Table "sessions" {
+  "id" varchar(255) [pk, not null]
+  "user_id" char(36)
+  "ip_address" varchar(45)
+  "user_agent" text
+  "payload" longtext [not null]
+  "last_activity" int [not null]
+
+  Indexes {
+    last_activity [type: btree, name: "sessions_last_activity_index"]
+    user_id [type: btree, name: "sessions_user_id_index"]
+  }
+}
+
+Table "steps" {
+  "id" "bigint unsigned" [pk, not null, increment]
+  "recipe_id" char(36) [not null]
+  "step_order" int [not null]
+  "text" text [not null]
+  "image" varchar(255)
+  "created_at" timestamp
+  "updated_at" timestamp
+
+  Indexes {
+    (recipe_id, step_order) [type: btree, name: "steps_recipe_id_step_order_index"]
+  }
+}
+
+Table "user_preferences" {
+  "user_id" char(36) [not null]
+  "category_id" "bigint unsigned" [not null]
+
+  Indexes {
+    (user_id, category_id) [pk, name: "PRIMARY"]
+  }
+}
+
+Table "users" {
+  "id" char(36) [pk, not null]
+  "name" varchar(255) [not null]
+  "email" varchar(255) [unique, not null]
+  "username" varchar(255) [unique, not null]
+  "avatar" varchar(255) [not null]
+  "restricted_at" timestamp
+  "password" varchar(255) [not null]
+  "created_at" timestamp
+  "updated_at" timestamp
+}
+
+Ref "bookmarks_recipe_id_foreign":"recipes"."id" < "bookmarks"."recipe_id" [delete: cascade]
+
+Ref "bookmarks_user_id_foreign":"users"."id" < "bookmarks"."user_id" [delete: cascade]
+
+Ref "comments_recipe_id_foreign":"recipes"."id" < "comments"."recipe_id" [delete: cascade]
+
+Ref "comments_user_id_foreign":"users"."id" < "comments"."user_id" [delete: cascade]
+
+Ref "ingredient_groups_recipe_id_foreign":"recipes"."id" < "ingredient_groups"."recipe_id" [delete: cascade]
+
+Ref "ingredients_group_id_foreign":"ingredient_groups"."id" < "ingredients"."group_id" [delete: cascade]
+
+Ref "ratings_recipe_id_foreign":"recipes"."id" < "ratings"."recipe_id" [delete: cascade]
+
+Ref "ratings_user_id_foreign":"users"."id" < "ratings"."user_id" [delete: cascade]
+
+Ref "recipes_category_id_foreign":"categories"."id" < "recipes"."category_id" [delete: cascade]
+
+Ref "recipes_user_id_foreign":"users"."id" < "recipes"."user_id" [delete: cascade]
+
+Ref "reports_user_id_foreign":"users"."id" < "reports"."user_id" [delete: cascade]
+
+Ref "steps_recipe_id_foreign":"recipes"."id" < "steps"."recipe_id" [delete: cascade]
+
+Ref "user_preferences_category_id_foreign":"categories"."id" < "user_preferences"."category_id" [delete: cascade]
+
+Ref "user_preferences_user_id_foreign":"users"."id" < "user_preferences"."user_id" [delete: cascade]

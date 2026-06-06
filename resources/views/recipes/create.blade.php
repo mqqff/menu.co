@@ -3,16 +3,16 @@
 @section('title', 'Create Recipe')
 
 @section('content')
-    <div class="toast fixed bottom-8 left-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-3xl text-sm font-semibold pointer-events-none z-999 whitespace-nowrap" id="toast"></div>
+    <div class="toast fixed bottom-8 left-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-3xl text-sm font-semibold pointer-events-none z-999 text-center w-[90vw]" id="toast"></div>
 
-    <div class="max-w-6xl mx-auto my-9 pb-5 pt-8">
+    <div class="max-w-6xl mx-auto my-9 pb-5 pt-8 px-4 sm:px-6">
         <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data" id="createForm">
             @csrf
             <input type="hidden" name="ingredients" id="ingredientsInput">
             <input type="hidden" name="steps" id="stepsInput">
             <input type="hidden" name="status" id="statusInput">
-            <div class="flex flex-col lg:flex-row gap-8 items-start">
-                <div class="w-full lg:w-sm lg:shrink-0">
+            <div class="flex flex-col items-center lg:flex-row lg:items-start gap-8">
+                <div class="w-full max-w-xl lg:w-sm lg:max-w-none lg:shrink-0">
                     <div id="photoUpload"
                          onclick="document.getElementById('mainPhotoInput').click()"
                          class="photo-upload bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-72 p-8 cursor-pointer transition-all hover:border-orange-600 hover:bg-orange-50 relative overflow-hidden mb-7">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
 
-                <div class="flex-1">
+                <div class="w-full max-w-xl lg:flex-1 lg:max-w-none">
                     <input type="text" id="recipeTitle" name="title" placeholder="Title" autofocus required
                            class="w-full bg-gray-100 border-none rounded-xl px-5 py-2 text-[28px] font-extrabold text-gray-700 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] mb-4 placeholder:text-gray-300">
 
@@ -84,7 +84,7 @@
                                    class="w-16 sm:w-20 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
                         </div>
                     </div>
-                    <div class="mb-4 flex items-center gap-4">
+                    <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                         <div>
                             <label class="text-sm font-semibold text-gray-500 mb-1 block">Category</label>
                         </div>
@@ -111,7 +111,7 @@
                     <div>
                         <h2 class="text-2xl font-extrabold text-orange mb-3.5">Steps</h2>
                         <div class="flex flex-col gap-5" id="stepsList"></div>
-                        <div class="flex justify-end mt-4">
+                        <div class="flex justify-center mt-4">
                             <button type="button" onclick="addStep()"
                                     class="flex items-center gap-1.5 bg-transparent border-[1.5px] border-gray-200 rounded-[20px] px-4 py-1.5 text-sm font-semibold text-gray-500 cursor-pointer transition-all hover:border-gray-400 hover:text-orange w-fit">
                                 <x-icons.plus class="w-3.5 h-3.5"/>
@@ -162,7 +162,7 @@
             list.innerHTML = '';
             ingredients.forEach((ing, i) => {
                 const row = document.createElement('div');
-                row.className = 'ingredient-row grid grid-cols-[auto_100px_1fr_auto] items-center gap-1.5 w-full';
+                row.className = 'ingredient-row grid grid-cols-[auto_1fr_1fr_auto] sm:grid-cols-[auto_100px_1fr_auto] items-center gap-1.5 w-full';
                 row.setAttribute('data-id', ing.id);
                 row.draggable = true;
 
@@ -271,16 +271,16 @@
             <x-icons.drag class="w-4 h-4"/>
         </button>
       </div>
-      <div class="flex-1">
+      <div class="flex-1 min-w-0">
         <div class="flex items-center gap-2 mb-2">
           <input
             type="text"
-            class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"
+            class="flex-1 min-w-0 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"
             value="${escHtml(step.title)}"
             placeholder="Step ${i + 1}"
             oninput="updateStep(${step.id}, this.value)"
           >
-          <div class="relative">
+          <div class="relative shrink-0">
             <button type="button" class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn" onclick="toggleDetailDropdown(this)" type="button">
               <x-icons.three-dot class="w-3.5 h-3.5"/>
             </button>
