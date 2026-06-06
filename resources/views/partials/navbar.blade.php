@@ -8,7 +8,7 @@
             @auth <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white whitespace-nowrap {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>@endauth
         </div>
 
-        <div class="hidden lg:block flex-1 min-w-0 mx-2 sm:mx-4">
+        <div class="hidden sm:block flex-1 min-w-0 mx-2 sm:mx-4">
             <form action="{{ route('recipes.search') }}" method="GET">
                 <div class="flex items-center bg-white rounded-full w-full md:max-w-md lg:max-w-lg xl:max-w-xl px-3 md:px-4 py-1.5 md:py-2 gap-2 mx-auto md:mx-0">
                     <input
@@ -25,58 +25,59 @@
             </form>
         </div>
 
-        <div class="hidden md:flex items-center ml-auto shrink-0">
-            @auth
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('recipes.create') }}" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-4 md:px-5 py-1.5 md:py-2 whitespace-nowrap">
-                        <x-icons.plus class="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                        <span class="text-primary font-semibold text-xs md:text-sm hidden md:inline">Create a Recipe</span>
-                    </a>
+        <div class="flex items-center gap-2 ml-auto shrink-0">
+            <div class="hidden md:flex items-center">
+                @auth
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('recipes.create') }}" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-4 md:px-5 py-1.5 md:py-2 whitespace-nowrap">
+                            <x-icons.plus class="w-4 h-4 md:w-5 md:h-5 text-primary" />
+                            <span class="text-primary font-semibold text-xs md:text-sm hidden md:inline">Create a Recipe</span>
+                        </a>
 
-                    <div class="relative" id="profileDropdown">
-                        <button
-                            onclick="toggleDropdown()"
-                            class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-white focus:outline-none cursor-pointer shrink-0"
-                        >
-                            <img src="{{ auth()->user()->avatar_url }}" alt="User Image" class="w-full h-full object-cover" />
-                        </button>
+                        <div class="relative" id="profileDropdown">
+                            <button
+                                onclick="toggleDropdown()"
+                                class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-white focus:outline-none cursor-pointer shrink-0"
+                            >
+                                <img src="{{ auth()->user()->avatar_url }}" alt="User Image" class="w-full h-full object-cover" />
+                            </button>
 
-                        <div
-                            id="dropdownMenu"
-                            class="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl py-2 z-50 transition-all duration-200 ease-out opacity-0 -translate-y-2 pointer-events-none"
-                        >
-                            <a href="{{ route('profile.show', ['user' => Auth::user()->username]) }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
-                                <x-icons.user class="w-5 h-5 text-gray-500" />
-                                <span class="font-medium text-sm">Your Profile</span>
-                            </a>
+                            <div
+                                id="dropdownMenu"
+                                class="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl py-2 z-50 transition-all duration-200 ease-out opacity-0 -translate-y-2 pointer-events-none"
+                            >
+                                <a href="{{ route('profile.show', ['user' => Auth::user()->username]) }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                                    <x-icons.user class="w-5 h-5 text-gray-500" />
+                                    <span class="font-medium text-sm">Your Profile</span>
+                                </a>
 
-                            <a href="{{ route('profile.settings') }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
-                                <x-icons.gear class="w-5 h-5 text-gray-500" />
-                                <span class="font-medium text-sm">Settings</span>
-                            </a>
+                                <a href="{{ route('profile.settings') }}" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition">
+                                    <x-icons.gear class="w-5 h-5 text-gray-500" />
+                                    <span class="font-medium text-sm">Settings</span>
+                                </a>
 
-                            <hr class="my-1 border-gray-200 mx-4" style="border-color: #D2714A; opacity: 0.4;" />
+                                <hr class="my-1 border-gray-200 mx-4" style="border-color: #D2714A; opacity: 0.4;" />
 
-                            <form method="POST" action="{{ route('auth.logout') }}" id="logoutForm">
-                                @csrf
-                                <button type="button" class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition cursor-pointer">
-                                    <x-icons.sign-out class="w-5 h-5 text-gray-500" />
-                                    <span class="font-medium text-sm">Log Out</span>
-                                </button>
-                            </form>
+                                <form method="POST" action="{{ route('auth.logout') }}" id="logoutForm">
+                                    @csrf
+                                    <button type="button" class="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition cursor-pointer">
+                                        <x-icons.sign-out class="w-5 h-5 text-gray-500" />
+                                        <span class="font-medium text-sm">Log Out</span>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
+
                     </div>
+                @else
+                    <a href="{{ route('auth.login.form') }}" class="flex items-center gap-2 bg-white rounded-full px-4 md:px-5 py-1.5 md:py-2 hover:bg-gray-100 transition whitespace-nowrap">
+                        <x-icons.sign-in class="w-4 h-4 md:w-5 md:h-5 text-primary" />
+                        <span class="text-primary font-semibold text-xs md:text-sm">Log In</span>
+                    </a>
+                @endauth
+            </div>
 
-                </div>
-            @else
-                <a href="{{ route('auth.login.form') }}" class="flex items-center gap-2 bg-white rounded-full px-4 md:px-5 py-1.5 md:py-2 hover:bg-gray-100 transition whitespace-nowrap">
-                    <x-icons.sign-in class="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                    <span class="text-primary font-semibold text-xs md:text-sm">Log In</span>
-                </a>
-            @endauth
-        </div>
-
-        <button id="hamburgerBtn" class="lg:hidden flex items-center justify-center w-8 h-8 text-white cursor-pointer shrink-0 ml-auto" aria-label="Toggle menu">
+            <button id="hamburgerBtn" class="lg:hidden flex items-center justify-center w-8 h-8 text-white cursor-pointer shrink-0" aria-label="Toggle menu">
             <svg id="hamburgerIcon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
