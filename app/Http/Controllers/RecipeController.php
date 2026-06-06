@@ -215,6 +215,8 @@ class RecipeController extends Controller
             'image' => $imagePath,
             'cook_time' => $validated['cook_time'],
             'servings' => $validated['servings'],
+            'budget_min' => $validated['budget_min'] ?? null,
+            'budget_max' => $validated['budget_max'] ?? null,
             'status' => $validated['status'],
             'tips' => $validated['tips'] ?? null,
         ]);
@@ -274,6 +276,8 @@ class RecipeController extends Controller
             'image' => $imagePath,
             'cook_time' => $validated['cook_time'],
             'servings' => $validated['servings'],
+            'budget_min' => $validated['budget_min'] ?? null,
+            'budget_max' => $validated['budget_max'] ?? null,
             'status' => $validated['status'],
             'tips' => $validated['tips'],
         ]);
@@ -379,6 +383,8 @@ class RecipeController extends Controller
             'steps' => 'required|string',
             'description' => 'required|string',
             'tips' => 'nullable|string',
+            'budget_min' => 'nullable|numeric|min:0',
+            'budget_max' => 'nullable|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
         ]);
     }
