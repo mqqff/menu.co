@@ -11,8 +11,8 @@
             <input type="hidden" name="ingredients" id="ingredientsInput">
             <input type="hidden" name="steps" id="stepsInput">
             <input type="hidden" name="status" id="statusInput">
-            <div class="flex flex-col lg:flex-row gap-8 items-start">
-                <div class="w-full lg:w-sm lg:shrink-0">
+            <div class="flex flex-col items-center lg:flex-row lg:items-start gap-8">
+                <div class="w-full max-w-xl lg:w-sm lg:max-w-none lg:shrink-0">
                     <div id="photoUpload"
                          onclick="document.getElementById('mainPhotoInput').click()"
                          class="photo-upload bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-72 p-8 cursor-pointer transition-all hover:border-orange-600 hover:bg-orange-50 relative overflow-hidden mb-7">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
 
-                <div class="flex-1">
+                <div class="w-full max-w-xl lg:flex-1 lg:max-w-none">
                     <input type="text" id="recipeTitle" name="title" placeholder="Title" autofocus required
                            class="w-full bg-gray-100 border-none rounded-xl px-5 py-2 text-[28px] font-extrabold text-gray-700 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] mb-4 placeholder:text-gray-300">
 
