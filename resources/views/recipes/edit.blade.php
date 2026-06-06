@@ -290,16 +290,16 @@
             <x-icons.drag class="w-4 h-4"/>
         </button>
       </div>
-      <div class="flex-1">
+      <div class="flex-1 min-w-0">
         <div class="flex items-center gap-2 mb-2">
           <input
             type="text"
-            class="flex-1 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"
+            class="flex-1 min-w-0 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400"
             value="${escHtml(step.title)}"
             placeholder="Step ${i + 1}"
             oninput="updateStep(${step.id}, this.value)"
           >
-          <div class="relative">
+          <div class="relative shrink-0">
             <button type="button" class="bg-transparent border-none cursor-pointer text-gray-400 p-1 rounded flex items-center hover:text-gray-600 transition-colors more-btn" onclick="toggleDetailDropdown(this)" type="button">
               <x-icons.three-dot class="w-3.5 h-3.5"/>
             </button>
