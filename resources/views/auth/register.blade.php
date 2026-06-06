@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="flex min-h-screen">
-        <div class="relative w-full lg:w-1/2 bg-primary flex flex-col px-10 py-8">
+        <div class="relative w-full lg:w-1/2 bg-primary flex flex-col px-6 sm:px-10 py-8">
             <a href="{{ route('home') }}" class="inline-flex items-center text-white hover:opacity-70 transition-opacity w-fit">
                 <x-icons.arrow-left class="w-6 h-6" />
             </a>

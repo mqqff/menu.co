@@ -23,14 +23,14 @@
 
 @section('content')
     <div class="bg-gray-100 min-h-screen py-10">
-        <div class="max-w-6xl mx-auto flex gap-16 px-4">
-            <div class="w-1/4">
-                <div class="sticky top-24">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-6 md:gap-16 px-4">
+            <div class="w-full md:w-1/4">
+                <div class="md:sticky md:top-24">
                     <h2 class="text-xl font-semibold text-primary mb-6">
                         Settings
                     </h2>
 
-                    <ul class="space-y-3">
+                    <ul class="flex md:flex-col gap-4 md:space-y-3">
                         <li>
                             <a href="#profile" id="menu-profile"
                                class="text-gray-700 font-semibold text-lg">
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="w-3/4">
+            <div class="w-full md:w-3/4">
                 <section id="profile" class="mb-12 max-w-2xl">
                     <form id="form-profile" action="{{ route('profile.update.profile', $user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf

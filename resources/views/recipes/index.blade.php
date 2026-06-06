@@ -7,7 +7,7 @@
 
     <div class="relative bg-primary overflow-hidden" id="hero-slider">
         <div class="relative h-85 md:h-95">
-            <div class="hero-slide absolute inset-0 px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-100 z-10">
+            <div class="hero-slide absolute inset-0 px-6 sm:px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-100 z-10">
                 <div class="absolute right-8 top-6">
                     <x-auth.egg />
                 </div>
@@ -22,7 +22,7 @@
                 </p>
             </div>
 
-            <div class="hero-slide absolute inset-0 px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-0 z-0">
+            <div class="hero-slide absolute inset-0 px-6 sm:px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-0 z-0">
                 <div class="absolute right-12 top-8 w-32 h-32 rounded-full bg-[#f5e9c8]/60"></div>
                 <p class="text-white/90 font-semibold text-3xl mb-1">New This Week</p>
                 <h1 class="text-white font-black text-4xl md:text-8xl leading-tight mb-4">#FreshFromKitchen</h1>
@@ -31,7 +31,7 @@
                 </p>
             </div>
 
-            <div class="hero-slide absolute inset-0 px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-0 z-0">
+            <div class="hero-slide absolute inset-0 px-6 sm:px-10 md:px-16 flex flex-col justify-center transition-opacity duration-700 opacity-0 z-0">
                 <div class="absolute right-8 top-6   ">
                     <x-auth.egg />
                 </div>

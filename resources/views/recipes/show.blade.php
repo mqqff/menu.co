@@ -47,7 +47,7 @@
     <div class="bg-[#FEFAF6] min-h-screen pt-20 pb-32">
         <div class="max-w-6xl mx-auto px-5">
             <section class="flex flex-col md:flex-row gap-8 items-start">
-                <div class="w-sm shrink-0">
+                <div class="w-full md:w-sm md:shrink-0">
                     <img
                         src="{{ $recipe->image_url }}"
                         alt="{{ $recipe->title }}"

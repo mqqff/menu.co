@@ -12,8 +12,8 @@
             <input type="hidden" name="ingredients" id="ingredientsInput">
             <input type="hidden" name="steps" id="stepsInput">
             <input type="hidden" name="status" id="statusInput">
-            <div class="flex gap-8 items-start">
-                <div class="w-sm shrink-0">
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <div class="w-full lg:w-sm lg:shrink-0">
                     <div id="photoUpload"
                          onclick="document.getElementById('mainPhotoInput').click()"
                          class="photo-upload bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center min-h-72 p-8 cursor-pointer transition-all hover:border-orange-600 hover:bg-orange-50 relative overflow-hidden mb-7">
@@ -308,7 +308,7 @@
             </div>
           </div>
         </div>
-        <div class="step-photo bg-gray-100 rounded-xl h-48 w-80 flex items-center justify-center cursor-pointer transition-colors hover:bg-orange-50 relative overflow-hidden" onclick="triggerStepPhoto(${i})" id="stepPhoto_${step.id}">
+        <div class="step-photo bg-gray-100 rounded-xl h-48 w-full max-w-xs flex items-center justify-center cursor-pointer transition-colors hover:bg-orange-50 relative overflow-hidden" onclick="triggerStepPhoto(${i})" id="stepPhoto_${step.id}">
           <input type="file" name="step_images[${step.id}]" accept="image/*" style="display:none" id="stepInput_${step.id}" onchange="handleStepPhoto(this, ${step.id})">
           ${step.previewUrl
                     ? `<img src="${step.previewUrl}" alt="step photo" class="absolute inset-0 w-full h-full object-cover rounded-xl">

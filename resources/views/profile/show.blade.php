@@ -3,7 +3,7 @@
 @section('title', $user->username.'\'s Profile')
 
 @section('content')
-    <div class="bg-[#faf8f5] min-h-screen px-8 md:px-28 py-10">
+    <div class="bg-[#faf8f5] min-h-screen px-4 sm:px-8 md:px-28 py-10">
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-10">
             <img src="{{ $user->avatar_url }}"
                  alt="Profile Picture"
