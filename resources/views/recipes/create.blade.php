@@ -3,7 +3,7 @@
 @section('title', 'Create Recipe')
 
 @section('content')
-    <div class="toast fixed bottom-8 left-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-3xl text-sm font-semibold pointer-events-none z-999 whitespace-nowrap" id="toast"></div>
+    <div class="toast fixed bottom-8 left-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-3xl text-sm font-semibold pointer-events-none z-999 text-center w-[90vw]" id="toast"></div>
 
     <div class="max-w-6xl mx-auto my-9 pb-5 pt-8 px-4 sm:px-6">
         <form method="POST" action="{{ route('recipes.store') }}" enctype="multipart/form-data" id="createForm">
