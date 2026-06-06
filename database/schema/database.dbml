@@ -155,6 +155,8 @@ Table "recipes" {
   "image" varchar(255) [not null]
   "cook_time" int [not null]
   "servings" int [not null]
+  "budget_min" decimal(10,2)
+  "budget_max" decimal(10,2)
   "status" recipes_status_enum [not null]
   "tips" text
   "restricted_at" timestamp

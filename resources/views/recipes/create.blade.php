@@ -86,12 +86,12 @@
 
                         <div class="flex items-center gap-2">
                             <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Budget:</span>
-                            <input type="number" id="budgetMin" name="budget_min" placeholder="10" step="0.01"
+                            <span class="text-gray-500 text-xs">Rp</span>
+                            <input type="number" id="budgetMin" name="budget_min" placeholder="5000" step="0.01"
                                    class="w-16 sm:w-20 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
                             <span class="text-gray-400 text-sm">-</span>
-                            <input type="number" id="budgetMax" name="budget_max" placeholder="30" step="0.01"
+                            <input type="number" id="budgetMax" name="budget_max" placeholder="7000" step="0.01"
                                    class="w-16 sm:w-20 bg-gray-100 border-none rounded-lg px-3 py-2 text-sm text-gray-600 outline-none transition-shadow focus:shadow-[0_0_0_2px_#f4b89a] placeholder:text-gray-400">
-                            <span class="text-gray-500 text-xs">Rp</span>
                         </div>
                     </div>
                     <div class="mb-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
