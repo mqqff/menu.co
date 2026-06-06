@@ -3,14 +3,14 @@
 
         <a href="{{ route('home') }}" class="text-white text-xl sm:text-2xl font-bold mr-2 sm:mr-4 shrink-0">Menu.Co</a>
 
-        <div class="hidden md:flex items-center gap-6 shrink-0">
+        <div class="hidden lg:flex items-center gap-6 shrink-0">
             <a href="{{ route('recipes.trending') }}" class="font-semibold hover:text-white transition whitespace-nowrap {{ request()->routeIs('recipes.trending') ? 'text-white' : 'text-white/80' }}">Trending</a>
             @auth <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white whitespace-nowrap {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>@endauth
         </div>
 
-        <div class="flex-1 min-w-0 md:mx-6">
+        <div class="flex-1 min-w-0 mx-2 sm:mx-4">
             <form action="{{ route('recipes.search') }}" method="GET">
-                <div class="flex items-center bg-white rounded-full max-w-xs md:max-w-sm px-3 md:px-4 py-1.5 md:py-2 gap-2 mx-auto md:mx-0">
+                <div class="flex items-center bg-white rounded-full w-full max-w-[180px] sm:max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl px-3 md:px-4 py-1.5 md:py-2 gap-2 mx-auto md:mx-0">
                     <input
                         type="text"
                         name="q"
@@ -30,7 +30,7 @@
                 <div class="flex items-center gap-3">
                     <a href="{{ route('recipes.create') }}" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-4 md:px-5 py-1.5 md:py-2 whitespace-nowrap">
                         <x-icons.plus class="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                        <span class="text-primary font-semibold text-xs md:text-sm hidden sm:inline">Create a Recipe</span>
+                        <span class="text-primary font-semibold text-xs md:text-sm hidden lg:inline">Create a Recipe</span>
                     </a>
 
                     <div class="relative" id="profileDropdown">
@@ -76,7 +76,7 @@
             @endauth
         </div>
 
-        <button id="hamburgerBtn" class="md:hidden flex items-center justify-center w-8 h-8 text-white cursor-pointer shrink-0" aria-label="Toggle menu">
+        <button id="hamburgerBtn" class="lg:hidden flex items-center justify-center w-8 h-8 text-white cursor-pointer shrink-0" aria-label="Toggle menu">
             <svg id="hamburgerIcon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
