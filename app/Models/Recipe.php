@@ -23,6 +23,8 @@ class Recipe extends Model
         'image',
         'cook_time',
         'servings',
+        'budget_min',
+        'budget_max',
         'status',
         'tips',
         'restricted_at',
@@ -32,6 +34,8 @@ class Recipe extends Model
     {
         return [
             'restricted_at' => 'datetime',
+            'budget_min' => 'decimal:2',
+            'budget_max' => 'decimal:2',
         ];
     }
 

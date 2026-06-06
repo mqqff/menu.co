@@ -94,6 +94,19 @@
                         {{ $recipe->servings }} servings
                     </span>
 
+                    @if ($recipe->budget_min || $recipe->budget_max)
+                        <span class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white">
+                            <span class="text-primary font-medium text-sm">Rp</span>
+                            @if ($recipe->budget_min && $recipe->budget_max)
+                                {{ number_format($recipe->budget_min) }} - {{ number_format($recipe->budget_max) }}
+                            @elseif ($recipe->budget_min)
+                                From {{ number_format($recipe->budget_min) }}
+                            @else
+                                Up to {{ number_format($recipe->budget_max) }}
+                            @endif
+                        </span>
+                    @endif
+
                     <form action="{{ route('bookmarks.toggle', $recipe->id) }}" method="POST">
                         @csrf
                         <button class="flex items-center gap-2 border border-gray-200 py-1 px-2 rounded-lg shadow-sm font-medium bg-white cursor-pointer">
