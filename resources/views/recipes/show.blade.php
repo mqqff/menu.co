@@ -240,16 +240,16 @@
                 <div class="space-y-5">
                     @forelse ($recipe->comments as $comment)
                         <div class="bg-white rounded-2xl p-5 shadow-sm border border-[#EAE0D8]" id="comment-{{ $comment->id }}">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-center gap-3">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="flex items-center gap-3 min-w-0">
                                     <img
                                         src="{{ $comment->user->avatar_url }}"
                                         alt="{{ $comment->user->name }}"
-                                        class="w-14 h-14 rounded-full object-cover"
+                                        class="w-10 h-10 sm:w-14 sm:h-14 rounded-full object-cover shrink-0"
                                     />
-                                    <a href="{{ route('profile.show', $comment->user->username) }}">
-                                        <p class="text-md font-bold text-gray-800">{{ $comment->user->name }}</p>
-                                        <p class="text-sm text-gray-400">{{ '@' . $comment->user->username }}</p>
+                                    <a href="{{ route('profile.show', $comment->user->username) }}" class="min-w-0">
+                                        <p class="text-sm sm:text-md font-bold text-gray-800 truncate">{{ $comment->user->name }}</p>
+                                        <p class="text-xs sm:text-sm text-gray-400 truncate">{{ '@' . $comment->user->username }}</p>
                                     </a>
                                 </div>
 
@@ -313,7 +313,7 @@
                                 @endfor
                             </div>
 
-                            <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $comment->content }}</p>
+                            <p class="text-sm text-gray-600 mt-2 leading-relaxed break-words">{{ $comment->content }}</p>
                         </div>
                     @empty
                         @auth
@@ -323,45 +323,45 @@
                 </div>
 
                 @auth
-                    <div class="mt-5 flex items-center gap-3">
+                    <div class="mt-5 flex items-center gap-2 sm:gap-3">
                         <img
                             src="{{ auth()->user()->avatar_url }}"
                             alt="{{ auth()->user()->name }}"
-                            class="w-9 h-9 rounded-full object-cover shrink-0"
+                            class="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover shrink-0"
                         />
                         <form action="{{ route('comments.store', $recipe->id) }}" method="POST" id="comment-form"
-                              class="flex-1 flex items-center gap-2 {{ $hasReviewed ? 'opacity-50 pointer-events-none' : '' }}">
+                              class="flex-1 min-w-0 {{ $hasReviewed ? 'opacity-50 pointer-events-none' : '' }}">
                             @csrf
-
-                            <div class="rating flex justify-end gap-1 mr-2">
-                                @for ($i = 5; $i >= 1; $i--)
-                                    <input
-                                        type="radio"
-                                        id="star{{ $i }}"
-                                        name="rating"
-                                        value="{{ $i }}"
-                                        class="hidden peer rating-input"
-                                    />
-                                    <label
-                                        for="star{{ $i }}"
-                                        class="cursor-pointer text-gray-300 peer-checked:text-primary hover:text-primary transition"
-                                    >
-                                        <x-icons.star class="w-5 h-5" />
-                                    </label>
-                                @endfor
+                            <div class="flex items-center gap-1 sm:gap-2 flex-wrap">
+                                <div class="rating flex gap-0.5 sm:gap-1 shrink-0">
+                                    @for ($i = 5; $i >= 1; $i--)
+                                        <input
+                                            type="radio"
+                                            id="star{{ $i }}"
+                                            name="rating"
+                                            value="{{ $i }}"
+                                            class="hidden peer rating-input"
+                                        />
+                                        <label
+                                            for="star{{ $i }}"
+                                            class="cursor-pointer text-gray-300 peer-checked:text-primary hover:text-primary transition"
+                                        >
+                                            <x-icons.star class="w-4 h-4 sm:w-5 sm:h-5" />
+                                        </label>
+                                    @endfor
+                                </div>
+                                <input
+                                    type="text"
+                                    id="comment-content"
+                                    name="content"
+                                    placeholder="Add Review"
+                                    autocomplete="off"
+                                    class="flex-1 min-w-[120px] bg-white border border-[#EAE0D8] rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder-gray-400"
+                                />
+                                <button type="submit" class="shrink-0 text-primary! hover:text-[#b84e22] transition cursor-pointer">
+                                    <x-icons.plane class="w-5 h-5 sm:w-6 sm:h-6" />
+                                </button>
                             </div>
-
-                            <input
-                                type="text"
-                                id="comment-content"
-                                name="content"
-                                placeholder="Add Review"
-                                autocomplete="off"
-                                class="flex-1 bg-white border border-[#EAE0D8] rounded-lg px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder-gray-400"
-                            />
-                            <button type="submit" class="shrink-0 text-primary! hover:text-[#b84e22] transition cursor-pointer">
-                                <x-icons.plane class="w-6 h-6" />
-                            </button>
                         </form>
                     </div>
                 @endauth
