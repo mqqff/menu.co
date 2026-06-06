@@ -3,7 +3,7 @@
 @section('title', request('q') . ' - Search Results')
 
 @section('content')
-    <div class="min-h-screen bg-[#faf8f5] px-8 py-10">
+    <div class="min-h-screen bg-[#faf8f5] px-4 sm:px-8 py-10">
 
         <section class="mb-12">
             <h2 class="text-2xl font-bold text-primary mb-6">

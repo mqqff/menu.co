@@ -1,12 +1,12 @@
-<footer class="w-full px-10 py-12 bg-primary">
+<footer class="w-full px-4 sm:px-6 md:px-10 py-8 md:py-12 bg-primary">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
         <div class="text-white">
             <a href="{{ route('home') }}"><h2 class="text-2xl font-bold mb-3">Menu.Co</h2></a>
             <p class="text-sm text-white/80">Taste the world, one recipe at a time.</p>
-            <p class="text-sm text-white/80">© Menu.Co Developer Team. All right reserved</p>
+            <p class="text-sm text-white/80">&copy; Menu.Co Developer Team. All right reserved</p>
         </div>
 
-        <div class="flex flex-row gap-10 text-white">
+        <div class="flex flex-wrap gap-x-6 gap-y-4 sm:gap-x-10 text-white">
 
             <div>
                 <p class="font-bold mb-2">Home</p>
@@ -17,7 +17,7 @@
             </div>
 
             @auth
-                <div class="w-px bg-white/30 self-stretch"></div>
+                <div class="w-px bg-white/30 self-stretch hidden sm:block"></div>
 
                 <div>
                     <p class="font-bold mb-2">Your Recipe</p>
@@ -27,7 +27,7 @@
                     </ul>
                 </div>
 
-                <div class="w-px bg-white/30 self-stretch"></div>
+                <div class="w-px bg-white/30 self-stretch hidden sm:block"></div>
 
                 <div>
                     <p class="font-bold mb-2">Account</p>

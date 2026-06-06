@@ -23,14 +23,14 @@
 
 @section('content')
     <div class="bg-gray-100 min-h-screen py-10">
-        <div class="max-w-6xl mx-auto flex gap-16 px-4">
-            <div class="w-1/4">
-                <div class="sticky top-24">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-6 md:gap-16 px-4">
+            <div class="w-full md:w-1/4">
+                <div class="md:sticky md:top-24">
                     <h2 class="text-xl font-semibold text-primary mb-6">
                         Settings
                     </h2>
 
-                    <ul class="space-y-3">
+                    <ul class="flex md:flex-col gap-4 md:space-y-3">
                         <li>
                             <a href="#profile" id="menu-profile"
                                class="text-gray-700 font-semibold text-lg">
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="w-3/4">
+            <div class="w-full md:w-3/4">
                 <section id="profile" class="mb-12 max-w-2xl">
                     <form id="form-profile" action="{{ route('profile.update.profile', $user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -100,18 +100,18 @@
                             </div>
                         </div>
 
-                        <div class="flex justify-center gap-4 mt-6">
+                        <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6">
                             <button
                                 type="button" id="discard-profile-btn"
-                                class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium cursor-pointer">
-                                <x-icons.trash class="w-4"/>
+                                class="flex items-center justify-center gap-2 px-6 py-1.5 rounded-full border-2 border-red-500 text-red-500 text-sm font-semibold cursor-pointer">
+                                <x-icons.trash class="w-5 sm:w-4"/>
                                 Discard Changes
                             </button>
 
                             <button
                                 type="submit"
-                                class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm font-medium cursor-pointer">
-                                <x-icons.save class="w-4"/>
+                                class="flex items-center justify-center gap-2 px-6 py-2 rounded-full shadow-md border text-primary! text-sm font-semibold cursor-pointer">
+                                <x-icons.save class="w-5 sm:w-4"/>
                                 Save Changes
                             </button>
                         </div>
@@ -158,16 +158,72 @@
 
                         </div>
 
-                        <div class="flex justify-center gap-4 mt-6">
+                        <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6">
                             <button type="button" id="discard-account-btn"
-                                    class="flex items-center gap-2 px-5 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-medium cursor-pointer">
-                                <x-icons.trash class="w-4"/>
+                                    class="flex items-center justify-center gap-2 px-6 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-semibold cursor-pointer">
+                                <x-icons.trash class="w-5 sm:w-4"/>
                                 Discard Changes
                             </button>
 
                             <button type="submit"
-                                    class="flex items-center gap-2 px-5 py-2 rounded-full shadow-md border text-primary! text-sm font-medium cursor-pointer">
-                                <x-icons.save class="w-4"/>
+                                    class="flex items-center justify-center gap-2 px-6 py-2 rounded-full shadow-md border text-primary! text-sm font-semibold cursor-pointer">
+                                <x-icons.save class="w-5 sm:w-4"/>
+                                Save Changes
+                            </button>
+                        </div>
+
+                        <div class="my-10 border-t border-dashed border-gray-300"/>
+                    </form>
+                </section>
+
+                <section id="account" class="max-w-2xl">
+                    <form id="form-account" action="{{ route('profile.update.account', ['user' => auth()->id()]) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <h2 class="text-2xl font-semibold text-primary mb-2">
+                            Account
+                        </h2>
+                        <p class="text-sm text-gray-800 mb-6">
+                            Make changes to your email or password.
+                        </p>
+
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">Email</label>
+                                <x-profile.input type="email" value="{{ old('email') ?? $user->email }}"
+                                                 placeholder="Enter your email" name="email"/>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">Old Password</label>
+                                <x-profile.input type="password" placeholder="Enter old password if you want to change"
+                                                 name="old_password" autocomplete="off"/>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">New Password</label>
+                                <x-profile.input type="password" placeholder="Enter new password" name="password"
+                                                 autocomplete="off"/>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm text-primary mb-1 font-medium">Confirm New Password</label>
+                                <x-profile.input type="password" placeholder="Confirm new password"
+                                                 name="password_confirmation" autocomplete="off"/>
+                            </div>
+
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6">
+                            <button type="button" id="discard-account-btn"
+                                    class="flex items-center justify-center gap-2 px-6 py-2 rounded-full border-2 border-red-500 text-red-500 text-sm font-semibold cursor-pointer">
+                                <x-icons.trash class="w-5 sm:w-4"/>
+                                Discard Changes
+                            </button>
+
+                            <button type="submit"
+                                    class="flex items-center justify-center gap-2 px-6 py-2 rounded-full shadow-md border text-primary! text-sm font-semibold cursor-pointer">
+                                <x-icons.save class="w-5 sm:w-4"/>
                                 Save Changes
                             </button>
                         </div>
@@ -180,12 +236,12 @@
                             Delete Account
                         </h3>
 
-                        <div class="flex justify-between items-center">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <p class="text-sm text-gray-800 flex-1">
                                 Permanently delete your data and everything associated with your account
                             </p>
                             <button type="button" id="delete-account-btn"
-                                    class="bg-red-500 text-white px-6 py-2 rounded-full text-sm font-semibold cursor-pointer">
+                                    class="bg-red-500 text-white px-6 py-2 rounded-full text-sm font-semibold cursor-pointer shrink-0">
                                 Delete Account
                             </button>
                         </div>
