@@ -30,7 +30,7 @@
                 <div class="flex items-center gap-3">
                     <a href="{{ route('recipes.create') }}" class="flex items-center gap-2 bg-white hover:bg-gray-100 rounded-full px-4 md:px-5 py-1.5 md:py-2 whitespace-nowrap">
                         <x-icons.plus class="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                        <span class="text-primary font-semibold text-xs md:text-sm hidden lg:inline">Create a Recipe</span>
+                        <span class="text-primary font-semibold text-xs md:text-sm hidden md:inline">Create a Recipe</span>
                     </a>
 
                     <div class="relative" id="profileDropdown">
