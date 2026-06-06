@@ -180,12 +180,12 @@
                             Delete Account
                         </h3>
 
-                        <div class="flex justify-between items-center">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <p class="text-sm text-gray-800 flex-1">
                                 Permanently delete your data and everything associated with your account
                             </p>
                             <button type="button" id="delete-account-btn"
-                                    class="bg-red-500 text-white px-6 py-2 rounded-full text-sm font-semibold cursor-pointer">
+                                    class="bg-red-500 text-white px-6 py-2 rounded-full text-sm font-semibold cursor-pointer shrink-0">
                                 Delete Account
                             </button>
                         </div>
