@@ -10,7 +10,7 @@
 
         <div class="flex-1 min-w-0 mx-2 sm:mx-4">
             <form action="{{ route('recipes.search') }}" method="GET">
-                <div class="flex items-center bg-white rounded-full w-full max-w-[180px] sm:max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl px-3 md:px-4 py-1.5 md:py-2 gap-2 mx-auto md:mx-0">
+                <div class="flex items-center bg-white rounded-full w-full max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl px-3 md:px-4 py-1.5 md:py-2 gap-2 mx-auto md:mx-0">
                     <input
                         type="text"
                         name="q"
