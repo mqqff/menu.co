@@ -8,9 +8,9 @@
             @auth <a href="{{ route('recipes.my') }}" class="font-semibold hover:text-white whitespace-nowrap {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }} transition">Your Recipes</a>@endauth
         </div>
 
-        <div class="flex-1 min-w-0 mx-2 sm:mx-4">
+        <div class="hidden lg:block flex-1 min-w-0 mx-2 sm:mx-4">
             <form action="{{ route('recipes.search') }}" method="GET">
-                <div class="flex items-center bg-white rounded-full w-full max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl px-3 md:px-4 py-1.5 md:py-2 gap-2 mx-auto md:mx-0">
+                <div class="flex items-center bg-white rounded-full w-full md:max-w-md lg:max-w-lg xl:max-w-xl px-3 md:px-4 py-1.5 md:py-2 gap-2 mx-auto md:mx-0">
                     <input
                         type="text"
                         name="q"
@@ -76,7 +76,7 @@
             @endauth
         </div>
 
-        <button id="hamburgerBtn" class="lg:hidden flex items-center justify-center w-8 h-8 text-white cursor-pointer shrink-0" aria-label="Toggle menu">
+        <button id="hamburgerBtn" class="lg:hidden flex items-center justify-center w-8 h-8 text-white cursor-pointer shrink-0 ml-auto" aria-label="Toggle menu">
             <svg id="hamburgerIcon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -102,6 +102,23 @@
                 @auth
                     <a href="{{ route('recipes.my') }}" class="text-lg font-semibold {{ request()->routeIs('recipes.my') ? 'text-white' : 'text-white/80' }}">Your Recipes</a>
                 @endauth
+
+                <hr class="border-white/20 my-2" />
+
+                <form action="{{ route('recipes.search') }}" method="GET" class="mb-2">
+                    <div class="flex items-center bg-white/20 rounded-full px-4 py-2 gap-2">
+                        <input
+                            type="text"
+                            name="q"
+                            placeholder="Search recipes..."
+                            autocomplete="off"
+                            class="flex-1 bg-transparent outline-none text-white text-sm placeholder:text-white/60 min-w-0"
+                        />
+                        <button type="submit" class="shrink-0 text-white/80">
+                            <x-icons.magnifying-glass class="w-5 h-5" />
+                        </button>
+                    </div>
+                </form>
 
                 <hr class="border-white/20 my-2" />
 
