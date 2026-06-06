@@ -111,7 +111,7 @@
                     <div>
                         <h2 class="text-2xl font-extrabold text-orange mb-3.5">Steps</h2>
                         <div class="flex flex-col gap-5" id="stepsList"></div>
-                        <div class="flex justify-end mt-4">
+                        <div class="flex justify-center mt-4">
                             <button type="button" onclick="addStep()"
                                     class="flex items-center gap-1.5 bg-transparent border-[1.5px] border-gray-200 rounded-[20px] px-4 py-1.5 text-sm font-semibold text-gray-500 cursor-pointer transition-all hover:border-gray-400 hover:text-orange w-fit">
                                 <x-icons.plus class="w-3.5 h-3.5"/>
